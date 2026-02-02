@@ -1,4 +1,4 @@
 /target/
-products.temp
-produts.temp$
-rides.temp$
+src/main/resources/products.temp
+src/main/resources/produts.temp$
+src/main/resources/rides.temp$
