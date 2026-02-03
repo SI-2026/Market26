@@ -5,3 +5,4 @@ src/main/resources/rides.temp$
 .project
 .classpath
 .settings/
+.vscode/
