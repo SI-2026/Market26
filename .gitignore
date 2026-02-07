@@ -1,6 +1,5 @@
 /target/
 src/main/resources/
 .project
-.classpath
 .settings/
 .vscode/
