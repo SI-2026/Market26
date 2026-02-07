@@ -3721,7 +3721,7 @@
 									"parentStyle": true,
 									"left": 370,
 									"top": 541,
-									"width": 84,
+									"width": 85,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGMFafnwMlzf08="
@@ -5471,7 +5471,7 @@
 											"parentStyle": true,
 											"left": 608,
 											"top": 656,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -5681,7 +5681,7 @@
 											"parentStyle": true,
 											"left": 976,
 											"top": 576,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -5891,7 +5891,7 @@
 											"parentStyle": true,
 											"left": 1232,
 											"top": 192,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -7590,7 +7590,7 @@
 											"parentStyle": true,
 											"left": 1018,
 											"top": 174,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -7613,7 +7613,7 @@
 									"parentStyle": true,
 									"left": 777.5,
 									"top": 117,
-									"width": 120,
+									"width": 121,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIrpVO5nrs+Q="
@@ -7800,7 +7800,7 @@
 											"parentStyle": true,
 											"left": -256,
 											"top": 96,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -7990,7 +7990,7 @@
 											"parentStyle": true,
 											"left": -592,
 											"top": -144,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -8013,7 +8013,7 @@
 									"parentStyle": true,
 									"left": 224.5,
 									"top": 101,
-									"width": 78,
+									"width": 79,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIrzOJPwDtO4="
@@ -8500,7 +8500,7 @@
 											"parentStyle": true,
 											"left": 384,
 											"top": -256,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -9282,7 +9282,7 @@
 											"parentStyle": true,
 											"left": -768,
 											"top": -608,
-											"width": 119.1962890625,
+											"width": 117,
 											"height": 13,
 											"text": "(from Requirements)"
 										},
@@ -15732,9 +15732,9 @@
 													},
 													"font": "Arial;13;0",
 													"parentStyle": true,
-													"left": 242.11181640625,
+													"left": 243,
 													"top": 213,
-													"width": 48.5087890625,
+													"width": 56,
 													"height": 13,
 													"text": "si=s1..sN"
 												},
@@ -15748,7 +15748,7 @@
 													"parentStyle": true,
 													"left": 213,
 													"top": 213,
-													"width": 23.11181640625,
+													"width": 24,
 													"height": 13,
 													"text": "loop"
 												},
@@ -17273,7 +17273,7 @@
 							}
 						}
 					],
-					"documentation": "# Query Sales Flow of events\n\n## Basic Flow\n\n1. *non registrated* press the **sign up button**.\n2. *non registrated* write the **username** in the **username gap**.\n3. *non registrated* write the **password** in the **password gap**.\n4. *non registrated* write the **password** in the **repeat password gap**.\n5. *non registrated* press the **confirmation button**.\n\n\n## Alternative flow\n\n1. Some fields are **empty**. System informs the *non registrated*.\n2. The **username** already exist in the **data-base**.  System informs the *non registrated*."
+					"documentation": "# Query Sales Flow of events\n\n## Basic Flow\n\n1. *non registrated* press the **register button**.\n2. *non registrated* write the **username** in the **username gap**.\n3. *non registrated* write the **password** in the **password gap**.\n4. *non registrated* press the **confirmation button**.\n\n\n## Alternative flow\n\n1. Some fields are **empty**. System informs the *non registrated*.\n2. The **username** already exist in the **data-base**.  System informs the *non registrated*."
 				},
 				{
 					"_type": "UMLUseCase",
@@ -24580,7 +24580,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 569,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24603,7 +24603,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 584,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24626,7 +24626,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 689,
+									"left": 688,
 									"top": 539,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -24681,7 +24681,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 621,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24704,7 +24704,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 636,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24727,7 +24727,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 689,
+									"left": 688,
 									"top": 591,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -24782,7 +24782,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 677,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24805,7 +24805,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 692,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24828,7 +24828,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 689,
+									"left": 688,
 									"top": 647,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -24883,7 +24883,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 737,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24906,7 +24906,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 752,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -24929,7 +24929,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 689,
+									"left": 688,
 									"top": 707,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -24984,7 +24984,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 789,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -25007,7 +25007,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 688,
+									"left": 687,
 									"top": 804,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -25030,7 +25030,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 689,
+									"left": 688,
 									"top": 759,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -25282,7 +25282,7 @@
 									"containerExtending": true,
 									"left": 236,
 									"top": 644,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3Gfiuc7g="
@@ -25478,7 +25478,7 @@
 									"containerExtending": true,
 									"left": 236,
 									"top": 708,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3Gfi4mk0="
@@ -25674,7 +25674,7 @@
 									"containerExtending": true,
 									"left": 236,
 									"top": 764,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3GfjCNJc="
@@ -25870,7 +25870,7 @@
 									"containerExtending": true,
 									"left": 236,
 									"top": 820,
-									"width": 82.685546875,
+									"width": 89,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3GfjMtPY="
@@ -26066,7 +26066,7 @@
 									"containerExtending": true,
 									"left": 236,
 									"top": 876,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3GvjWULI="
@@ -26183,7 +26183,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 236,
+									"left": 235,
 									"top": 634,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -26206,7 +26206,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 236,
+									"left": 235,
 									"top": 619,
 									"height": 12,
 									"alpha": 1.5707963267948966,
@@ -26229,7 +26229,7 @@
 									"font": "Arial;12;0",
 									"parentStyle": false,
 									"containerExtending": true,
-									"left": 236,
+									"left": 235,
 									"top": 664,
 									"height": 12,
 									"alpha": -1.5707963267948966,
@@ -26984,7 +26984,7 @@
 									"containerExtending": true,
 									"left": 740,
 									"top": 24,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3Gvj+hQk="
@@ -27034,7 +27034,7 @@
 									"containerExtending": true,
 									"left": 740,
 									"top": 60,
-									"width": 112.427734375,
+									"width": 123,
 									"height": 22
 								},
 								{
@@ -27198,7 +27198,7 @@
 									"containerExtending": true,
 									"left": 740,
 									"top": 96,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3G/kJtBc="
@@ -27394,7 +27394,7 @@
 									"containerExtending": true,
 									"left": 740,
 									"top": 148,
-									"width": 71.3125,
+									"width": 81,
 									"height": 36,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGcIqg3G/kTRRw="
