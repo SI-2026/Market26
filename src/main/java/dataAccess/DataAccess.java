@@ -19,7 +19,7 @@ import javax.persistence.TypedQuery;
 
 import configuration.ConfigXML;
 import configuration.UtilDate;
-import domain.Seller;
+import domain.User;
 import domain.Sale;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -78,31 +78,31 @@ public class DataAccess  {
 		try { 
 	       
 		    //Create sellers 
-			Seller seller1=new Seller("seller1@gmail.com","Aitor Fernandez");
-			Seller seller2=new Seller("seller22@gmail.com","Ane Gaztañaga");
-			Seller seller3=new Seller("seller3@gmail.com","Test Seller");
+			User user1=new User("seller1@gmail.com","Aitor Fernandez");
+			User user2=new User("seller22@gmail.com","Ane Gaztañaga");
+			User user3=new User("seller3@gmail.com","Test Seller");
 
 			
 			//Create products
 			Date today = UtilDate.trim(new Date());
 		
 			
-			seller1.addSale("futbol baloia", "oso polita, gutxi erabilita", 10, 2,  today, null);
-			seller1.addSale("salomon mendiko botak", "44 zenbakia, 3 ateraldi",20,  2,  today, null);
-			seller1.addSale("samsung 42\" telebista", "berria, erabili gabe", 175, 1,  today, null);
+			user1.addSale("futbol baloia", "oso polita, gutxi erabilita", 10, 2,  today, null);
+			user1.addSale("salomon mendiko botak", "44 zenbakia, 3 ateraldi",20,  2,  today, null);
+			user1.addSale("samsung 42\" telebista", "berria, erabili gabe", 175, 1,  today, null);
 
 
-			seller2.addSale("imac 27", "7 urte, dena ondo dabil", 1, 200,today, null);
-			seller2.addSale("iphone 17", "oso gutxi erabilita", 2, 400, today, null);
-			seller2.addSale("orbea mendiko bizikleta", "29\" 10 urte, mantenua behar du", 3,225, today, null);
-			seller2.addSale("polar kilor erlojua", "Vantage M, ondo dago", 3, 30, today, null);
+			user2.addSale("imac 27", "7 urte, dena ondo dabil", 1, 200,today, null);
+			user2.addSale("iphone 17", "oso gutxi erabilita", 2, 400, today, null);
+			user2.addSale("orbea mendiko bizikleta", "29\" 10 urte, mantenua behar du", 3,225, today, null);
+			user2.addSale("polar kilor erlojua", "Vantage M, ondo dago", 3, 30, today, null);
 
-			seller3.addSale("sukaldeko mahaia", "1.8*0.8, 4 aulkiekin. Prezio finkoa", 3,45, today, null);
+			user3.addSale("sukaldeko mahaia", "1.8*0.8, 4 aulkiekin. Prezio finkoa", 3,45, today, null);
 
 			
-			db.persist(seller1);
-			db.persist(seller2);
-			db.persist(seller3);
+			db.persist(user1);
+			db.persist(user2);
+			db.persist(user3);
 
 	
 			db.getTransaction().commit();
@@ -111,6 +111,14 @@ public class DataAccess  {
 		catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	public User isRegistered(String log, String pass) {
+		
+		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.name="+log+"",User.class);   
+		
+		User ema = query.getSingleResult();
+		
+		return ema;
 	}
 	
 	
@@ -141,18 +149,18 @@ public class DataAccess  {
 
 			db.getTransaction().begin();
 			
-			Seller seller = db.find(Seller.class, sellerEmail);
-			if (seller.doesSaleExist(title)) {
+			User user = db.find(User.class, sellerEmail);
+			if (user.doesSaleExist(title)) {
 				db.getTransaction().commit();
 				throw new SaleAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.SaleAlreadyExist"));
 			}
 
-			Sale sale = seller.addSale(title, description, status, price, pubDate, file);
+			Sale sale = user.addSale(title, description, status, price, pubDate, file);
 			//next instruction can be obviated
 
-			db.persist(seller); 
+			db.persist(user); 
 			db.getTransaction().commit();
-			 System.out.println("sale stored "+sale+ " "+seller);
+			 System.out.println("sale stored "+sale+ " "+user);
 
 			
 

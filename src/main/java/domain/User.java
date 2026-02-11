@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlIDREF;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Seller implements Serializable {
+public class User implements Serializable {
 	
 	/**
 	 * 
@@ -28,11 +28,11 @@ public class Seller implements Serializable {
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> sales=new ArrayList<Sale>();
 
-	public Seller() {
+	public User() {
 		super();
 	}
 
-	public Seller(String email, String name) {
+	public User(String email, String name) {
 		this.email = email;
 		this.name = name;
 	}
@@ -104,7 +104,7 @@ public class Seller implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Seller other = (Seller) obj;
+		User other = (User) obj;
 		if (email != other.email)
 			return false;
 		return true;
