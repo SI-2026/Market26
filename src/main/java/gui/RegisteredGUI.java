@@ -18,16 +18,17 @@ import java.util.ResourceBundle;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 
-public class MainGUI extends JFrame {
+public class RegisteredGUI extends JFrame {
 	
     private String sellerMail;
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-	private JButton jButtonLogin = null;
-	private JButton jButtonRegister = null;
+	private JButton jButtonLogOut = null;
+	private JButton jButtonCreateQuery = null;
 	private JButton jButtonQueryQueries = null;
 
     private static BLFacade appFacadeInterface;
@@ -49,7 +50,7 @@ public class MainGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public MainGUI( String mail) {
+	public RegisteredGUI( String mail) {
 		super();
 
 		this.sellerMail=mail;
@@ -92,31 +93,33 @@ public class MainGUI extends JFrame {
 		panel.add(rdbtnNewRadioButton_2);
 		panel.add(rdbtnNewRadioButton);
 		
-		jButtonLogin = new JButton();
-		jButtonLogin.setBounds(212, 11, 125, 23);
-		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
-		jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
+		
+		jButtonLogOut = new JButton();
+		jButtonLogOut.setBounds(344, 11, 125, 23);
+		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.LogOut"));
+		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame a = new LoginGUI();
+				JFrame a = new MainGUI("Guest");
 				a.setVisible(true);
 				dispose();
 			}
 		});
 		
-		jButtonRegister = new JButton();
-		jButtonRegister.setBounds(344, 11, 125, 23);
-		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
-		jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
+		
+		jButtonCreateQuery = new JButton();
+		jButtonCreateQuery.setSize(217, 64);
+		jButtonCreateQuery.setLocation(117, 40);
+		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
+		jButtonCreateQuery.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame a = new RegisterGUI();
+				JFrame a = new CreateSaleGUI(sellerMail);
 				a.setVisible(true);
-				dispose();
 			}
 		});
 		
 		jButtonQueryQueries = new JButton();
-		jButtonQueryQueries.setBounds(119, 92, 217, 64);
-		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
+		jButtonQueryQueries.setBounds(117, 112, 217, 64);
+		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
 		jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				JFrame a = new QuerySalesGUI();
@@ -128,14 +131,14 @@ public class MainGUI extends JFrame {
 		jContentPane = new JPanel();
 		jContentPane.setLayout(null);
 		jContentPane.add(jLabelSelectOption);
-		jContentPane.add(jButtonLogin);
-		jContentPane.add(jButtonRegister);
+		jContentPane.add(jButtonCreateQuery);
 		jContentPane.add(jButtonQueryQueries);
+		jContentPane.add(jButtonLogOut);
 		jContentPane.add(panel);
 		
 		
 		setContentPane(jContentPane);
-		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
+		setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") +": "+sellerMail);
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -147,10 +150,10 @@ public class MainGUI extends JFrame {
 	
 	private void paintAgain() {
 		jLabelSelectOption.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
-		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
-		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
-		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
-		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": "+sellerMail);
+		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
+		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
+		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.LogOut"));
+		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle")+ ": "+sellerMail);
 	}
 	
 } // @jve:decl-index=0:visual-constraint="0,0"
