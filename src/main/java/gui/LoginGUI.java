@@ -9,12 +9,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import businessLogic.BLFacade;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import domain.User;
 
 public class LoginGUI extends JFrame {
 
@@ -25,6 +30,7 @@ public class LoginGUI extends JFrame {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private JButton btnLogin;
+	private JLabel lblInfo;
 
 
 	public LoginGUI() {
@@ -68,14 +74,31 @@ public class LoginGUI extends JFrame {
 		btnLogin = new JButton(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.btnLogin")); //$NON-NLS-1$ //$NON-NLS-2$
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFrame a = new RegisteredGUI("email");
-				a.setVisible(true);
-				dispose();
-
+				lblInfo.setText("");
+				BLFacade facade = MainGUI.getBusinessLogic();
+				String username = textField.getText().toString();
+				String pass =  new String(passwordField.getPassword());
+				if (!username.isEmpty() || !pass.isEmpty()) {
+					User u = facade.isRegistered(username, pass);
+					if (u != null) {
+						JFrame a = new RegisteredGUI(u);
+						a.setVisible(true);
+						dispose();
+					} else {
+						lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.WrongCredentials"));
+					}
+				} else {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.EmptyFields"));
+				}
 			}
 		});
 		btnLogin.setBounds(149, 172, 144, 23);
 		contentPane.add(btnLogin);
+		
+		lblInfo = new JLabel("");
+		lblInfo.setForeground(new Color(255, 0, 0));
+		lblInfo.setBounds(124, 155, 234, 16);
+		contentPane.add(lblInfo);
 		
 		
 		

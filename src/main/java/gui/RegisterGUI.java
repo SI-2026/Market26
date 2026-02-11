@@ -9,12 +9,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import businessLogic.BLFacade;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import domain.User;
 
 public class RegisterGUI extends JFrame {
 
@@ -28,6 +33,8 @@ public class RegisterGUI extends JFrame {
 	private JPasswordField passwordField;
 	private JPasswordField passwordFieldRepeat;
 	private JButton btnSignUp;
+	private JLabel lblInfo;
+
 
 
 	public RegisterGUI() {
@@ -79,25 +86,43 @@ public class RegisterGUI extends JFrame {
 		contentPane.add(passwordField);
 		contentPane.add(passwordFieldRepeat);
 
-
+		lblInfo = new JLabel("");
+		lblInfo.setForeground(new Color(255, 0, 0));
+		lblInfo.setBounds(124, 174, 234, 16);
+		contentPane.add(lblInfo);
 		
 		
 		btnSignUp = new JButton(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.btnSignUp")); //$NON-NLS-1$ //$NON-NLS-2$
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFrame a = new RegisteredGUI("email");
-				a.setVisible(true);
-				dispose();
+				String username = textField.getText().toString();
+				String pass =  new String(passwordField.getPassword());
+				String passr =  new String(passwordFieldRepeat.getPassword());
+				
+				if (pass != null && passr != null && pass.equals(passr)) {
+					BLFacade facade = MainGUI.getBusinessLogic();
+
+					if (!username.isEmpty() || !pass.isEmpty()) {
+						User u = facade.register(username, pass);
+						if (u != null) {
+							JFrame a = new RegisteredGUI(u);
+							a.setVisible(true);
+							dispose();
+						} else {
+							lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.UserAlreadyExists"));
+						}
+					} else {
+						lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.EmptyFields"));
+					}
+
+				} else {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.DiferentPasswords"));
+				}
+				
 			}
 		});
-		btnSignUp.setBounds(149, 172, 144, 23);
+		btnSignUp.setBounds(149, 191, 144, 23);
 		contentPane.add(btnSignUp);
 		
-		
-		
-		
-		
-		
-
 	}
 }

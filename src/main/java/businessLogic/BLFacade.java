@@ -66,6 +66,8 @@ public interface BLFacade  {
 	@WebMethod public Image downloadImage(String imageName);
 	
 	@WebMethod public User isRegistered(String log, String pass);
+	
+	@WebMethod public User register(String log, String pass);
 
 
 	

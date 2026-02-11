@@ -22,8 +22,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@XmlID
 	@Id 
-	private String email;
-	private String name; 
+	private String username;
+	private String password; 
 	@XmlIDREF
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> sales=new ArrayList<Sale>();
@@ -32,33 +32,33 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(String email, String name) {
-		this.email = email;
-		this.name = name;
+	public User(String username, String name) {
+		this.username = username;
+		this.password = name;
 	}
 	
 	
-	public String getEmail() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String email) {
+		this.username = email;
 	}
 
-	public String getName() {
-		return name;
+	public String getpassword() {
+		return password;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setpassword(String name) {
+		this.password = name;
 	}
 	
 
 	
 	
 	public String toString(){
-		return email+";"+name+sales;
+		return username+";"+password+sales;
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (email != other.email)
+		if (username != other.username)
 			return false;
 		return true;
 	}

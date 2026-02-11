@@ -20,10 +20,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 
+import domain.User;
 
 public class RegisteredGUI extends JFrame {
 	
-    private String sellerMail;
+    private String username;
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
@@ -50,10 +51,10 @@ public class RegisteredGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public RegisteredGUI( String mail) {
+	public RegisteredGUI( User u) {
 		super();
 
-		this.sellerMail=mail;
+		this.username=u.getUsername();
 		
 		this.setSize(495, 290);
 		jLabelSelectOption = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
@@ -112,7 +113,7 @@ public class RegisteredGUI extends JFrame {
 		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
 		jButtonCreateQuery.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame a = new CreateSaleGUI(sellerMail);
+				JFrame a = new CreateSaleGUI(username);
 				a.setVisible(true);
 			}
 		});
@@ -138,7 +139,7 @@ public class RegisteredGUI extends JFrame {
 		
 		
 		setContentPane(jContentPane);
-		setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") +": "+sellerMail);
+		setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") +": "+username);
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -153,7 +154,7 @@ public class RegisteredGUI extends JFrame {
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
 		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.LogOut"));
-		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle")+ ": "+sellerMail);
+		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle")+ ": "+username);
 	}
 	
 } // @jve:decl-index=0:visual-constraint="0,0"

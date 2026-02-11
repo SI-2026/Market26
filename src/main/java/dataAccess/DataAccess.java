@@ -78,9 +78,9 @@ public class DataAccess  {
 		try { 
 	       
 		    //Create sellers 
-			User user1=new User("seller1@gmail.com","Aitor Fernandez");
-			User user2=new User("seller22@gmail.com","Ane Gaztañaga");
-			User user3=new User("seller3@gmail.com","Test Seller");
+			User user1=new User("Aitor Fernandez","111");
+			User user2=new User("Ane Gaztañaga","222");
+			User user3=new User("Test Seller","333");
 
 			
 			//Create products
@@ -112,14 +112,42 @@ public class DataAccess  {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	public User isRegistered(String log, String pass) {
+		User result = null;
 		
-		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.name="+log+"",User.class);   
-		
-		User ema = query.getSingleResult();
-		
-		return ema;
+		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.username= :username", User.class);   
+	    query.setParameter("username", log);
+	    List<User> results = query.getResultList();
+	    if (!results.isEmpty()) {
+	    	User user = results.get(0);
+		    if (pass.equals(user.getpassword())) {
+			    result = user;
+		    }
+	    }
+		return result;
 	}
+	
+	public User register(String log, String pass) {
+		User result = null;
+		
+		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.username= :username", User.class);   
+	    query.setParameter("username", log);
+	    List<User> results = query.getResultList();
+	    if (results.isEmpty()) {
+		    db.getTransaction().begin();
+			result = new User(log, pass);
+			db.persist(result);
+			db.getTransaction().commit();
+	    }
+
+		return result;
+		
+	}
+	
+	
+	
 	
 	
 	/**
@@ -134,10 +162,10 @@ public class DataAccess  {
 	 * @return Product
  	 * @throws SaleAlreadyExistException if the same product already exists for the seller
 	 */
-	public Sale createSale(String title, String description, int status, float price,  Date pubDate, String sellerEmail, File file) throws  FileNotUploadedException, MustBeLaterThanTodayException, SaleAlreadyExistException {
+	public Sale createSale(String title, String description, int status, float price,  Date pubDate, String sellerUsername, File file) throws  FileNotUploadedException, MustBeLaterThanTodayException, SaleAlreadyExistException {
 		
 
-		System.out.println(">> DataAccess: createProduct=> title= "+title+" seller="+sellerEmail);
+		System.out.println(">> DataAccess: createProduct=> title= "+title+" seller="+sellerUsername);
 		try {
 		
 
@@ -149,7 +177,7 @@ public class DataAccess  {
 
 			db.getTransaction().begin();
 			
-			User user = db.find(User.class, sellerEmail);
+			User user = db.find(User.class, sellerUsername);
 			if (user.doesSaleExist(title)) {
 				db.getTransaction().commit();
 				throw new SaleAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.SaleAlreadyExist"));
