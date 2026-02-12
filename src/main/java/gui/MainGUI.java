@@ -45,6 +45,8 @@ public class MainGUI extends JFrame {
 	private JRadioButton rdbtnNewRadioButton_2;
 	private JPanel panel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
+
 	
 	/**
 	 * This is the default constructor
@@ -135,6 +137,35 @@ public class MainGUI extends JFrame {
 		
 		
 		setContentPane(jContentPane);
+		
+		JComboBox lenguage = new JComboBox();
+		lenguage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switch (lenguage.getSelectedItem().toString()) {
+				case "Euskara":
+					Locale.setDefault(new Locale("eus"));
+					paintAgain();
+					break;
+				case "English":
+					Locale.setDefault(new Locale("en"));
+					paintAgain();
+					break;
+				case "Castellano":
+					Locale.setDefault(new Locale("es"));
+					paintAgain();
+					break;
+				}
+			}
+		});
+		lenguage.setBounds(344, 174, 125, 22);
+		lenguage.setModel(lenguageMod);
+		lenguageMod.addElement("Euskara");
+		lenguageMod.addElement("󠁧󠁢󠁥English");
+		lenguageMod.addElement("Castellano");
+		lenguageMod.setSelectedItem(ResourceBundle.getBundle("Etiquetas").getString("Lenguage"));
+		jContentPane.add(lenguage);
+		
+		
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
 		
 		addWindowListener(new WindowAdapter() {
@@ -152,6 +183,5 @@ public class MainGUI extends JFrame {
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": "+sellerMail);
 	}
-	
 } // @jve:decl-index=0:visual-constraint="0,0"
 
