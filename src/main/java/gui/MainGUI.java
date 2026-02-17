@@ -50,12 +50,17 @@ public class MainGUI extends JFrame {
 	 */
 	public MainGUI(String mail) {
 		super();
-		this.sellerMail=mail;
+		sellerMail=mail;
+		setBounds(580, 280, 500, 300);
+		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
+		setAlwaysOnTop(true);
+		
+		
+		//Panel hasieraketa
 		jContentPane = new JPanel();
 		jContentPane.setLayout(null);
 		setContentPane(jContentPane);
-		this.setSize(495, 290);
-		
+
 		
 		//Titulua
 		jLabelSelectOption = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
@@ -71,6 +76,8 @@ public class MainGUI extends JFrame {
 		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
 		jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
+				thisRef.setEnabled(false);
 				JFrame loginGUI = new LoginGUI(thisRef);
 				loginGUI.setVisible(true);
 			}
@@ -83,6 +90,8 @@ public class MainGUI extends JFrame {
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
 		jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
+				thisRef.setEnabled(false);
 				JFrame registerGUI = new RegisterGUI(thisRef);
 				registerGUI.setVisible(true);
 			}
@@ -96,7 +105,6 @@ public class MainGUI extends JFrame {
 		jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				JFrame a = new QuerySalesGUI();
-
 				a.setVisible(true);
 			}
 		});
@@ -127,7 +135,15 @@ public class MainGUI extends JFrame {
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
 		lenguageMod.setSelectedItem("\uD83C\uDF10" + ResourceBundle.getBundle("Etiquetas").getString("Lenguage"));
-		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
+		
+
+		//Panelera gehitzeko aginduak
+		jContentPane.add(jLabelSelectOption);
+		jContentPane.add(jButtonLogin);
+		jContentPane.add(jButtonRegister);
+		jContentPane.add(jButtonQueryQueries);
+		jContentPane.add(lenguage);
+
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -136,14 +152,6 @@ public class MainGUI extends JFrame {
 			}
 		});
 		
-		
-		//Panelera gehitzeko aginduak
-		jContentPane.add(jLabelSelectOption);
-		jContentPane.add(jButtonLogin);
-		jContentPane.add(jButtonRegister);
-		jContentPane.add(jButtonQueryQueries);
-		jContentPane.add(lenguage);
-
 	}
 	
 	private void paintAgain() {
