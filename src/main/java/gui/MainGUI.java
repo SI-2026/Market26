@@ -23,7 +23,6 @@ import businessLogic.BLFacade;
 
 public class MainGUI extends JFrame {
 	
-    private String sellerMail;
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
@@ -49,11 +48,10 @@ public class MainGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public MainGUI(String mail) {
+	public MainGUI() {
 		super();
-		sellerMail=mail;
 		setBounds(580, 280, 500, 300);
-		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
+		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 		setAlwaysOnTop(true);
 		
 		
@@ -105,13 +103,14 @@ public class MainGUI extends JFrame {
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
 		jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
 				JFrame a = new QuerySalesGUI();
 				a.setVisible(true);
 			}
 		});
 		
 		
-		//Lengoaiak aukeratzeko comboboxa
+		//Lengoaiak aukeratzeko combobox-a
 		JComboBox<String> lenguage = new JComboBox<String>(lenguageMod);
 		lenguage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -124,14 +123,14 @@ public class MainGUI extends JFrame {
 					Locale.setDefault(new Locale("en"));
 					paintAgain();
 					break;
-				case "Castellano":
+				case "Español":
 					Locale.setDefault(new Locale("es"));
 					paintAgain();
 					break;
 				}
 			}
 		});
-		lenguage.setBounds(344, 174, 125, 22);
+		lenguage.setBounds(349, 228, 125, 22);
 		lenguageMod.addElement("Euskara");
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
@@ -160,7 +159,7 @@ public class MainGUI extends JFrame {
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
 		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
-		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": "+sellerMail);
+		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 	}
 } // @jve:decl-index=0:visual-constraint="0,0"
 
