@@ -80,7 +80,7 @@ public class DataAccess  {
 		    //Create sellers 
 			User user1=new User("Aitor Fernandez","111");
 			User user2=new User("Ane Gaztañaga","222");
-			User user3=new User("Test Seller","333");
+			User user3=new User("oier","111");
 
 			
 			//Create products
@@ -116,34 +116,23 @@ public class DataAccess  {
 	
 	public User isRegistered(String log, String pass) {
 		User result = null;
-		
-		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.username= :username", User.class);   
-	    query.setParameter("username", log);
-	    List<User> results = query.getResultList();
-	    if (!results.isEmpty()) {
-	    	User user = results.get(0);
-		    if (pass.equals(user.getpassword())) {
-			    result = user;
-		    }
+	    User u = db.find(User.class, log);
+	    if (u != null && u.isConectedPassword(pass)) {
+	    	result = u;
 	    }
 		return result;
 	}
 	
 	public User register(String log, String pass) {
 		User result = null;
-		
-		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.username= :username", User.class);   
-	    query.setParameter("username", log);
-	    List<User> results = query.getResultList();
-	    if (results.isEmpty()) {
+	    User u = db.find(User.class, log);
+	    if (u == null) {
 		    db.getTransaction().begin();
 			result = new User(log, pass);
 			db.persist(result);
 			db.getTransaction().commit();
 	    }
-
 		return result;
-		
 	}
 	
 	
