@@ -109,6 +109,9 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
+	public Boolean isConectedPassword(String pass) {
+		return this.getpassword().equals(pass);
+	}
 
 	
 }
