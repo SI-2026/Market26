@@ -45,7 +45,6 @@ public class MainGUI extends JFrame {
 	private JRadioButton rdbtnNewRadioButton_2;
 	private JPanel panel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 
 	
 	/**
@@ -158,12 +157,7 @@ public class MainGUI extends JFrame {
 			}
 		});
 		lenguage.setBounds(344, 174, 125, 22);
-		lenguage.setModel(lenguageMod);
-		lenguageMod.addElement("Euskara");
-		lenguageMod.addElement("󠁧󠁢󠁥English");
-		lenguageMod.addElement("Castellano");
-		lenguageMod.setSelectedItem(ResourceBundle.getBundle("Etiquetas").getString("Lenguage"));
-		jContentPane.add(lenguage);
+
 		
 		
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
