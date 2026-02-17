@@ -1,23 +1,24 @@
 package gui;
 
-/**
- * @author Software Engineering teachers
- */
-
-
-import javax.swing.*;
-
-import businessLogic.BLFacade;
-
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import businessLogic.BLFacade;
 
 
 public class MainGUI extends JFrame {
