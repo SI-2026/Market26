@@ -29,6 +29,9 @@ public class MainGUI extends JFrame {
 	private JButton jButtonLogin = null;
 	private JButton jButtonRegister = null;
 	private JButton jButtonQueryQueries = null;
+	protected JLabel jLabelSelectOption;
+	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
+	private JFrame thisRef = this;
 
     private static BLFacade appFacadeInterface;
 	
@@ -39,82 +42,54 @@ public class MainGUI extends JFrame {
 	public static void setBussinessLogic (BLFacade facade){
 		appFacadeInterface=facade;
 	}
-	protected JLabel jLabelSelectOption;
-	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnNewRadioButton_1;
-	private JRadioButton rdbtnNewRadioButton_2;
-	private JPanel panel;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
+
 
 	
 	/**
 	 * This is the default constructor
 	 */
-	public MainGUI( String mail) {
+	public MainGUI(String mail) {
 		super();
-
 		this.sellerMail=mail;
-		
+		jContentPane = new JPanel();
+		jContentPane.setLayout(null);
+		setContentPane(jContentPane);
 		this.setSize(495, 290);
+		
+		
+		//Titulua
 		jLabelSelectOption = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
 		jLabelSelectOption.setBounds(30, 13, 125, 16);
 		jLabelSelectOption.setFont(new Font("Tahoma", Font.BOLD, 13));
 		jLabelSelectOption.setForeground(Color.BLACK);
 		jLabelSelectOption.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		rdbtnNewRadioButton = new JRadioButton("English");
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Locale.setDefault(new Locale("en"));
-				paintAgain();				}
-		});
-		buttonGroup.add(rdbtnNewRadioButton);
 		
-		rdbtnNewRadioButton_1 = new JRadioButton("Euskara");
-		rdbtnNewRadioButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Locale.setDefault(new Locale("eus"));
-				paintAgain();				}
-		});
-		buttonGroup.add(rdbtnNewRadioButton_1);
-		
-		rdbtnNewRadioButton_2 = new JRadioButton("Castellano");
-		rdbtnNewRadioButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Locale.setDefault(new Locale("es"));
-				paintAgain();
-			}
-		});
-		buttonGroup.add(rdbtnNewRadioButton_2);
-	
-		panel = new JPanel();
-		panel.setBounds(72, 207, 328, 33);
-		panel.add(rdbtnNewRadioButton_1);
-		panel.add(rdbtnNewRadioButton_2);
-		panel.add(rdbtnNewRadioButton);
-		
+		//Login pantailara joateko botoia
 		jButtonLogin = new JButton();
 		jButtonLogin.setBounds(212, 11, 125, 23);
 		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
 		jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame a = new LoginGUI();
-				a.setVisible(true);
-				dispose();
+				JFrame loginGUI = new LoginGUI(thisRef);
+				loginGUI.setVisible(true);
 			}
 		});
 		
+		
+		//Register pantailara joateko botoia
 		jButtonRegister = new JButton();
 		jButtonRegister.setBounds(344, 11, 125, 23);
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
 		jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame a = new RegisterGUI();
-				a.setVisible(true);
-				dispose();
+				JFrame registerGUI = new RegisterGUI(thisRef);
+				registerGUI.setVisible(true);
 			}
 		});
 		
+		
+		//QueryQueries pantailara joateko botoia
 		jButtonQueryQueries = new JButton();
 		jButtonQueryQueries.setBounds(119, 92, 217, 64);
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
@@ -126,18 +101,9 @@ public class MainGUI extends JFrame {
 			}
 		});
 		
-		jContentPane = new JPanel();
-		jContentPane.setLayout(null);
-		jContentPane.add(jLabelSelectOption);
-		jContentPane.add(jButtonLogin);
-		jContentPane.add(jButtonRegister);
-		jContentPane.add(jButtonQueryQueries);
-		jContentPane.add(panel);
 		
-		
-		setContentPane(jContentPane);
-		
-		JComboBox lenguage = new JComboBox();
+		//Lengoaiak aukeratzeko comboboxa
+		JComboBox<String> lenguage = new JComboBox<String>(lenguageMod);
 		lenguage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (lenguage.getSelectedItem().toString()) {
@@ -157,9 +123,10 @@ public class MainGUI extends JFrame {
 			}
 		});
 		lenguage.setBounds(344, 174, 125, 22);
-
-		
-		
+		lenguageMod.addElement("Euskara");
+		lenguageMod.addElement("English");
+		lenguageMod.addElement("Español");
+		lenguageMod.setSelectedItem("\uD83C\uDF10" + ResourceBundle.getBundle("Etiquetas").getString("Lenguage"));
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": "+sellerMail);
 		
 		addWindowListener(new WindowAdapter() {
@@ -168,6 +135,15 @@ public class MainGUI extends JFrame {
 				System.exit(1);
 			}
 		});
+		
+		
+		//Panelera gehitzeko aginduak
+		jContentPane.add(jLabelSelectOption);
+		jContentPane.add(jButtonLogin);
+		jContentPane.add(jButtonRegister);
+		jContentPane.add(jButtonQueryQueries);
+		jContentPane.add(lenguage);
+
 	}
 	
 	private void paintAgain() {
