@@ -26,7 +26,7 @@ public class RegisteredGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-	private JButton jButtonLogOut = null;
+	private JButton jButtonProfile = null;
 	private JButton jButtonCreateQuery = null;
 	private JButton jButtonQueryQueries = null;
 	private JLabel jLabelSelectOption;
@@ -71,14 +71,14 @@ public class RegisteredGUI extends JFrame {
 		
 		
 		//Kontutik ateratzeko botoia
-		jButtonLogOut = new JButton();
-		jButtonLogOut.setBounds(344, 11, 125, 23);
-		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.LogOut"));
-		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
+		jButtonProfile = new JButton();
+		jButtonProfile.setBounds(344, 11, 125, 23);
+		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
+		jButtonProfile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame mainGUI = new MainGUI();
-				mainGUI.setVisible(true);
-				dispose();
+				thisRef.setAlwaysOnTop(false);
+				JFrame profileGUI = new ProfileGUI(thisRef, username);
+				profileGUI.setVisible(true);
 			}
 		});
 		
@@ -139,7 +139,7 @@ public class RegisteredGUI extends JFrame {
 		
 		//Panelera gehitzeko aginduak
 		jContentPane.add(jLabelSelectOption);
-		jContentPane.add(jButtonLogOut);
+		jContentPane.add(jButtonProfile);
 		jContentPane.add(jButtonCreateQuery);
 		jContentPane.add(jButtonQueryQueries);
 		jContentPane.add(lenguage);
@@ -157,7 +157,7 @@ public class RegisteredGUI extends JFrame {
 		jLabelSelectOption.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
 		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
-		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.LogOut"));
+		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") + ": " + username);
 	}
 	
