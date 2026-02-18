@@ -22,7 +22,7 @@ public class ApplicationLauncher {
 		ConfigXML c=ConfigXML.getInstance();		
 		Locale.setDefault(new Locale(c.getLocale()));
 		
-		MainGUI a=new MainGUI();
+		UserGUI a=new UserGUI();
 		a.setVisible(true);
 
 
@@ -50,7 +50,7 @@ public class ApplicationLauncher {
 		        appFacadeInterface = service.getPort(BLFacade.class);
 			} 
 			
-			MainGUI.setBussinessLogic(appFacadeInterface);
+			UserGUI.setBussinessLogic(appFacadeInterface);
 			//ErreklamatuGUI g=new ErreklamatuGUI();
 			//g.setVisible(true);
 			

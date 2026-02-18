@@ -32,9 +32,10 @@ public class LoginGUI extends JFrame {
 	
 
 
-	public LoginGUI(JFrame mainGUIref) {
+	public LoginGUI(JFrame userGUIref) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(600, 300, 500, 300);
+		final int frameWidth = 500;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.MainTitle"));
 		setAlwaysOnTop(true);
 
@@ -47,29 +48,29 @@ public class LoginGUI extends JFrame {
 		
 		//Erabiltzailea sartzeko titulua
 		JLabelUsername = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.UsernameLabel"));
-		JLabelUsername.setBounds(66, 34, 144, 14);
+		JLabelUsername.setBounds((frameWidth - 260) / 2, 32, 260, 16);
 		JLabelUsername.setFont(new Font("Tahoma", Font.BOLD, 13));
 		JLabelUsername.setForeground(Color.BLACK);
-		JLabelUsername.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabelUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Pasahitzak sartzeko tituluak
 		JLabelPassword = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.PasswordLabel"));
-		JLabelPassword.setBounds(66, 97, 144, 14);
+		JLabelPassword.setBounds((frameWidth - 260) / 2, 95, 260, 16);
 		JLabelPassword.setFont(new Font("Tahoma", Font.BOLD, 13));
 		JLabelPassword.setForeground(Color.BLACK);
-		JLabelPassword.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabelPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		
 
 		//Erabiltzailea sartzeko hutsunea
 		textField = new JTextField();
-		textField.setBounds(124, 59, 200, 20);
+		textField.setBounds((frameWidth - 240) / 2, 56, 240, 24);
 		textField.setColumns(10);
 		
 		
 		//Pasahitza sartzeko hutsunea
 		passwordField = new JPasswordField();
-		passwordField.setBounds(124, 122, 200, 20);
+		passwordField.setBounds((frameWidth - 240) / 2, 119, 240, 24);
 
 		
 		//Enter ematerakoan botoiari clik egin
@@ -80,7 +81,8 @@ public class LoginGUI extends JFrame {
 		//Informazio textua
 		lblInfo = new JLabel("");
 		lblInfo.setForeground(new Color(255, 0, 0));
-		lblInfo.setBounds(124, 155, 234, 16);
+		lblInfo.setBounds((frameWidth - 300) / 2, 154, 300, 16);
+		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Logeatzeko botoia
@@ -88,7 +90,7 @@ public class LoginGUI extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				lblInfo.setText("");
-				BLFacade facade = MainGUI.getBusinessLogic();
+				BLFacade facade = UserGUI.getBusinessLogic();
 				String username = textField.getText().toString();
 				String pass =  new String(passwordField.getPassword());
 				if (!username.isEmpty() && !pass.isEmpty()) {
@@ -96,7 +98,7 @@ public class LoginGUI extends JFrame {
 					if (u != null) {
 						JFrame registeredGUI = new RegisteredGUI(u);
 						registeredGUI.setVisible(true);
-						mainGUIref.dispose();
+						userGUIref.dispose();
 						dispose();
 					} else {
 						lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("LoginGUI.WrongCredentials"));
@@ -106,7 +108,7 @@ public class LoginGUI extends JFrame {
 				}
 			}
 		});
-		btnLogin.setBounds(149, 172, 144, 23);
+		btnLogin.setBounds((frameWidth - 160) / 2, 178, 160, 30);
 		
 		
 		//Panelera gehitzeko aginduak
@@ -121,7 +123,7 @@ public class LoginGUI extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				mainGUIref.setEnabled(true);
+				userGUIref.setEnabled(true);
 			}
 		});
 	}

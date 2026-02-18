@@ -35,9 +35,10 @@ public class RegisterGUI extends JFrame {
 
 
 
-	public RegisterGUI(JFrame mainGUIref) {
+	public RegisterGUI(JFrame userGUIref) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(600, 300, 500, 300);
+		final int frameWidth = 500;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.MainTitle"));
 		setAlwaysOnTop(true);
 
@@ -50,38 +51,38 @@ public class RegisterGUI extends JFrame {
 		
 		//Erabiltzailea sartzeko titulua
 		JLabelUsername = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.UsernameLabel"));
-		JLabelUsername.setBounds(66, 11, 144, 14);
+		JLabelUsername.setBounds((frameWidth - 280) / 2, 10, 280, 16);
 		JLabelUsername.setFont(new Font("Tahoma", Font.BOLD, 13));
 		JLabelUsername.setForeground(Color.BLACK);
-		JLabelUsername.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabelUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Pasahitzak sartzeko tituluak
 		JLabelPassword = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.PasswordLabel"));
-		JLabelPassword.setBounds(66, 67, 144, 14);
+		JLabelPassword.setBounds((frameWidth - 280) / 2, 63, 280, 16);
 		JLabelPassword.setFont(new Font("Tahoma", Font.BOLD, 13));
 		JLabelPassword.setForeground(Color.BLACK);
-		JLabelPassword.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabelPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabelPasswordRepeat = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.PasswordLabelRepeat"));
-		JLabelPasswordRepeat.setBounds(66, 116, 200, 14);
+		JLabelPasswordRepeat.setBounds((frameWidth - 280) / 2, 116, 280, 16);
 		JLabelPasswordRepeat.setFont(new Font("Tahoma", Font.BOLD, 13));
 		JLabelPasswordRepeat.setForeground(Color.BLACK);
-		JLabelPasswordRepeat.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabelPasswordRepeat.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Erabiltzailea sartzeko hutsunea
 		textField = new JTextField();
-		textField.setBounds(124, 36, 200, 20);
+		textField.setBounds((frameWidth - 240) / 2, 33, 240, 24);
 		textField.setColumns(10);
 		
 		
 		//Pasahitzak sartzeko hutsuneak
 		passwordField = new JPasswordField();
-		passwordField.setBounds(124, 92, 200, 20);
+		passwordField.setBounds((frameWidth - 240) / 2, 86, 240, 24);
 		
 		passwordFieldRepeat = new JPasswordField();
-		passwordFieldRepeat.setBounds(124, 141, 200, 20);
+		passwordFieldRepeat.setBounds((frameWidth - 240) / 2, 139, 240, 24);
 
 		
 		//Enter ematerakoan botoiari clik egin
@@ -92,7 +93,8 @@ public class RegisterGUI extends JFrame {
 		//Informazio textua
 		lblInfo = new JLabel("");
 		lblInfo.setForeground(new Color(255, 0, 0));
-		lblInfo.setBounds(124, 174, 234, 16);
+		lblInfo.setBounds((frameWidth - 300) / 2, 172, 300, 16);
+		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Erregistratzeko botoia
@@ -105,12 +107,12 @@ public class RegisterGUI extends JFrame {
 				
 				if (!pass.isEmpty() && !passr.isEmpty() && !username.isEmpty()) {
 					if (pass.equals(passr)) {
-						BLFacade facade = MainGUI.getBusinessLogic();
+						BLFacade facade = UserGUI.getBusinessLogic();
 						User u = facade.register(username, pass);
 						if (u != null) {
 							JFrame registeredGUI = new RegisteredGUI(u);
 							registeredGUI.setVisible(true);
-							mainGUIref.dispose();
+							userGUIref.dispose();
 							dispose();
 						} else {
 							lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.UserAlreadyExists"));
@@ -124,7 +126,7 @@ public class RegisterGUI extends JFrame {
 				
 			}
 		});
-		btnSignUp.setBounds(149, 191, 144, 23);
+		btnSignUp.setBounds((frameWidth - 160) / 2, 194, 160, 30);
 		
 		
 		//Panelera gehitzeko aginduak
@@ -141,7 +143,7 @@ public class RegisterGUI extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				mainGUIref.setEnabled(true);
+				userGUIref.setEnabled(true);
 			}
 		});
 	}

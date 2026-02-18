@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,21 +19,20 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import businessLogic.BLFacade;
-import domain.User;
 
-public class RegisteredGUI extends JFrame {
+
+public class UserGUI extends JFrame {
 	
-    private String username;
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-	private JButton jButtonProfile = null;
-	private JButton jButtonCreateQuery = null;
+	private JButton jButtonLogin = null;
+	private JButton jButtonRegister = null;
 	private JButton jButtonQueryQueries = null;
-	private JLabel jLabelSelectOption;
+	protected JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
-	
+
     private static BLFacade appFacadeInterface;
 	
 	public static BLFacade getBusinessLogic(){
@@ -48,64 +48,65 @@ public class RegisteredGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public RegisteredGUI(User u) {
+	public UserGUI() {
 		super();
 		setBounds(580, 280, 500, 300);
 		final int frameWidth = 500;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 		setAlwaysOnTop(true);
-		username = u.getUsername();
 		
 		
 		//Panel hasieraketa
 		jContentPane = new JPanel();
 		jContentPane.setLayout(null);
 		setContentPane(jContentPane);
-		
+
 		
 		//Titulua
 		jLabelSelectOption = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
-		jLabelSelectOption.setBounds((frameWidth - 220) / 2, 16, 220, 16);
+		jLabelSelectOption.setBounds(30, 16, 220, 16);
 		jLabelSelectOption.setFont(new Font("Tahoma", Font.BOLD, 13));
 		jLabelSelectOption.setForeground(Color.BLACK);
 		jLabelSelectOption.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
-		//Kontutik ateratzeko botoia
-		jButtonProfile = new JButton();
-		jButtonProfile.setBounds(frameWidth - 145, 11, 115, 25);
-		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
-		jButtonProfile.addActionListener(new java.awt.event.ActionListener() {
+		//Login pantailara joateko botoia
+		jButtonLogin = new JButton();
+		jButtonLogin.setBounds(frameWidth - 272, 11, 115, 25);
+		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
+		jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				thisRef.setAlwaysOnTop(false);
-				JFrame profileGUI = new ProfileGUI(thisRef, username);
-				profileGUI.setVisible(true);
+				thisRef.setEnabled(false);
+				JFrame loginGUI = new LoginGUI(thisRef);
+				loginGUI.setVisible(true);
 			}
 		});
 		
 		
-		//CreateQueryGUI-ra joataeko botoia
-		jButtonCreateQuery = new JButton();
-		jButtonCreateQuery.setBounds((frameWidth - 240) / 2, 66, 240, 58);
-		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
-		jButtonCreateQuery.addActionListener(new java.awt.event.ActionListener() {
+		//Register pantailara joateko botoia
+		jButtonRegister = new JButton();
+		jButtonRegister.setBounds(frameWidth - 145, 11, 115, 25);
+		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
+		jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				thisRef.setAlwaysOnTop(false);
-				JFrame createsaleGUI = new CreateSaleGUI(username);
-				createsaleGUI.setVisible(true);
+				thisRef.setEnabled(false);
+				JFrame registerGUI = new RegisterGUI(thisRef);
+				registerGUI.setVisible(true);
 			}
 		});
 		
 		
 		//QueryQueries pantailara joateko botoia
 		jButtonQueryQueries = new JButton();
-		jButtonQueryQueries.setBounds((frameWidth - 240) / 2, 133, 240, 58);
-		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
+		jButtonQueryQueries.setBounds((frameWidth - 240) / 2, 96, 240, 64);
+		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
 		jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				thisRef.setAlwaysOnTop(false);
-				JFrame querysalesGUI = new QuerySalesGUI();
-				querysalesGUI.setVisible(true);
+				JFrame a = new QuerySalesGUI();
+				a.setVisible(true);
 			}
 		});
 		
@@ -130,17 +131,17 @@ public class RegisteredGUI extends JFrame {
 				}
 			}
 		});
-		lenguage.setBounds((frameWidth - 160) / 2, 221, 160, 24);
+		lenguage.setBounds(349, 228, 125, 22);
 		lenguageMod.addElement("Euskara");
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
 		lenguageMod.setSelectedItem("\uD83C\uDF10" + ResourceBundle.getBundle("Etiquetas").getString("Lenguage"));
 		
-		
+
 		//Panelera gehitzeko aginduak
 		jContentPane.add(jLabelSelectOption);
-		jContentPane.add(jButtonProfile);
-		jContentPane.add(jButtonCreateQuery);
+		jContentPane.add(jButtonLogin);
+		jContentPane.add(jButtonRegister);
 		jContentPane.add(jButtonQueryQueries);
 		jContentPane.add(lenguage);
 
@@ -151,15 +152,15 @@ public class RegisteredGUI extends JFrame {
 				System.exit(1);
 			}
 		});
+		
 	}
 	
 	private void paintAgain() {
 		jLabelSelectOption.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
-		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
-		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
-		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
-		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") + ": " + username);
+		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
+		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
+		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
+		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 	}
-	
 } // @jve:decl-index=0:visual-constraint="0,0"
 

@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 public class ProfileGUI extends JFrame {
@@ -17,12 +17,13 @@ public class ProfileGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblUsername;
-	private JTextPane descriptionPane;
+	private JTextArea descriptionPane;
 	private JButton jButtonLogOut;
 
 	public ProfileGUI(JFrame registeredRef, String username) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(1000, 340, 400, 250);
+		final int frameWidth = 400;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.MainTitle") + ": " + username);
 		setAlwaysOnTop(true);
 		
@@ -36,23 +37,24 @@ public class ProfileGUI extends JFrame {
 		//Username title
 		lblUsername = new JLabel(username);
 		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsername.setBounds(108, 11, 153, 14);
+		lblUsername.setBounds((frameWidth - 220) / 2, 24, 220, 20);
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 13));
 
 		
 		
 		//Description area
-		descriptionPane = new JTextPane();
+		descriptionPane = new JTextArea();
 		descriptionPane.setEditable(false);
-		descriptionPane.setBounds(46, 70, 295, 84);
+		descriptionPane.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		descriptionPane.setBounds((frameWidth - 300) / 2, 90, 300, 42);
 		
 		
 		jButtonLogOut = new JButton();
-		jButtonLogOut.setBounds(119, 164, 126, 36);
+		jButtonLogOut.setBounds((frameWidth - 150) / 2, 160, 150, 36);
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.LogOut"));
 		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame mainGUI = new MainGUI();
+				JFrame mainGUI = new UserGUI();
 				mainGUI.setVisible(true);
 				registeredRef.dispose();
 				dispose();
