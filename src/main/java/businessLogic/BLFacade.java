@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import domain.Purchase;
 import domain.Sale;
 import domain.User;
 import exceptions.FileNotUploadedException;
@@ -68,6 +69,37 @@ public interface BLFacade  {
 	@WebMethod public User isRegistered(String log, String pass);
 	
 	@WebMethod public User register(String log, String pass);
+
+	/**
+	 * This method creates a purchase when a user buys a product
+	 * 
+	 * @param saleNumber the ID of the product to buy
+	 * @param buyerEmail the email of the buyer
+	 * @return Purchase the created purchase
+	 */
+	@WebMethod
+	
+	public Purchase createPurchase(Integer saleNumber, String buyerEmail);
+
+	/**
+	 * This method retrieves all purchases made by a specific buyer
+	 * 
+	 * @param buyerEmail the email of the buyer
+	 * @return List of purchases made by that user
+	 */
+	@WebMethod
+	public List<Purchase> getBuyerPurchases(String buyerEmail);
+
+	/**
+	 * This method retrieves all purchases of a specific product
+	 * 
+	 * @param saleNumber the ID of the product
+	 * @return List of purchases for that product
+	 */
+	@WebMethod
+	public List<Purchase> getSalePurchases(Integer saleNumber);
+
+
 
 
 	

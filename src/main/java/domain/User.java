@@ -37,7 +37,7 @@ public class User implements Serializable {
 	public User(String username, String name) {
 		this.username = username;
 		this.password = name;
-		this.favorites = new List<Sale>();
+		this.favorites = new ArrayList<Sale>() {
 	}
 	
 	
@@ -57,7 +57,9 @@ public class User implements Serializable {
 		this.password = name;
 	}
 	
-
+	public void updateFavorites(Sale sale){
+		this.favorites.add(sale);
+	}
 	
 	
 	public String toString(){

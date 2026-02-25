@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
+import domain.Purchase;
 import domain.Sale;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -283,5 +284,37 @@ public void open(){
 		db.close();
 		System.out.println("DataAcess closed");
 	}
-	
+
+	public Purchase createPurchase(Integer saleNumber, String buyerMail){
+		System.out.println(">> DataAccess: createPurchase=> saleNumber= "+saleNumber+" buyerMail="+buyerMail);
+		try{
+			db.getTransaction().begin();
+			Sale sale = db.find(Sale.class, saleNumber);
+			if (sale == null) {
+				db.getTransaction().commit();
+				System.out.println("Sale not found");
+				return null;
+			}else{
+				User buyer = db.find(User.class, buyerMail);
+				if(buyer == null) {
+					db.getTransaction().commit();
+					System.out.println("Buyer not found");
+					return null;
+				}else{
+					sale.setSold(true);
+					db.persist(sale); //DB-an eguneratu egiten da.
+
+					Purchase purchase = new Purchase(buyerMail, new Date(), sale.getPrice(), buyer, sale, saleNumber);
+					db.persist(purchase);
+					db.getTransaction().commit();
+					System.out.println("Purchase created "+purchase);
+					return purchase;
+			}
+		}
+		}catch (Exception e){
+			db.getTransaction().commit();
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
