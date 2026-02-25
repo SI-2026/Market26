@@ -32,6 +32,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
+	private final initialize = false;
 
 	private static final String basePath="src/main/resources/images/";
 
@@ -40,7 +41,7 @@ public class DataAccess  {
 	ConfigXML c=ConfigXML.getInstance();
 
      public DataAccess()  {
-		if (c.isDatabaseInitialized()) {
+		if (initialize) {
 			String fileName=c.getDbFilename();
 
 			File fileToDelete= new File(fileName);
@@ -53,7 +54,7 @@ public class DataAccess  {
 				}
 		}
 		open();
-		if  (c.isDatabaseInitialized()) 
+		if  (initialize) 
 			initializeDB();
 		System.out.println("DataAccess created => isDatabaseLocal: "+c.isDatabaseLocal()+" isDatabaseInitialized: "+c.isDatabaseInitialized());
 
