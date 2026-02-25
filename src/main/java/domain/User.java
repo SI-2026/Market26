@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class User implements Serializable {
@@ -36,7 +37,7 @@ public class User implements Serializable {
 	public User(String username, String name) {
 		this.username = username;
 		this.password = name;
-		this.favorites = new Lis<Sale>();
+		this.favorites = new List<Sale>();
 	}
 	
 	
