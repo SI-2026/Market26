@@ -6,16 +6,15 @@ import java.util.List;
 
 import domain.Sale;
 import domain.User;
+import domain.Purchase;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
 import exceptions.SaleAlreadyExistException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.awt.image.BufferedImage;
 import java.awt.Image;
 
-import gui.*;
 /**
  * Interface that specifies the business logic.
  */
@@ -68,6 +67,8 @@ public interface BLFacade  {
 	@WebMethod public User isRegistered(String log, String pass);
 	
 	@WebMethod public User register(String log, String pass);
+
+	@WebMethod public Purchase buySale(int saleNumer, String buyerUsername);
 
 
 	

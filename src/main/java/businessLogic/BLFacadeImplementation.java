@@ -7,6 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import dataAccess.DataAccess;
+import domain.Purchase;
 import domain.Sale;
 import domain.User;
 import exceptions.FileNotUploadedException;
@@ -122,6 +123,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		User u = dbManager.register(log, pass);
 		dbManager.close();
 		return u;
+	}
+	
+	@Override
+	public Purchase buySale(int saleNumer, String buyerUsername) {
+		dbManager.open();
+		Purchase p = dbManager.buySale(saleNumer, buyerUsername);
+		dbManager.close();
+		return p;
 	}
 
     
