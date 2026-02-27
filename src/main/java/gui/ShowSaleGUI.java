@@ -45,7 +45,7 @@ public class ShowSaleGUI extends JFrame {
 	private JLabel statusField=new JLabel();
 	private JFrame thisFrame;
 	
-	public ShowSaleGUI(Sale sale) { 
+	public ShowSaleGUI(Sale sale, String username) { 
 		thisFrame=this; 
 		this.setVisible(true);
 		this.getContentPane().setLayout(null);
@@ -130,7 +130,29 @@ public class ShowSaleGUI extends JFrame {
 		statusField = new JLabel(Utils.getStatus(sale.getStatus())); 
 		statusField.setBounds(137, 191, 92, 16);
 		getContentPane().add(statusField);
-		setVisible(true);
+		
+		JButton jButtonBuy = new JButton((String) null);
+		jButtonBuy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (facade.buySale(sale.getSaleNumber(), username) != null) {
+					sale.setSold(true);
+					jButtonBuy.setEnabled(false);
+					jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buyed"));
+				}
+			}
+		});
+		jButtonBuy.setBounds(new Rectangle(16, 268, 114, 30));
+		jButtonBuy.setBounds(164, 268, 114, 30);
+		jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buy"));
+		if (username.equals("Guest") || sale.isSold()) {
+			jButtonBuy.setEnabled(false);
+			if (sale.isSold()) {
+				jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buyed"));
+			}
+		}
+		getContentPane().add(jButtonBuy);
+
+		
 	}	 
 	public BufferedImage rescale(BufferedImage originalImage)
     {
@@ -140,7 +162,5 @@ public class ShowSaleGUI extends JFrame {
         g.dispose();
         return resizedImage;
     }
-	
-	
 }
 
