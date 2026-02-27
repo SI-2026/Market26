@@ -163,9 +163,7 @@ public class ShowSaleGUI extends JFrame {
 		jButtonFavorites.setBounds(new Rectangle(16, 268, 114, 30));
 		jButtonFavorites.setBounds(164, 231, 114, 30);
 		jButtonFavorites.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddtoFav"));
-		if (username.equals("Guest")) {
-			jButtonFavorites.setEnabled(false);
-		} else if (facade.isInFavorites(sale.getSaleNumber(), username)) {
+		if (facade.isInFavorites(sale.getSaleNumber(), username)) {
 			jButtonFavorites.setEnabled(false);
 		}
 		
