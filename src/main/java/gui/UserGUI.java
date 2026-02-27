@@ -105,7 +105,7 @@ public class UserGUI extends JFrame {
 		jButtonQueryQueries.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				thisRef.setAlwaysOnTop(false);
-				JFrame a = new QuerySalesGUI();
+				JFrame a = new QuerySalesGUI("Guest");
 				a.setVisible(true);
 			}
 		});
