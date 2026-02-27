@@ -25,10 +25,11 @@ public class User implements Serializable {
 	@Id 
 	private String username;
 	private String password; 
-	private List<Sale> favorites;
 	@XmlIDREF
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> sales=new ArrayList<Sale>();
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	private List<Purchase> purchases=new ArrayList<Purchase>();
 
 	public User() {
 		super();
@@ -37,7 +38,6 @@ public class User implements Serializable {
 	public User(String username, String name) {
 		this.username = username;
 		this.password = name;
-		this.favorites = new List<Sale>();
 	}
 	
 	
@@ -97,6 +97,13 @@ public class User implements Serializable {
 			if ( s.getTitle().compareTo(title)==0 )
 			 return true;
 		return false;
+	}
+	
+	public Purchase addPurchase(Sale sale, Date date)  {
+		
+		Purchase purchase =new Purchase(this, sale, date);
+		purchases.add(purchase);
+        return purchase;
 	}
 		
 	@Override

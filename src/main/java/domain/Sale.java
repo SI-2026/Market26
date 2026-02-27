@@ -27,8 +27,8 @@ public class Sale implements Serializable {
 	private float price;
 	private Date pubDate;
 	private String fileName;
-	
-	private User user;  
+	private boolean sold;
+	private User seller;  
 	
 	public Sale(){
 		super();
@@ -42,6 +42,7 @@ public class Sale implements Serializable {
 		this.status = status;
 		this.price=price;
 		this.pubDate=pubDate;
+		this.sold=false;
 		if (file!=null) {
 		    this.fileName=file.getName();
 			try {
@@ -58,7 +59,7 @@ public class Sale implements Serializable {
 		}
 		}
 
-		this.user = user;
+		this.seller = user;
 		
 	}
 	
@@ -192,7 +193,7 @@ public class Sale implements Serializable {
 	 * @return the associated seller
 	 */
 	public User getSeller() {
-		return user;
+		return seller;
 	}
 
 	/**
@@ -201,7 +202,7 @@ public class Sale implements Serializable {
 	 * @param user to assign to the sale
 	 */
 	public void setSeller(User user) {
-		this.user = user;
+		this.seller = user;
 	}
 
 	/**
@@ -211,6 +212,12 @@ public class Sale implements Serializable {
 	 */
 	public String getFile() {
 		return fileName;
+	}
+	public void setSold(boolean sold) {
+		this.sold = sold;
+	}
+	public boolean isSold() {
+		return this.sold;
 	}
 	
 	
