@@ -151,8 +151,28 @@ public class DataAccess  {
 		return p;
 	}
 	
+	public boolean addFavorites(int saleNumer, String username) {
+		boolean b = false;
+		Sale s = db.find(Sale.class, saleNumer);
+		User u = db.find(User.class, username);
+		if (s != null && u != null && !u.isInFavorites(s)) {
+		    db.getTransaction().begin();
+			b = u.addFavorites(s);
+			db.persist(u);
+			db.getTransaction().commit();
+		}
+		return b;
+	}
 	
-	
+	public boolean isInFavorites(int saleNumer, String username) {
+		boolean b = false;
+		Sale s = db.find(Sale.class, saleNumer);
+		User u = db.find(User.class, username);
+		if (s != null && u != null) {
+			b = u.isInFavorites(s);
+		}
+		return b;
+	}
 	
 	
 	/**

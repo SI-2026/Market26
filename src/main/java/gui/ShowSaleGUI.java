@@ -44,6 +44,7 @@ public class ShowSaleGUI extends JFrame {
 	private JLabel jLabelError = new JLabel();
 	private JLabel statusField=new JLabel();
 	private JFrame thisFrame;
+	private final JButton jButtonFavorites = new JButton((String) null);
 	
 	public ShowSaleGUI(Sale sale, String username) { 
 		thisFrame=this; 
@@ -151,6 +152,24 @@ public class ShowSaleGUI extends JFrame {
 			}
 		}
 		getContentPane().add(jButtonBuy);
+		
+		jButtonFavorites.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (facade.addFavorites(sale.getSaleNumber(), username)) {
+					jButtonFavorites.setEnabled(false);
+				}
+			}
+		});
+		jButtonFavorites.setBounds(new Rectangle(16, 268, 114, 30));
+		jButtonFavorites.setBounds(164, 231, 114, 30);
+		jButtonFavorites.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddtoFav"));
+		if (username.equals("Guest")) {
+			jButtonFavorites.setEnabled(false);
+		} else if (facade.isInFavorites(sale.getSaleNumber(), username)) {
+			jButtonFavorites.setEnabled(false);
+		}
+		
+		getContentPane().add(jButtonFavorites);
 
 		
 	}	 

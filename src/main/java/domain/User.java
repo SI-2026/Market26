@@ -24,13 +24,15 @@ public class User implements Serializable {
 	@XmlID
 	@Id 
 	private String username;
-	private String password; 
+	private String password;
 	@XmlIDREF
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> sales=new ArrayList<Sale>();
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Purchase> purchases=new ArrayList<Purchase>();
-
+	@XmlIDREF
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	private List<Sale> favorites=new ArrayList<Sale>();
 	public User() {
 		super();
 	}
@@ -100,10 +102,20 @@ public class User implements Serializable {
 	}
 	
 	public Purchase addPurchase(Sale sale, Date date)  {
-		
 		Purchase purchase =new Purchase(this, sale, date);
 		purchases.add(purchase);
         return purchase;
+	}
+	
+	public boolean addFavorites(Sale sale)  {
+		if (favorites.contains(sale)) {
+			return false;
+		}
+		return favorites.add(sale);
+	}
+	
+	public boolean isInFavorites(Sale sale)  {
+        return favorites.contains(sale);
 	}
 		
 	@Override

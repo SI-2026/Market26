@@ -133,6 +133,21 @@ public class BLFacadeImplementation  implements BLFacade {
 		return p;
 	}
 
+	@Override
+	public boolean addFavorites(int saleNumer, String username) {
+		dbManager.open();
+		boolean b = dbManager.addFavorites(saleNumer, username);
+		dbManager.close();
+		return b;
+	}
+	
+	@Override
+	public boolean isInFavorites(int saleNumer, String username) {
+		dbManager.open();
+		boolean b = dbManager.isInFavorites(saleNumer, username);
+		dbManager.close();
+		return b;
+	}
     
 }
 
