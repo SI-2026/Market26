@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
+import domain.Purchase;
 import domain.Sale;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -32,7 +33,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
-	private final initialize = false;
+	private final boolean initialize = true;
 
 	private static final String basePath="src/main/resources/images/";
 
@@ -136,6 +137,20 @@ public class DataAccess  {
 		return result;
 	}
 	
+	public Purchase buySale(int saleNumer, String buyerUsername) {
+		Purchase p = null;
+		Sale s = db.find(Sale.class, saleNumer);
+		User u = db.find(User.class, buyerUsername);
+		if (s != null && u != null && !s.isSold()) {
+		    db.getTransaction().begin();
+		    s.setSold(true);
+			p = u.addPurchase(s, new Date());
+			db.persist(u);
+			db.getTransaction().commit();
+		}
+		return p;
+	}
+	
 	
 	
 	
@@ -236,7 +251,7 @@ public class DataAccess  {
 	 	return res;
 	}
 
-public void open(){
+	public void open(){
 		
 		String fileName=c.getDbFilename();
 		if (c.isDatabaseLocal()) {
