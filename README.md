@@ -6,11 +6,11 @@
         - Domeniuaren codea sortu.  ❌
     2. Add to Favorites:
         - Use case model markdown.  ✅      (@jonPa139)
-        - Sekuentzia diagrama.      ❌
+        - Sekuentzia diagrama.      ✅
         - Codigo.                   ✅
     3. Buy Products:
         - Use case model markdown.  ✅      (@jonPa139)
-        - Sekuentzia diagrama.      ❌
+        - Sekuentzia diagrama.      ✅
         - Codigo.                   ✅
 
 
