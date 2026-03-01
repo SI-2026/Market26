@@ -18,4 +18,5 @@
 	- Guk egindako funtzioetan konpondu genuen lehio bat baino gehiago ireki ezin izatea.
 
 
-5- Erabilitako orduak: 25
+5- Erabilitako orduak: 46
+
