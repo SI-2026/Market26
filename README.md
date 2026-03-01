@@ -1,17 +1,22 @@
 # **MARKET 26 PROIEKTUA**
 
-## Egin Beharrekoa (✅/❌)
-    1. Domeinua:
-        - Domeinu diagrama sortu.   ❌
-        - Domeniuaren codea sortu.  ❌
-    2. Add to Favorites:
-        - Use case model markdown.  ✅      (@jonPa139)
-        - Sekuentzia diagrama.      ✅
-        - Codigo.                   ✅
-    3. Buy Products:
-        - Use case model markdown.  ✅      (@jonPa139)
-        - Sekuentzia diagrama.      ✅
-        - Codigo.                   ✅
+## VIDEO
+- StarUML erabilpen kasuak.
+- Domeinu eredua.
+- Produktua erosi sequentzia diagrama aurkeztu.
+- **Kode Aldaketak**:
+	- Purchase klasea sortu.
+	- User klaseari funtzioak gehitu.
+	- BLFacade-n funtziak gehitu.
+	- DataAcces-en funtzioak gehitu.
+	- GUI-ak erakutsi, GUI deietan username pasa eta aurreko lehioaren erreferentzia blokeatzeko eta klik ezin izatea.
+	- ShowSaleGUI-n erosi eta favorites botoiak.
+- **DEMO**:
+	- Showsalera joan ikusi erosi botoia desaktibatua.
+	- Hizkuntza aldatu.
+	- Kontu bat sortu.
+	- Produktu bat erosi.
+	- Kontutik atera.
 
 
 
