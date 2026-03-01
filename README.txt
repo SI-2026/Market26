@@ -17,4 +17,5 @@
 	- Hasieran sql lengoiala erabiltzen saiatu ginen baina azkenean find funtzioa erabili genuen gauzak errazteko.
 	- Guk egindako funtzioetan konpondu genuen lehio bat baino gehiago ireki ezin izatea.
 
-5- Erabilitako orduak: 50
+
+5- Erabilitako orduak: 25
