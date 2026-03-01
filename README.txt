@@ -20,3 +20,5 @@
 
 5- Erabilitako orduak: 46
 
+6- Bideoaren esteka: https://upvehueus-my.sharepoint.com/:v:/g/personal/jpacios002_ikasle_ehu_eus/IQAI8-HTxDidRpwCQOSmdcrsAegrMGjBdUhgL64TpLmHgDA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=SZOnpS
+
