@@ -155,7 +155,7 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, saleNumer);
 		User u = db.find(User.class, username);
-		if (s != null && u != null && !u.isInFavorites(s)) {
+		if (s != null && u != null) {
 		    db.getTransaction().begin();
 			b = u.addFavorites(s);
 			db.persist(u);
