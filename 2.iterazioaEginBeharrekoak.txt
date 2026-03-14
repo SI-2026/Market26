@@ -17,7 +17,7 @@ Produkua erosi (Errepasoa)
         - User klasean//KODEA:
             * public void makeOffer(sellerName, offer) (offer = dirua)
         - Salle klasean//KODEA:
-            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>
+            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>, Honekin batera, saleGUI-n, sale bakoitzak lista bat eduki Offerrekin, hua da, beste panel bat non onartu edo ez egin daitekeen.
                 - Offer klase berria: Buyer info, Offer, OfferDate.
         
     - sltzaileak onartu edo ez
