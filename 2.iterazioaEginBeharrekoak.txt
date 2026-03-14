@@ -1,15 +1,15 @@
 IMPLEMENTATU BEHARREKOA:
 Produkua erosi (Errepasoa)
     - dirua behar
-      - User klasean, dirua aldagaia float motakoa.
-        - dirua sartu //KODEA: 
+      - User klasean, dirua aldagaia float motakoa. HECHO!!!!!!!!!!!!!!!
+        - dirua sartu //KODEA:  
               - domain/User klasea:
                    * public void addMoney(...) //ondoren BLfacade(implementation) eta dataAcces
-                      klaseetan transakzioa egin.
+                      klaseetan transakzioa egin. HECHO!!!!!!!!
         - dirua atera //KODEA
                - domain/User klasean:
                    * public void takeOutMoney(...) //ondoren BLfacade(implementation) eta dataAcces
-                      klaseetan transakzioa egin.
+                      klaseetan transakzioa egin. HECHO!!!!!!!!!!!!!!!!!
         - ProfileGUI-an botoiak gehitu dirua atera zein sartzeko. (Zenbat, atera, sartu)
         
                    
