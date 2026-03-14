@@ -73,6 +73,12 @@ public interface BLFacade  {
 	@WebMethod public boolean addFavorites(int saleNumer, String buyerUsername);
 	
 	@WebMethod public boolean isInFavorites(int saleNumer, String username);
+	
+	@WebMethod public void addMoney(float dirua, String username);
+	
+	@WebMethod public boolean takeOutMoney(float euroKop, String username);
+
+
 
 	
 }

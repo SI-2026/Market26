@@ -1,8 +1,10 @@
 package domain;
 
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Date;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -29,6 +31,7 @@ public class Sale implements Serializable {
 	private String fileName;
 	private boolean sold;
 	private User seller;  
+	private List<Offer> offerList;
 	
 	public Sale(){
 		super();
@@ -43,6 +46,7 @@ public class Sale implements Serializable {
 		this.price=price;
 		this.pubDate=pubDate;
 		this.sold=false;
+		this.offerList = new ArrayList<Offer>();
 		if (file!=null) {
 		    this.fileName=file.getName();
 			try {
@@ -225,7 +229,14 @@ public class Sale implements Serializable {
 		return saleNumber+";"+title+";"+price;  
 	}
 
-
+	//TODO falta hacerlo en blfacada , blfacadeimplementation y dataacces.
+	public boolean addOffer(Offer offer) {
+		if(offer.getOffer() <= 0) return false;
+		this.offerList.add(offer);
+		return true;
+		
+		
+	}
 
 
 	

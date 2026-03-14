@@ -148,6 +148,20 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return b;
 	}
+	
+	@Override
+	public void addMoney(float euro, String username) {
+		dbManager.open();
+		dbManager.addMoney(euro, username);
+		dbManager.close();
+	}
+	
+	public boolean takeOutMoney(float euro, String username) {
+		dbManager.open();
+		boolean b = dbManager.takeOutMoney(euro, username);
+		dbManager.close();
+		return b;
+	}
     
 }
 

@@ -174,6 +174,19 @@ public class DataAccess  {
 		return b;
 	}
 	
+	//TODO falta hacer los botones y sincronizarlos
+	public void addMoney(float euro, String username) {
+		User u = db.find(User.class, username);
+		if(u != null) u.addMoney(euro);
+	}
+	//TODO falta hacer los botones y sincronizarlos
+	public boolean takeOutMoney(float euroKop, String username) {
+		boolean b =false;
+		User u = db.find(User.class, username);
+		if(u!=null) b = u.takeOutMoney(euroKop);
+		return b;
+		
+	}
 	
 	/**
 	 * This method creates/adds a product to a seller

@@ -25,6 +25,7 @@ public class User implements Serializable {
 	@Id 
 	private String username;
 	private String password;
+	private float euro;
 	@XmlIDREF
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> sales=new ArrayList<Sale>();
@@ -40,8 +41,16 @@ public class User implements Serializable {
 	public User(String username, String name) {
 		this.username = username;
 		this.password = name;
+		this.euro = 0;
 	}
 	
+	public float getDirua() {
+		return this.euro;
+	}
+	
+	public void setDirua(float dirua) {
+		this.euro = dirua;
+	}
 	
 	public String getUsername() {
 		return username;
@@ -133,6 +142,26 @@ public class User implements Serializable {
 	}
 	public Boolean isConectedPassword(String pass) {
 		return this.getpassword().equals(pass);
+	}
+	
+	public void addMoney(float dirua) {
+		this.euro += dirua;
+	}
+	
+	public boolean takeOutMoney(float euroKop) {
+		if(euroKop > this.euro) {
+			return false;
+		}
+		
+		this.euro -= euroKop;
+		return true;
+	}
+	
+	public boolean makeOffer(float offerAmount, Sale s) {
+		if(offerAmount <= 0) return false;
+		s.addOffer(new Offer(this, offerAmount, new Date()));
+		return true;
+		
 	}
 
 	
