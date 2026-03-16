@@ -157,12 +157,16 @@ public class User implements Serializable {
 		return true;
 	}
 	
-	public boolean makeOffer(float offerAmount, Sale s) {
-		if(offerAmount <= 0) return false;
-		s.addOffer(new Offer(this, offerAmount, new Date()));
+	public boolean onartuKobratu() {
+		
+		
+		
+		
 		return true;
 		
 	}
+	
+	
 
 	
 }

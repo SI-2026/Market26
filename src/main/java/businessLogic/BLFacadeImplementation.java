@@ -7,6 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import dataAccess.DataAccess;
+import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
 import domain.User;
@@ -161,6 +162,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		boolean b = dbManager.takeOutMoney(euro, username);
 		dbManager.close();
 		return b;
+	}
+	
+	public boolean addOffer(Offer offer, int salenumber) {
+		dbManager.open();
+		boolean b = dbManager.addOffer(offer, salenumber);
+		dbManager.close();
+		return b;
+		
 	}
     
 }

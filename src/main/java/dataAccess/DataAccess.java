@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
+import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
 import exceptions.FileNotUploadedException;
@@ -187,6 +188,15 @@ public class DataAccess  {
 		return b;
 		
 	}
+	
+	public boolean addOffer(Offer offer, int salenumber) {
+		
+		boolean b = false;
+		Sale s = db.find(Sale.class, salenumber);
+		if(s != null) b = s.addOffer(offer);
+		return b;
+	}
+	
 	
 	/**
 	 * This method creates/adds a product to a seller

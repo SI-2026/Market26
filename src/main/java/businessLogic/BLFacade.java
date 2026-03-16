@@ -6,6 +6,7 @@ import java.util.List;
 
 import domain.Sale;
 import domain.User;
+import domain.Offer;
 import domain.Purchase;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -77,6 +78,8 @@ public interface BLFacade  {
 	@WebMethod public void addMoney(float dirua, String username);
 	
 	@WebMethod public boolean takeOutMoney(float euroKop, String username);
+	
+	@WebMethod public boolean addOffer(Offer offer, int salenumber);
 
 
 

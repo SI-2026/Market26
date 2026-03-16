@@ -229,7 +229,7 @@ public class Sale implements Serializable {
 		return saleNumber+";"+title+";"+price;  
 	}
 
-	//TODO falta hacerlo en blfacada , blfacadeimplementation y dataacces.
+	//TODO falta hacerlo en blfacade , blfacadeimplementation y dataacces.
 	public boolean addOffer(Offer offer) {
 		if(offer.getOffer() <= 0) return false;
 		this.offerList.add(offer);
