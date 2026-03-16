@@ -14,11 +14,10 @@ Produkua erosi (Errepasoa)
         
                    
     - erosketa ezkaintza egin
-        - User klasean//KODEA:
-            * public void makeOffer(sellerName, offer) (offer = dirua)
         - Salle klasean//KODEA:
-            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>, Honekin batera, saleGUI-n, sale bakoitzak lista bat eduki Offerrekin, hua da, beste panel bat non onartu edo ez egin daitekeen.
-                - Offer klase berria: Buyer info, Offer, OfferDate.
+            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>, Honekin batera, saleGUI-n, sale bakoitzak lista                 bat eduki Offerrekin, hua da, beste panel bat non onartu edo ez egin daitekeen.
+            * addOffer metodoa egin non Offerra pasatzen zaion eta SaleNUmberra ere. 
+                - Offer klase berria: Buyer info, Offer, OfferDate. HECHO!!!!!!!!
         
     - sltzaileak onartu edo ez
         - SHowSaleGUI-klasean //KODEA
