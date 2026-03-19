@@ -118,17 +118,15 @@ public class UserGUI extends JFrame {
 				switch (lenguage.getSelectedItem().toString()) {
 				case "Euskara":
 					Locale.setDefault(new Locale("eus"));
-					paintAgain();
 					break;
 				case "English":
 					Locale.setDefault(new Locale("en"));
-					paintAgain();
 					break;
 				case "Español":
 					Locale.setDefault(new Locale("es"));
-					paintAgain();
 					break;
 				}
+				paintAgain();
 			}
 		});
 		lenguage.setBounds(349, 228, 125, 22);

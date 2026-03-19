@@ -33,6 +33,7 @@ public class User implements Serializable {
 	@XmlIDREF
 	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Sale> favorites=new ArrayList<Sale>();
+
 	public User() {
 		super();
 	}
@@ -47,16 +48,16 @@ public class User implements Serializable {
 		return username;
 	}
 
-	public void setUsername(String email) {
-		this.username = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getpassword() {
 		return password;
 	}
 
-	public void setpassword(String name) {
-		this.password = name;
+	public void setpassword(String pass) {
+		this.password = pass;
 	}
 	
 

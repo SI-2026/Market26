@@ -70,7 +70,7 @@ public interface BLFacade  {
 
 	@WebMethod public Purchase buySale(int saleNumer, String buyerUsername);
 
-	@WebMethod public boolean addFavorites(int saleNumer, String buyerUsername);
+	@WebMethod public boolean addFavorites(int saleNumer, String username);
 	
 	@WebMethod public boolean isInFavorites(int saleNumer, String username);
 
