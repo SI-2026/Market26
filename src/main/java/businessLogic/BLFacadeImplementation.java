@@ -157,6 +157,7 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 	}
 	
+	@Override
 	public boolean takeOutMoney(float euro, String username) {
 		dbManager.open();
 		boolean b = dbManager.takeOutMoney(euro, username);
@@ -164,12 +165,29 @@ public class BLFacadeImplementation  implements BLFacade {
 		return b;
 	}
 	
-	public boolean addOffer(Offer offer, int salenumber) {
+	@Override
+	public boolean addOffer(Offer offer, int salenumber, String buyername) {
 		dbManager.open();
-		boolean b = dbManager.addOffer(offer, salenumber);
+		boolean b = dbManager.addOffer(offer, salenumber, buyername);
 		dbManager.close();
 		return b;
 		
+	}
+	
+	@Override
+	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
+		dbManager.open();
+		boolean b = dbManager.acceptOffer(offer, salenumber, sellername);
+		dbManager.close();
+		return b;
+	}
+	
+	@Override
+	public boolean declinedOffer(int salenumber, Offer offer) {
+		dbManager.open();
+		boolean b = dbManager.declinedOffer(salenumber, offer);
+		dbManager.close();
+		return b;
 	}
     
 }

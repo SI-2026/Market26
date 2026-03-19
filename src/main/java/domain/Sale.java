@@ -208,6 +208,8 @@ public class Sale implements Serializable {
 	public void setSeller(User user) {
 		this.seller = user;
 	}
+	
+	
 
 	/**
 	 * Get the file of a sale
@@ -220,6 +222,10 @@ public class Sale implements Serializable {
 	public void setSold(boolean sold) {
 		this.sold = sold;
 	}
+	
+	public List<Offer> getOfferList(){
+		return offerList;
+	}
 	public boolean isSold() {
 		return this.sold;
 	}
@@ -229,14 +235,19 @@ public class Sale implements Serializable {
 		return saleNumber+";"+title+";"+price;  
 	}
 
-	//TODO falta hacerlo en blfacade , blfacadeimplementation y dataacces.
+		
 	public boolean addOffer(Offer offer) {
-		if(offer.getOffer() <= 0) return false;
+		if(offer.getOffer() <= 0 ) return false;
 		this.offerList.add(offer);
 		return true;
 		
 		
 	}
+	
+	public boolean OfferDeclined(Offer offer) {
+		return offerList.remove(offer);
+	}
+	
 
 
 	

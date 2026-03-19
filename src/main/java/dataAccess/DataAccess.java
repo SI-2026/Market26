@@ -189,11 +189,37 @@ public class DataAccess  {
 		
 	}
 	
-	public boolean addOffer(Offer offer, int salenumber) {
+	public boolean addOffer(Offer offer, int salenumber, String buyername) {
 		
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
-		if(s != null) b = s.addOffer(offer);
+		User buyer = db.find(User.class, buyername);
+		if(s != null && buyer != null && buyer.getDirua() >= offer.getOffer()) b = s.addOffer(offer);
+		return b;
+	}
+	
+	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
+		boolean b = false;
+		boolean b2 = false;
+		Sale s = db.find(Sale.class, salenumber);
+		User seller = db.find(User.class, sellername);
+		User buyer = db.find(User.class, offer.getBuyer());
+		if(seller != null && buyer != null) {
+			b = seller.acceptOffer(offer.getOffer(), s);
+			if (b) {
+				buyer.setDirua(buyer.getDirua() - offer.getOffer());
+				List<Sale> favoritesList = buyer.getFavorites();
+				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
+			}
+			
+		}
+		return b && b2;
+	}
+	
+	public boolean declinedOffer(int salenumber, Offer offer) {
+		boolean b = false;
+		Sale s = db.find(Sale.class, salenumber);
+		if(s != null) b = s.OfferDeclined(offer);
 		return b;
 	}
 	

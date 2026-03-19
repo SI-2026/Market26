@@ -12,28 +12,28 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class User implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@XmlID
-	@Id 
+	@Id
 	private String username;
 	private String password;
 	private float euro;
 	@XmlIDREF
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private List<Sale> sales=new ArrayList<Sale>();
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private List<Purchase> purchases=new ArrayList<Purchase>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Sale> sales = new ArrayList<Sale>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Purchase> purchases = new ArrayList<Purchase>();
 	@XmlIDREF
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private List<Sale> favorites=new ArrayList<Sale>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Sale> favorites = new ArrayList<Sale>();
+
 	public User() {
 		super();
 	}
@@ -43,15 +43,15 @@ public class User implements Serializable {
 		this.password = name;
 		this.euro = 0;
 	}
-	
+
 	public float getDirua() {
 		return this.euro;
 	}
-	
+
 	public void setDirua(float dirua) {
 		this.euro = dirua;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -67,66 +67,65 @@ public class User implements Serializable {
 	public void setpassword(String name) {
 		this.password = name;
 	}
-	
 
-	
-	
-	public String toString(){
-		return username+";"+password+sales;
+	public String toString() {
+		return username + ";" + password + sales;
 	}
-	
+
 	/**
 	 * This method creates/adds a sale to a seller
 	 * 
-	 * @param title of the sale
-	 * @param description of the sale
-	 * @param status 
-	 * @param selling price
+	 * @param title           of the sale
+	 * @param description     of the sale
+	 * @param status
+	 * @param selling         price
 	 * @param publicationDate
 	 * @return Sale
 	 */
-	
-	
 
+	public Sale addSale(String title, String description, int status, float price, Date pubDate, File file) {
 
-	public Sale addSale(String title, String description, int status, float price,  Date pubDate, File file)  {
-		
-		Sale sale=new Sale(title, description, status, price,  pubDate, file, this);
-        sales.add(sale);
-        return sale;
+		Sale sale = new Sale(title, description, status, price, pubDate, file, this);
+		sales.add(sale);
+		return sale;
 	}
+
 	/**
 	 * This method checks if the ride already exists for that driver
 	 * 
-	 * @param from the origin location 
-	 * @param to the destination location 
-	 * @param date the date of the ride 
+	 * @param from the origin location
+	 * @param to   the destination location
+	 * @param date the date of the ride
 	 * @return true if the ride exists and false in other case
 	 */
-	public boolean doesSaleExist(String title)  {	
-		for (Sale s:sales)
-			if ( s.getTitle().compareTo(title)==0 )
-			 return true;
+	public boolean doesSaleExist(String title) {
+		for (Sale s : sales)
+			if (s.getTitle().compareTo(title) == 0)
+				return true;
 		return false;
 	}
-	
-	public Purchase addPurchase(Sale sale, Date date)  {
-		Purchase purchase =new Purchase(this, sale, date);
+
+	public Purchase addPurchase(Sale sale, Date date) {
+		Purchase purchase = new Purchase(this, sale, date);
 		purchases.add(purchase);
-        return purchase;
+		return purchase;
 	}
-	
-	public boolean addFavorites(Sale sale)  {
+
+	public boolean addFavorites(Sale sale) {
 		if (favorites.contains(sale)) {
 			return false;
 		}
 		return favorites.add(sale);
 	}
 	
-	public boolean isInFavorites(Sale sale)  {
-        return favorites.contains(sale);
+	public List<Sale> getFavorites() {
+		return favorites;
 	}
-		
+
+	public boolean isInFavorites(Sale sale) {
+		return favorites.contains(sale);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -140,33 +139,33 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
+
 	public Boolean isConectedPassword(String pass) {
 		return this.getpassword().equals(pass);
 	}
-	
+
 	public void addMoney(float dirua) {
 		this.euro += dirua;
 	}
-	
+
 	public boolean takeOutMoney(float euroKop) {
-		if(euroKop > this.euro) {
+		if (euroKop > this.euro) {
 			return false;
 		}
-		
+
 		this.euro -= euroKop;
 		return true;
 	}
-	
-	public boolean onartuKobratu() {
+
+
+	public boolean acceptOffer(float prezioa, Sale s){
 		
-		
-		
-		
-		return true;
+		euro -= prezioa;
+		boolean b = sales.remove(s);
+		return b;
 		
 	}
 	
 	
 
-	
 }

@@ -79,9 +79,11 @@ public interface BLFacade  {
 	
 	@WebMethod public boolean takeOutMoney(float euroKop, String username);
 	
-	@WebMethod public boolean addOffer(Offer offer, int salenumber);
+	@WebMethod public boolean addOffer(Offer offer, int salenumber, String buyername);
+	
+	@WebMethod public boolean acceptOffer(Offer offer, int salenumber, String sellername);
 
-
+	@WebMethod public boolean declinedOffer(int salenumber, Offer offer);
 
 	
 }
