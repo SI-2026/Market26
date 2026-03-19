@@ -78,6 +78,7 @@ public class RegisteredGUI extends JFrame {
 		jButtonProfile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				thisRef.setAlwaysOnTop(false);
+				thisRef.setEnabled(false);
 				JFrame profileGUI = new ProfileGUI(thisRef, username);
 				profileGUI.setVisible(true);
 			}

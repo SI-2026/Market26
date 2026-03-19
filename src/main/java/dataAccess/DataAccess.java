@@ -118,24 +118,27 @@ public class DataAccess  {
 	
 	
 	public User isRegistered(String log, String pass) {
-		User result = null;
+		User r = null;
 	    User u = db.find(User.class, log);
-	    if (u != null && u.isConectedPassword(pass)) {
-	    	result = u;
+	    if (u != null) {
+	    	boolean b = u.isConectedPassword(pass);
+	    	if (b) {
+		    	r = u;
+	    	}
 	    }
-		return result;
+		return r;
 	}
 	
 	public User register(String log, String pass) {
-		User result = null;
+		User r = null;
 	    User u = db.find(User.class, log);
 	    if (u == null) {
 		    db.getTransaction().begin();
-			result = new User(log, pass);
-			db.persist(result);
+			r = new User(log, pass);
+			db.persist(r);
 			db.getTransaction().commit();
 	    }
-		return result;
+		return r;
 	}
 	
 	public Purchase buySale(int saleNumer, String buyerUsername) {
@@ -147,6 +150,7 @@ public class DataAccess  {
 		    s.setSold(true);
 			p = u.addPurchase(s, new Date());
 			db.persist(u);
+			db.persist(s);
 			db.getTransaction().commit();
 		}
 		return p;

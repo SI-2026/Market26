@@ -54,8 +54,8 @@ public class ProfileGUI extends JFrame {
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.LogOut"));
 		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				JFrame mainGUI = new UserGUI();
-				mainGUI.setVisible(true);
+				JFrame userGUI = new UserGUI();
+				userGUI.setVisible(true);
 				registeredRef.dispose();
 				dispose();
 			}

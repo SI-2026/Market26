@@ -1,24 +1,23 @@
 IMPLEMENTATU BEHARREKOA:
 Produkua erosi (Errepasoa)
     - dirua behar
-      - User klasean, dirua aldagaia float motakoa.
-        - dirua sartu //KODEA: 
+      - User klasean, dirua aldagaia float motakoa. HECHO!!!!!!!!!!!!!!!
+        - dirua sartu //KODEA:  
               - domain/User klasea:
                    * public void addMoney(...) //ondoren BLfacade(implementation) eta dataAcces
-                      klaseetan transakzioa egin.
+                      klaseetan transakzioa egin. HECHO!!!!!!!!
         - dirua atera //KODEA
                - domain/User klasean:
                    * public void takeOutMoney(...) //ondoren BLfacade(implementation) eta dataAcces
-                      klaseetan transakzioa egin.
+                      klaseetan transakzioa egin. HECHO!!!!!!!!!!!!!!!!!
         - ProfileGUI-an botoiak gehitu dirua atera zein sartzeko. (Zenbat, atera, sartu)
         
                    
     - erosketa ezkaintza egin
-        - User klasean//KODEA:
-            * public void makeOffer(sellerName, offer) (offer = dirua)
         - Salle klasean//KODEA:
-            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>
-                - Offer klase berria: Buyer info, Offer, OfferDate.
+            * aldagai berria Oferrak goretzeko, lista adibidez. List<Offer>, Honekin batera, saleGUI-n, sale bakoitzak lista                 bat eduki Offerrekin, hua da, beste panel bat non onartu edo ez egin daitekeen.
+            * addOffer metodoa egin non Offerra pasatzen zaion eta SaleNUmberra ere. 
+                - Offer klase berria: Buyer info, Offer, OfferDate. HECHO!!!!!!!!
         
     - sltzaileak onartu edo ez
         - SHowSaleGUI-klasean //KODEA
