@@ -33,6 +33,10 @@ public class User implements Serializable {
 	@XmlIDREF
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Sale> favorites = new ArrayList<Sale>();
+	
+	@XmlID
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Claim> claims = new ArrayList<Claim>();
 
 	public User() {
 		super();
@@ -161,10 +165,19 @@ public class User implements Serializable {
 	public boolean acceptOffer(float prezioa, Sale s){
 		
 		euro -= prezioa;
-		boolean b = sales.remove(s);
-		return b;
+		return  sales.remove(s);
 		
 	}
+	
+	public boolean addClaim(Claim claim) {
+		return (!claims.contains(claim)) ? claims.add(claim) : false;
+	}
+	
+	public List<Claim> getClaims() {
+		return claims;
+	}
+	
+	
 	
 	
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import domain.Sale;
 import domain.User;
+import domain.Claim;
 import domain.Offer;
 import domain.Purchase;
 import exceptions.FileNotUploadedException;
@@ -79,11 +80,13 @@ public interface BLFacade  {
 	
 	@WebMethod public boolean takeOutMoney(float euroKop, String username);
 	
-	@WebMethod public boolean addOffer(Offer offer, int salenumber, String buyername);
+	@WebMethod public boolean addOffer(float offer, int salenumber, String buyername);
 	
 	@WebMethod public boolean acceptOffer(Offer offer, int salenumber, String sellername);
 
 	@WebMethod public boolean declinedOffer(int salenumber, Offer offer);
+	
+	@WebMethod public boolean makeClaim(String description, String sellername, String claimername);
 
 	
 }

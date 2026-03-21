@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
+import domain.Claim;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
@@ -183,22 +184,25 @@ public class DataAccess  {
 	public void addMoney(float euro, String username) {
 		User u = db.find(User.class, username);
 		if(u != null) u.addMoney(euro);
+
 	}
 	//TODO falta hacer los botones y sincronizarlos
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
 		User u = db.find(User.class, username);
 		if(u!=null) b = u.takeOutMoney(euroKop);
+
 		return b;
 		
 	}
 	
-	public boolean addOffer(Offer offer, int salenumber, String buyername) {
+	public boolean addOffer(float offer, int salenumber, String buyername) {
 		
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && buyer.getDirua() >= offer.getOffer()) b = s.addOffer(offer);
+		if(s != null && buyer != null && buyer.getDirua() >= offer) b = s.addOffer(new Offer(buyer, offer, new Date()));
+
 		return b;
 	}
 	
@@ -217,6 +221,7 @@ public class DataAccess  {
 			}
 			
 		}
+		
 		return b && b2;
 	}
 	
@@ -224,6 +229,16 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		if(s != null) b = s.OfferDeclined(offer);
+		return b;
+	}
+	
+	public boolean makeClaim(String description, String sellername, String claimername) {
+		boolean b = false;
+		User seller = db.find(User.class, sellername);
+		User claimer = db.find(User.class, claimername);
+		if(seller != null && claimer != null) {
+			 b =  seller.addClaim(new Claim(claimer, new Date(), description, false));
+		}
 		return b;
 	}
 	
