@@ -183,15 +183,24 @@ public class DataAccess  {
 	//TODO falta hacer los botones y sincronizarlos
 	public void addMoney(float euro, String username) {
 		User u = db.find(User.class, username);
-		if(u != null) u.addMoney(euro);
+		if(u != null) {
+		    db.getTransaction().begin();
+			u.addMoney(euro);
+			db.persist(u);
+			db.getTransaction().commit();
+		}
 
 	}
 	//TODO falta hacer los botones y sincronizarlos
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
 		User u = db.find(User.class, username);
-		if(u!=null) b = u.takeOutMoney(euroKop);
-
+		if(u!=null) {
+			db.getTransaction().begin();
+			b = u.takeOutMoney(euroKop);
+			db.persist(u);
+			db.getTransaction().commit();
+		}
 		return b;
 		
 	}
@@ -201,7 +210,12 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && buyer.getDirua() >= offer) b = s.addOffer(new Offer(buyer, offer, new Date()));
+		if(s != null && buyer != null && buyer.getDirua() >= offer) {
+		    db.getTransaction().begin();
+			b = s.addOffer(new Offer(buyer, offer, new Date(), s));
+			db.persist(s);
+			db.getTransaction().commit();
+		}
 
 		return b;
 	}
@@ -211,15 +225,18 @@ public class DataAccess  {
 		boolean b2 = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User seller = db.find(User.class, sellername);
-		User buyer = db.find(User.class, offer.getBuyer());
+		User buyer = db.find(User.class, offer.getBuyer().getUsername());
 		if(seller != null && buyer != null) {
+		    db.getTransaction().begin();
 			b = seller.acceptOffer(offer.getOffer(), s);
 			if (b) {
 				buyer.setDirua(buyer.getDirua() - offer.getOffer());
 				List<Sale> favoritesList = buyer.getFavorites();
 				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
 			}
-			
+			db.persist(buyer);
+			db.persist(seller);
+			db.getTransaction().commit();
 		}
 		
 		return b && b2;
@@ -228,7 +245,12 @@ public class DataAccess  {
 	public boolean declinedOffer(int salenumber, Offer offer) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
-		if(s != null) b = s.OfferDeclined(offer);
+		if(s != null) {
+			db.getTransaction().begin();
+			b = s.OfferDeclined(offer);
+			db.persist(s);
+			db.getTransaction().commit();
+		}
 		return b;
 	}
 	
@@ -237,7 +259,10 @@ public class DataAccess  {
 		User seller = db.find(User.class, sellername);
 		User claimer = db.find(User.class, claimername);
 		if(seller != null && claimer != null) {
-			 b =  seller.addClaim(new Claim(claimer, new Date(), description, false));
+			db.getTransaction().begin();
+			b =  seller.addClaim(new Claim(claimer, new Date(), description, false));
+			db.persist(seller);
+			db.getTransaction().commit();
 		}
 		return b;
 	}

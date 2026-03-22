@@ -30,7 +30,8 @@ public class Sale implements Serializable {
 	private Date pubDate;
 	private String fileName;
 	private boolean sold;
-	private User seller;  
+	private User seller;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Offer> offerList;
 	
 	public Sale(){
@@ -240,8 +241,7 @@ public class Sale implements Serializable {
 		if(offer.getOffer() <= 0 ) return false;
 		this.offerList.add(offer);
 		return true;
-		
-		
+
 	}
 	
 	public boolean OfferDeclined(Offer offer) {

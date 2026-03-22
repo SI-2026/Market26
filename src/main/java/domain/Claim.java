@@ -1,17 +1,33 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Claim {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+@SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+public class Claim implements Serializable {
+	@Id
+	@GeneratedValue
+	private Integer claimId;
+
+	@ManyToOne
 	private User buyer;
 	private Date date;
 	private String description;
 	private boolean status;
-	
+
 	public Claim() {
 		super();
 	}
-	
+
 	public Claim(User buyer, Date date, String description, boolean status) {
 		this.buyer = buyer;
 		this.date = date;
@@ -50,6 +66,5 @@ public class Claim {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
-	
+
 }
