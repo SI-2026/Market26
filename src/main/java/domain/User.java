@@ -163,8 +163,7 @@ public class User implements Serializable {
 
 
 	public boolean acceptOffer(float prezioa, Sale s){
-		
-		euro -= prezioa;
+		euro += prezioa;
 		return  sales.remove(s);
 		
 	}

@@ -125,6 +125,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return u;
 	}
+
+	@Override
+	public User getUser(String username) {
+		dbManager.open();
+		User u = dbManager.getUser(username);
+		dbManager.close();
+		return u;
+	}
 	
 	@Override
 	public Purchase buySale(int saleNumer, String buyerUsername) {

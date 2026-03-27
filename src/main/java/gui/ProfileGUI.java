@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -9,21 +10,30 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import businessLogic.BLFacade;
+import domain.User;
 
 public class ProfileGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblUsername;
-	private JTextArea descriptionPane;
+	private JLabel lblBalance;
+	private JLabel lblInfo;
+	private JTextField txtAmount;
+	private JButton jButtonAddMoney;
+	private JButton jButtonWithdrawMoney;
 	private JButton jButtonLogOut;
+	private final String username;
 
 	public ProfileGUI(JFrame registeredRef, String username) {
+		this.username = username;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(1000, 340, 400, 250);
-		final int frameWidth = 400;
+		setBounds(920, 300, 460, 340);
+		final int frameWidth = 460;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.MainTitle") + ": " + username);
 		setAlwaysOnTop(true);
 		
@@ -42,15 +52,63 @@ public class ProfileGUI extends JFrame {
 
 		
 		
-		//Description area
-		descriptionPane = new JTextArea();
-		descriptionPane.setEditable(false);
-		descriptionPane.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-		descriptionPane.setBounds((frameWidth - 300) / 2, 90, 300, 42);
+		lblBalance = new JLabel();
+		lblBalance.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBalance.setBounds((frameWidth - 320) / 2, 72, 320, 20);
+		lblBalance.setFont(new Font("Tahoma", Font.BOLD, 14));
+
+		txtAmount = new JTextField();
+		txtAmount.setBounds((frameWidth - 220) / 2, 110, 220, 28);
+		txtAmount.setColumns(10);
+
+		jButtonAddMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddMoney"));
+		jButtonAddMoney.setBounds((frameWidth - 220) / 2, 150, 220, 32);
+		jButtonAddMoney.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				Float amount = parseAmount();
+				if (amount == null || amount <= 0) {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.InvalidAmount"));
+					lblInfo.setForeground(Color.RED);
+					return;
+				}
+				BLFacade facade = UserGUI.getBusinessLogic();
+				facade.addMoney(amount, username);
+				refreshBalance();
+				lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddedMoney"));
+				lblInfo.setForeground(new Color(0, 128, 0));
+			}
+		});
+
+		jButtonWithdrawMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawMoney"));
+		jButtonWithdrawMoney.setBounds((frameWidth - 220) / 2, 190, 220, 32);
+		jButtonWithdrawMoney.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				Float amount = parseAmount();
+				if (amount == null || amount <= 0) {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.InvalidAmount"));
+					lblInfo.setForeground(Color.RED);
+					return;
+				}
+				BLFacade facade = UserGUI.getBusinessLogic();
+				boolean b = facade.takeOutMoney(amount, username);
+				refreshBalance();
+				if (b) {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawOk"));
+					lblInfo.setForeground(new Color(0, 128, 0));
+				} else {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawError"));
+					lblInfo.setForeground(Color.RED);
+				}
+			}
+		});
+
+		lblInfo = new JLabel("");
+		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInfo.setBounds((frameWidth - 360) / 2, 235, 360, 20);
 		
 		
 		jButtonLogOut = new JButton();
-		jButtonLogOut.setBounds((frameWidth - 150) / 2, 160, 150, 36);
+		jButtonLogOut.setBounds((frameWidth - 170) / 2, 265, 170, 32);
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.LogOut"));
 		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -64,8 +122,14 @@ public class ProfileGUI extends JFrame {
 		
 		//Panelera gehitzeko aginduak
 		contentPane.add(lblUsername);
+		contentPane.add(lblBalance);
+		contentPane.add(txtAmount);
+		contentPane.add(jButtonAddMoney);
+		contentPane.add(jButtonWithdrawMoney);
+		contentPane.add(lblInfo);
 		contentPane.add(jButtonLogOut);
-		contentPane.add(descriptionPane);
+
+		refreshBalance();
 
 		
 		addWindowListener(new WindowAdapter() {
@@ -74,5 +138,35 @@ public class ProfileGUI extends JFrame {
 				registeredRef.setEnabled(true);
 			}
 		});
+	}
+
+	private Float parseAmount() {
+		String text = txtAmount.getText();
+		if (text == null) {
+			return null;
+		}
+
+		if (text.isEmpty()) {
+			return null;
+		}
+
+		try {
+			return Float.parseFloat(text);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private void refreshBalance() {
+		BLFacade facade = UserGUI.getBusinessLogic();
+		User user = facade.getUser(username);
+
+		float balance = 0;
+		if (user != null) {
+			balance = user.getDirua();
+		}
+
+		String balanceLabel = ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Balance");
+		lblBalance.setText(balanceLabel + ": " + balance + " EUR");
 	}
 }

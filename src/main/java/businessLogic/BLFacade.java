@@ -6,7 +6,6 @@ import java.util.List;
 
 import domain.Sale;
 import domain.User;
-import domain.Claim;
 import domain.Offer;
 import domain.Purchase;
 import exceptions.FileNotUploadedException;
@@ -67,6 +66,8 @@ public interface BLFacade  {
 	@WebMethod public Image downloadImage(String imageName);
 	
 	@WebMethod public User isRegistered(String log, String pass);
+
+	@WebMethod public User getUser(String username);
 	
 	@WebMethod public User register(String log, String pass);
 

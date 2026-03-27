@@ -84,7 +84,8 @@ public class DataAccess  {
 		    //Create sellers 
 			User user1=new User("Aitor Fernandez","111");
 			User user2=new User("Ane Gaztañaga","222");
-			User user3=new User("oier","111");
+			User user3=new User("jon","111");
+			User villa=new User("villa","111");
 
 			
 			//Create products
@@ -107,6 +108,7 @@ public class DataAccess  {
 			db.persist(user1);
 			db.persist(user2);
 			db.persist(user3);
+			db.persist(villa);
 
 	
 			db.getTransaction().commit();
@@ -140,6 +142,10 @@ public class DataAccess  {
 			db.getTransaction().commit();
 	    }
 		return r;
+	}
+
+	public User getUser(String username) {
+		return db.find(User.class, username);
 	}
 	
 	public Purchase buySale(int saleNumer, String buyerUsername) {
@@ -182,6 +188,9 @@ public class DataAccess  {
 	
 	//TODO falta hacer los botones y sincronizarlos
 	public void addMoney(float euro, String username) {
+		if (euro <= 0) {
+			return;
+		}
 		User u = db.find(User.class, username);
 		if(u != null) {
 		    db.getTransaction().begin();
@@ -194,6 +203,9 @@ public class DataAccess  {
 	//TODO falta hacer los botones y sincronizarlos
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
+		if (euroKop <= 0) {
+			return false;
+		}
 		User u = db.find(User.class, username);
 		if(u!=null) {
 			db.getTransaction().begin();
@@ -210,7 +222,8 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && buyer.getDirua() >= offer) {
+		if(s != null && buyer != null && !s.isSold() && s.getSeller() != null
+				&& !buyer.getUsername().equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
 		    db.getTransaction().begin();
 			b = s.addOffer(new Offer(buyer, offer, new Date(), s));
 			db.persist(s);

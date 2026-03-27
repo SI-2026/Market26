@@ -1,6 +1,7 @@
 package gui;
 
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 
 import businessLogic.BLFacade;
+import domain.Offer;
 import domain.Sale;
 
 
@@ -47,6 +49,8 @@ public class ShowSaleGUI extends JFrame {
 	private final JButton jButtonFavorites = new JButton((String) null);
 	
 	public ShowSaleGUI(Sale sale, String username) { 
+		final boolean isGuest = "Guest".equals(username);
+		final boolean isSeller = sale.getSeller() != null && username.equals(sale.getSeller().getUsername());
 		thisFrame=this; 
 		this.setVisible(true);
 		this.getContentPane().setLayout(null);
@@ -132,26 +136,105 @@ public class ShowSaleGUI extends JFrame {
 		statusField.setBounds(137, 191, 92, 16);
 		getContentPane().add(statusField);
 		
-		JButton jButtonBuy = new JButton((String) null);
-		jButtonBuy.addActionListener(new ActionListener() {
+		JButton jButtonOffer = new JButton((String) null);
+		jButtonOffer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (facade.buySale(sale.getSaleNumber(), username) != null) {
-					sale.setSold(true);
-					jButtonBuy.setEnabled(false);
-					jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buyed"));
+				String amountInput = JOptionPane.showInputDialog(
+						ShowSaleGUI.this,
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferPrompt"),
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.MakeOffer"),
+						JOptionPane.PLAIN_MESSAGE);
+				if (amountInput == null) {
+					return;
+				}
+				try {
+					float amount = Float.parseFloat(amountInput);
+					if (amount <= 0) {
+						jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
+						return;
+					}
+					boolean added = facade.addOffer(amount, sale.getSaleNumber(), username);
+					if (added) {
+						jLabelError.setText("");
+						jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferCreated"));
+					} else {
+						jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
+					}
+				} catch (NumberFormatException ex) {
+					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
 				}
 			}
 		});
-		jButtonBuy.setBounds(new Rectangle(16, 268, 114, 30));
-		jButtonBuy.setBounds(164, 268, 114, 30);
-		jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buy"));
-		if (username.equals("Guest") || sale.isSold()) {
-			jButtonBuy.setEnabled(false);
-			if (sale.isSold()) {
-				jButtonBuy.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Buyed"));
-			}
+		jButtonOffer.setBounds(new Rectangle(16, 268, 114, 30));
+		jButtonOffer.setBounds(164, 268, 114, 30);
+		jButtonOffer.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.MakeOffer"));
+		if (isGuest) {
+			jButtonOffer.setEnabled(false);
+			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OnlyRegisteredOffer"));
+		} else if (sale.isSold()) {
+			jButtonOffer.setEnabled(false);
+			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.SaleSold"));
+		} else if (sale.getSeller() != null && username.equals(sale.getSeller().getUsername())) {
+			jButtonOffer.setEnabled(false);
+			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.YourOwnSale"));
 		}
-		getContentPane().add(jButtonBuy);
+		getContentPane().add(jButtonOffer);
+
+		JButton jButtonAcceptOffer = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOffer"));
+		jButtonAcceptOffer.setBounds(16, 231, 130, 30);
+		jButtonAcceptOffer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Offer> offers = sale.getOfferList();
+				if (offers == null || offers.isEmpty()) {
+					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.NoOffers"));
+					return;
+				}
+
+				String[] offerOptions = new String[offers.size()];
+				for (int i = 0; i < offers.size(); i++) {
+					Offer current = offers.get(i);
+					offerOptions[i] = "#" + (i + 1) + " - " + current.getBuyer().getUsername() + " - "
+							+ current.getOffer() + " EUR";
+				}
+
+				Object selected = JOptionPane.showInputDialog(
+						ShowSaleGUI.this,
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.SelectOffer"),
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOffer"),
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						offerOptions,
+						offerOptions[0]);
+
+				if (selected == null) {
+					return;
+				}
+
+				int idx = Arrays.asList(offerOptions).indexOf(selected.toString());
+				if (idx < 0) {
+					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
+					return;
+				}
+
+				Offer selectedOffer = offers.get(idx);
+				boolean ok = facade.acceptOffer(selectedOffer, sale.getSaleNumber(), username);
+				if (ok) {
+					sale.setSold(true);
+					jButtonAcceptOffer.setEnabled(false);
+					jButtonOffer.setEnabled(false);
+					jButtonFavorites.setEnabled(false);
+					jLabelError.setText("");
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferAccepted"));
+				} else {
+					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOfferError"));
+				}
+			}
+		});
+
+		if (!isSeller || sale.isSold()) {
+			jButtonAcceptOffer.setEnabled(false);
+		}
+		getContentPane().add(jButtonAcceptOffer);
 		
 		jButtonFavorites.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,7 +246,10 @@ public class ShowSaleGUI extends JFrame {
 		jButtonFavorites.setBounds(new Rectangle(16, 268, 114, 30));
 		jButtonFavorites.setBounds(164, 231, 114, 30);
 		jButtonFavorites.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddtoFav"));
-		if (facade.isInFavorites(sale.getSaleNumber(), username)) {
+		if (isGuest) {
+			jButtonFavorites.setEnabled(false);
+			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OnlyRegisteredFav"));
+		} else if (facade.isInFavorites(sale.getSaleNumber(), username)) {
 			jButtonFavorites.setEnabled(false);
 		}
 		
