@@ -166,23 +166,26 @@ public class User implements Serializable {
 	}
 
 
-	public boolean acceptOffer(float prezioa, Sale s){
+	public boolean acceptOffer(float prezioa, Sale s, String nondik, String nora){
 		euro += prezioa;
+		addMovement(nondik, nora, prezioa);
 		return  sales.remove(s);
 		
 	}
 	
-	public boolean addClaim(Claim claim) {
-		return (!claims.contains(claim)) ? claims.add(claim) : false;
+	public boolean addClaim(String buyer, Date date, String description, boolean status) {
+		Claim c = new Claim(buyer, date, description, status);
+		return (!claims.contains(c)) ? claims.add(c) : false;
 	}
 	
 	public List<Claim> getClaims() {
 		return claims;
 	}
 	
-	// int kopurua;
-	public boolean addMovement(String nondik, String nora, int kopurua) {
-		return (movements.contains(new Movement(kopurua, nondik,nora,new Date()))) ? false : movements.add(new Movement(kopurua, nondik,nora,new Date()));
+
+	public boolean addMovement(String nondik, String nora, float kopurua) {
+		Movement m = new Movement(kopurua, nondik,nora,new Date());
+		return (movements.contains(m) ? false : movements.add(m));
 		
 	}
 	

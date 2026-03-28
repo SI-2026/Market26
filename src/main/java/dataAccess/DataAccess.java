@@ -225,10 +225,11 @@ public class DataAccess  {
 		User buyer = db.find(User.class, offer.getBuyer().getUsername());
 		if(seller != null && buyer != null) {
 		    db.getTransaction().begin();
-			b = seller.acceptOffer(offer.getOffer(), s);
+			b = seller.acceptOffer(offer.getOffer(), s, buyer.getUsername(), seller.getUsername());
 			if (b) {
 				buyer.setDirua(buyer.getDirua() - offer.getOffer());
 				buyer.addPurchase(s);
+				buyer.addMovement(buyer.getUsername(), sellername, offer.getOffer());
 				s.setSold(true);
 				List<Sale> favoritesList = buyer.getFavorites();
 				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
@@ -259,7 +260,7 @@ public class DataAccess  {
 		User claimer = db.find(User.class, claimername);
 		if(seller != null && claimer != null) {
 			db.getTransaction().begin();
-			b =  seller.addClaim(new Claim(claimer, new Date(), description, false));
+			b =  seller.addClaim(claimername, new Date(), description, false);
 			db.persist(seller);
 			db.getTransaction().commit();
 		}
