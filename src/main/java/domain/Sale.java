@@ -237,9 +237,9 @@ public class Sale implements Serializable {
 	}
 
 		
-	public boolean addOffer(Offer offer) {
-		if(offer.getOffer() <= 0 ) return false;
-		this.offerList.add(offer);
+	public boolean addOffer(User buyer, float euro, Date offerDate, Sale sale) {
+		if(euro <= 0 ) return false;
+		this.offerList.add(new Offer(buyer, euro, offerDate, sale));
 		return true;
 
 	}

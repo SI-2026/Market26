@@ -207,9 +207,9 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && !s.isSold() && !buyer.getUsername().equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
+		if(s != null && buyer != null && !s.isSold() && !buyername.equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
 		    db.getTransaction().begin();
-			b = s.addOffer(new Offer(buyer, offer, new Date(), s));
+			b = s.addOffer(buyer, offer, new Date(), s);
 			db.persist(s);
 			db.getTransaction().commit();
 		}
