@@ -7,6 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import dataAccess.DataAccess;
+import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
@@ -176,17 +177,17 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 	
 	@Override
-	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
+	public boolean acceptOffer(int offerId, int salenumber, String sellername) {
 		dbManager.open();
-		boolean b = dbManager.acceptOffer(offer, salenumber, sellername);
+		boolean b = dbManager.acceptOffer(offerId, salenumber, sellername);
 		dbManager.close();
 		return b;
 	}
 	
 	@Override
-	public boolean declinedOffer(int salenumber, Offer offer) {
+	public boolean declinedOffer(int salenumber, int offerId) {
 		dbManager.open();
-		boolean b = dbManager.declinedOffer(salenumber, offer);
+		boolean b = dbManager.declinedOffer(salenumber, offerId);
 		dbManager.close();
 		return b;
 	}
@@ -197,6 +198,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		boolean b = dbManager.makeClaim(description, sellername, claimername);
 		dbManager.close();
 		return b;
+	}
+
+	@Override
+	public List<Movement> getMovements(String username) {
+		dbManager.open();
+		List<Movement> movements = dbManager.getMovements(username);
+		dbManager.close();
+		return movements;
 	}
     
 }

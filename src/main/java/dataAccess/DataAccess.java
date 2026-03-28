@@ -21,6 +21,7 @@ import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
 import domain.Claim;
+import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
@@ -171,7 +172,6 @@ public class DataAccess  {
 		return b;
 	}
 	
-	//TODO falta hacer los botones y sincronizarlos
 	public void addMoney(float euro, String username) {
 		if (euro <= 0) {
 			return;
@@ -180,12 +180,12 @@ public class DataAccess  {
 		if(u != null) {
 		    db.getTransaction().begin();
 			u.addMoney(euro);
+			u.addMovement("BANK", username, euro);
 			db.persist(u);
 			db.getTransaction().commit();
 		}
 
 	}
-	//TODO falta hacer los botones y sincronizarlos
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
 		if (euroKop <= 0) {
@@ -195,6 +195,9 @@ public class DataAccess  {
 		if(u!=null) {
 			db.getTransaction().begin();
 			b = u.takeOutMoney(euroKop);
+			if (b) {
+				u.addMovement(username, "BANK", euroKop);
+			}
 			db.persist(u);
 			db.getTransaction().commit();
 		}
@@ -217,13 +220,13 @@ public class DataAccess  {
 		return b;
 	}
 	
-	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
+	public boolean acceptOffer(int offerId, int salenumber, String sellername) {
 		boolean b = false;
-		boolean b2 = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User seller = db.find(User.class, sellername);
+		Offer offer = db.find(Offer.class, offerId);
 		User buyer = db.find(User.class, offer.getBuyer().getUsername());
-		if(seller != null && buyer != null) {
+		if(seller != null && buyer != null && s != null && !s.isSold()) {
 		    db.getTransaction().begin();
 			b = seller.acceptOffer(offer.getOffer(), s, buyer.getUsername(), seller.getUsername());
 			if (b) {
@@ -232,22 +235,34 @@ public class DataAccess  {
 				buyer.addMovement(buyer.getUsername(), sellername, offer.getOffer());
 				s.setSold(true);
 				List<Sale> favoritesList = buyer.getFavorites();
-				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
+				if(favoritesList.contains(s)) {
+					favoritesList.remove(s);
+				}
 			}
 			db.persist(buyer);
 			db.persist(seller);
 			db.getTransaction().commit();
 		}
 		
-		return b && b2;
+		return b;
 	}
 	
-	public boolean declinedOffer(int salenumber, Offer offer) {
+	public boolean declinedOffer(int salenumber, int offerId) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
-		if(s != null) {
+		Offer offer = db.find(Offer.class, offerId);
+		if(s != null && offer != null && !s.isSold()) {
 			db.getTransaction().begin();
-			b = s.OfferDeclined(offer);
+			Offer offerToRemove = null;
+			for (Offer current : s.getOfferList()) {
+				if (current.getOfferId() == offer.getOfferId()) {
+					offerToRemove = current;
+					break;
+				}
+			}
+			if (offerToRemove != null) {
+				b = s.OfferDeclined(offerToRemove);
+			}
 			db.persist(s);
 			db.getTransaction().commit();
 		}
@@ -265,6 +280,14 @@ public class DataAccess  {
 			db.getTransaction().commit();
 		}
 		return b;
+	}
+
+	public List<Movement> getMovements(String username) {
+		User user = db.find(User.class, username);
+		if (user == null || user.getMovements() == null) {
+			return new ArrayList<Movement>();
+		}
+		return new ArrayList<Movement>(user.getMovements());
 	}
 	
 	

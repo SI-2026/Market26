@@ -125,6 +125,10 @@ public class User implements Serializable {
 		}
 		return favorites.add(sale);
 	}
+
+	public List<Sale> getSales() {
+		return sales;
+	}
 	
 	public List<Sale> getFavorites() {
 		return favorites;
@@ -180,6 +184,10 @@ public class User implements Serializable {
 	
 	public List<Claim> getClaims() {
 		return claims;
+	}
+
+	public List<Movement> getMovements() {
+		return movements;
 	}
 	
 

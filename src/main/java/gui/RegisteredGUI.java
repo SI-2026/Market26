@@ -29,6 +29,7 @@ public class RegisteredGUI extends JFrame {
 	private JButton jButtonProfile = null;
 	private JButton jButtonCreateQuery = null;
 	private JButton jButtonQueryQueries = null;
+	private JButton jButtonSellerOffers = null;
 	private JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
@@ -50,7 +51,7 @@ public class RegisteredGUI extends JFrame {
 	 */
 	public RegisteredGUI(User u) {
 		super();
-		setBounds(580, 280, 500, 300);
+		setBounds(580, 280, 500, 360);
 		final int frameWidth = 500;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 		setAlwaysOnTop(true);
@@ -109,6 +110,17 @@ public class RegisteredGUI extends JFrame {
 				querysalesGUI.setVisible(true);
 			}
 		});
+
+		jButtonSellerOffers = new JButton();
+		jButtonSellerOffers.setBounds((frameWidth - 240) / 2, 200, 240, 58);
+		jButtonSellerOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyOffers"));
+		jButtonSellerOffers.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
+				JFrame sellerOffersGUI = new SellerOffersGUI(username);
+				sellerOffersGUI.setVisible(true);
+			}
+		});
 		
 		
 		//Lengoaiak aukeratzeko combobox-a
@@ -131,7 +143,7 @@ public class RegisteredGUI extends JFrame {
 				}
 			}
 		});
-		lenguage.setBounds((frameWidth - 160) / 2, 221, 160, 24);
+		lenguage.setBounds((frameWidth - 160) / 2, 286, 160, 24);
 		lenguageMod.addElement("Euskara");
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
@@ -143,6 +155,7 @@ public class RegisteredGUI extends JFrame {
 		jContentPane.add(jButtonProfile);
 		jContentPane.add(jButtonCreateQuery);
 		jContentPane.add(jButtonQueryQueries);
+		jContentPane.add(jButtonSellerOffers);
 		jContentPane.add(lenguage);
 
 		
@@ -158,6 +171,7 @@ public class RegisteredGUI extends JFrame {
 		jLabelSelectOption.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QuerySales"));
 		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
+		jButtonSellerOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyOffers"));
 		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") + ": " + username);
 	}
