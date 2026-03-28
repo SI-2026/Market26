@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 
 import businessLogic.BLFacade;
 import domain.User;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ProfileGUI extends JFrame {
 
@@ -54,15 +56,15 @@ public class ProfileGUI extends JFrame {
 		
 		lblBalance = new JLabel();
 		lblBalance.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBalance.setBounds((frameWidth - 320) / 2, 72, 320, 20);
+		lblBalance.setBounds(72, 43, 320, 20);
 		lblBalance.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		txtAmount = new JTextField();
-		txtAmount.setBounds((frameWidth - 220) / 2, 110, 220, 28);
+		txtAmount.setBounds(120, 81, 220, 28);
 		txtAmount.setColumns(10);
 
 		jButtonAddMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddMoney"));
-		jButtonAddMoney.setBounds((frameWidth - 220) / 2, 150, 220, 32);
+		jButtonAddMoney.setBounds(120, 120, 220, 32);
 		jButtonAddMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -80,7 +82,7 @@ public class ProfileGUI extends JFrame {
 		});
 
 		jButtonWithdrawMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawMoney"));
-		jButtonWithdrawMoney.setBounds((frameWidth - 220) / 2, 190, 220, 32);
+		jButtonWithdrawMoney.setBounds(120, 163, 220, 32);
 		jButtonWithdrawMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -104,7 +106,7 @@ public class ProfileGUI extends JFrame {
 
 		lblInfo = new JLabel("");
 		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfo.setBounds((frameWidth - 360) / 2, 235, 360, 20);
+		lblInfo.setBounds(50, 238, 360, 20);
 		
 		
 		jButtonLogOut = new JButton();
@@ -119,6 +121,14 @@ public class ProfileGUI extends JFrame {
 			}
 		});
 		
+		JButton JButtonMovements = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Movements"));
+		JButtonMovements.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		JButtonMovements.setBounds(120, 206, 220, 33);
+		
 		
 		//Panelera gehitzeko aginduak
 		contentPane.add(lblUsername);
@@ -128,6 +138,9 @@ public class ProfileGUI extends JFrame {
 		contentPane.add(jButtonWithdrawMoney);
 		contentPane.add(lblInfo);
 		contentPane.add(jButtonLogOut);
+		contentPane.add(JButtonMovements);
+	
+		
 
 		refreshBalance();
 

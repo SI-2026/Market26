@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 
 import businessLogic.BLFacade;
-import domain.Offer;
 import domain.Sale;
 
 
@@ -77,11 +76,9 @@ public class ShowSaleGUI extends JFrame {
 				thisFrame.setVisible(false);			}
 		});
 
-		jLabelMsg.setBounds(new Rectangle(275, 214, 305, 20));
+		jLabelMsg.setBounds(new Rectangle(16, 306, 320, 20));
 		jLabelMsg.setForeground(Color.red);
 
-		jLabelMsg.setBounds(new Rectangle(16, 214, 320, 20));
-		jLabelMsg.setForeground(Color.red);
 		
 
 		this.getContentPane().add(jLabelMsg, null);
@@ -118,7 +115,7 @@ public class ShowSaleGUI extends JFrame {
 		getContentPane().add(panel_1);
 		
 		labelStatus.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		labelStatus.setBounds(28, 214, 289, 16);
+		labelStatus.setBounds(16, 207, 289, 16);
 		getContentPane().add(labelStatus);
 		
 		
@@ -164,7 +161,7 @@ public class ShowSaleGUI extends JFrame {
 			}
 		});
 		jButtonOffer.setBounds(new Rectangle(16, 268, 114, 30));
-		jButtonOffer.setBounds(164, 268, 114, 30);
+		jButtonOffer.setBounds(164, 268, 144, 30);
 		jButtonOffer.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.MakeOffer"));
 		if (isGuest) {
 			jButtonOffer.setEnabled(false);
@@ -178,64 +175,14 @@ public class ShowSaleGUI extends JFrame {
 		}
 		getContentPane().add(jButtonOffer);
 
-		JButton jButtonAcceptOffer = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOffer"));
-		jButtonAcceptOffer.setBounds(16, 231, 130, 30);
-		jButtonAcceptOffer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				List<Offer> offers = sale.getOfferList();
-				if (offers == null || offers.isEmpty()) {
-					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.NoOffers"));
-					return;
-				}
-
-				String[] offerOptions = new String[offers.size()];
-				for (int i = 0; i < offers.size(); i++) {
-					Offer current = offers.get(i);
-					offerOptions[i] = "#" + (i + 1) + " - " + current.getBuyer().getUsername() + " - "
-							+ current.getOffer() + " EUR";
-				}
-
-				Object selected = JOptionPane.showInputDialog(
-						ShowSaleGUI.this,
-						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.SelectOffer"),
-						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOffer"),
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						offerOptions,
-						offerOptions[0]);
-
-				if (selected == null) {
-					return;
-				}
-
-				int idx = Arrays.asList(offerOptions).indexOf(selected.toString());
-				if (idx < 0) {
-					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
-					return;
-				}
-
-				Offer selectedOffer = offers.get(idx);
-				boolean ok = facade.acceptOffer(selectedOffer, sale.getSaleNumber(), username);
-				if (ok) {
-					sale.setSold(true);
-					jButtonAcceptOffer.setEnabled(false);
-					jButtonOffer.setEnabled(false);
-					jButtonFavorites.setEnabled(false);
-					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferAccepted"));
-				} else {
-					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOfferError"));
-				}
-			}
-		});
-
-		if (!isSeller || sale.isSold()) {
+		if (sale.isSold()) {
 			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Selled"));
 			jButtonFavorites.setEnabled(false);
 			jButtonOffer.setEnabled(false);
-			jButtonAcceptOffer.setEnabled(false);
-			
+		} else if (isSeller) {
+			jButtonFavorites.setEnabled(false);
+			jButtonOffer.setEnabled(false);
 		}
-		getContentPane().add(jButtonAcceptOffer);
 		
 		jButtonFavorites.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -245,7 +192,7 @@ public class ShowSaleGUI extends JFrame {
 			}
 		});
 		jButtonFavorites.setBounds(new Rectangle(16, 268, 114, 30));
-		jButtonFavorites.setBounds(164, 231, 114, 30);
+		jButtonFavorites.setBounds(164, 231, 144, 30);
 		jButtonFavorites.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddtoFav"));
 		if (isGuest) {
 			jButtonFavorites.setEnabled(false);

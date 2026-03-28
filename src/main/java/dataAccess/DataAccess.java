@@ -219,11 +219,10 @@ public class DataAccess  {
 	
 	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
 		boolean b = false;
-		boolean b2 = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User seller = db.find(User.class, sellername);
 		User buyer = db.find(User.class, offer.getBuyer().getUsername());
-		if(seller != null && buyer != null) {
+		if(seller != null && buyer != null && s != null && !s.isSold()) {
 		    db.getTransaction().begin();
 			b = seller.acceptOffer(offer.getOffer(), s);
 			if (b) {
@@ -231,22 +230,33 @@ public class DataAccess  {
 				buyer.addPurchase(s);
 				s.setSold(true);
 				List<Sale> favoritesList = buyer.getFavorites();
-				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
+				if(favoritesList.contains(s)) {
+					favoritesList.remove(s);
+				}
 			}
 			db.persist(buyer);
 			db.persist(seller);
 			db.getTransaction().commit();
 		}
 		
-		return b && b2;
+		return b;
 	}
 	
 	public boolean declinedOffer(int salenumber, Offer offer) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
-		if(s != null) {
+		if(s != null && offer != null && !s.isSold()) {
 			db.getTransaction().begin();
-			b = s.OfferDeclined(offer);
+			Offer offerToRemove = null;
+			for (Offer current : s.getOfferList()) {
+				if (current.getOfferId() == offer.getOfferId()) {
+					offerToRemove = current;
+					break;
+				}
+			}
+			if (offerToRemove != null) {
+				b = s.OfferDeclined(offerToRemove);
+			}
 			db.persist(s);
 			db.getTransaction().commit();
 		}
