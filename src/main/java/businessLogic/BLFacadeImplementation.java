@@ -134,13 +134,6 @@ public class BLFacadeImplementation  implements BLFacade {
 		return u;
 	}
 	
-	@Override
-	public Purchase buySale(int saleNumer, String buyerUsername) {
-		dbManager.open();
-		Purchase p = dbManager.buySale(saleNumer, buyerUsername);
-		dbManager.close();
-		return p;
-	}
 
 	@Override
 	public boolean addFavorites(int saleNumer, String username) {

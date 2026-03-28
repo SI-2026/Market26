@@ -35,7 +35,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
-	private final boolean initialize = true;
+	private final boolean initialize = false;
 
 	private static final String basePath="src/main/resources/images/";
 
@@ -148,21 +148,6 @@ public class DataAccess  {
 		return db.find(User.class, username);
 	}
 	
-	public Purchase buySale(int saleNumer, String buyerUsername) {
-		Purchase p = null;
-		Sale s = db.find(Sale.class, saleNumer);
-		User u = db.find(User.class, buyerUsername);
-		if (s != null && u != null && !s.isSold()) {
-		    db.getTransaction().begin();
-		    s.setSold(true);
-			p = u.addPurchase(s, new Date());
-			db.persist(u);
-			db.persist(s);
-			db.getTransaction().commit();
-		}
-		return p;
-	}
-	
 	public boolean addFavorites(int saleNumer, String username) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, saleNumer);
@@ -222,8 +207,7 @@ public class DataAccess  {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && !s.isSold() && s.getSeller() != null
-				&& !buyer.getUsername().equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
+		if(s != null && buyer != null && !s.isSold() && !buyer.getUsername().equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
 		    db.getTransaction().begin();
 			b = s.addOffer(new Offer(buyer, offer, new Date(), s));
 			db.persist(s);
@@ -244,6 +228,8 @@ public class DataAccess  {
 			b = seller.acceptOffer(offer.getOffer(), s);
 			if (b) {
 				buyer.setDirua(buyer.getDirua() - offer.getOffer());
+				buyer.addPurchase(s);
+				s.setSold(true);
 				List<Sale> favoritesList = buyer.getFavorites();
 				if(favoritesList.contains(s)) b2 = favoritesList.remove(s);
 			}

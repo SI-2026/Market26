@@ -43,7 +43,6 @@ public class ShowSaleGUI extends JFrame {
 	DefaultComboBoxModel<String> statusOptions = new DefaultComboBoxModel<String>();
 	private JButton jButtonClose = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
 	private JLabel jLabelMsg = new JLabel();
-	private JLabel jLabelError = new JLabel();
 	private JLabel statusField=new JLabel();
 	private JFrame thisFrame;
 	private final JButton jButtonFavorites = new JButton((String) null);
@@ -81,12 +80,12 @@ public class ShowSaleGUI extends JFrame {
 		jLabelMsg.setBounds(new Rectangle(275, 214, 305, 20));
 		jLabelMsg.setForeground(Color.red);
 
-		jLabelError.setBounds(new Rectangle(6, 231, 320, 20));
-		jLabelError.setForeground(Color.red);
+		jLabelMsg.setBounds(new Rectangle(16, 214, 320, 20));
+		jLabelMsg.setForeground(Color.red);
 		
 
 		this.getContentPane().add(jLabelMsg, null);
-		this.getContentPane().add(jLabelError, null);
+		this.getContentPane().add(jLabelMsg, null);
 
 		this.getContentPane().add(jButtonClose, null);
 		this.getContentPane().add(jLabelTitle, null);
@@ -119,7 +118,7 @@ public class ShowSaleGUI extends JFrame {
 		getContentPane().add(panel_1);
 		
 		labelStatus.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		labelStatus.setBounds(37, 231, 289, 16);
+		labelStatus.setBounds(28, 214, 289, 16);
 		getContentPane().add(labelStatus);
 		
 		
@@ -150,18 +149,17 @@ public class ShowSaleGUI extends JFrame {
 				try {
 					float amount = Float.parseFloat(amountInput);
 					if (amount <= 0) {
-						jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
+						jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
 						return;
 					}
 					boolean added = facade.addOffer(amount, sale.getSaleNumber(), username);
 					if (added) {
-						jLabelError.setText("");
 						jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferCreated"));
 					} else {
-						jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
+						jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
 					}
 				} catch (NumberFormatException ex) {
-					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidOffer"));
 				}
 			}
 		});
@@ -186,7 +184,7 @@ public class ShowSaleGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				List<Offer> offers = sale.getOfferList();
 				if (offers == null || offers.isEmpty()) {
-					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.NoOffers"));
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.NoOffers"));
 					return;
 				}
 
@@ -212,7 +210,7 @@ public class ShowSaleGUI extends JFrame {
 
 				int idx = Arrays.asList(offerOptions).indexOf(selected.toString());
 				if (idx < 0) {
-					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferError"));
 					return;
 				}
 
@@ -223,16 +221,19 @@ public class ShowSaleGUI extends JFrame {
 					jButtonAcceptOffer.setEnabled(false);
 					jButtonOffer.setEnabled(false);
 					jButtonFavorites.setEnabled(false);
-					jLabelError.setText("");
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferAccepted"));
 				} else {
-					jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOfferError"));
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOfferError"));
 				}
 			}
 		});
 
 		if (!isSeller || sale.isSold()) {
+			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Selled"));
+			jButtonFavorites.setEnabled(false);
+			jButtonOffer.setEnabled(false);
 			jButtonAcceptOffer.setEnabled(false);
+			
 		}
 		getContentPane().add(jButtonAcceptOffer);
 		

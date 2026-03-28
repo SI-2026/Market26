@@ -109,8 +109,8 @@ public class User implements Serializable {
 		return false;
 	}
 
-	public Purchase addPurchase(Sale sale, Date date) {
-		Purchase purchase = new Purchase(this, sale, date);
+	public Purchase addPurchase(Sale sale) {
+		Purchase purchase = new Purchase(this, sale, new Date());
 		purchases.add(purchase);
 		return purchase;
 	}
