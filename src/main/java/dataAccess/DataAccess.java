@@ -172,7 +172,6 @@ public class DataAccess  {
 		return b;
 	}
 	
-	//TODO falta hacer los botones y sincronizarlos
 	public void addMoney(float euro, String username) {
 		if (euro <= 0) {
 			return;
@@ -187,7 +186,6 @@ public class DataAccess  {
 		}
 
 	}
-	//TODO falta hacer los botones y sincronizarlos
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
 		if (euroKop <= 0) {
@@ -222,10 +220,11 @@ public class DataAccess  {
 		return b;
 	}
 	
-	public boolean acceptOffer(Offer offer, int salenumber, String sellername) {
+	public boolean acceptOffer(int offerId, int salenumber, String sellername) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User seller = db.find(User.class, sellername);
+		Offer offer = db.find(Offer.class, offerId);
 		User buyer = db.find(User.class, offer.getBuyer().getUsername());
 		if(seller != null && buyer != null && s != null && !s.isSold()) {
 		    db.getTransaction().begin();
@@ -248,9 +247,10 @@ public class DataAccess  {
 		return b;
 	}
 	
-	public boolean declinedOffer(int salenumber, Offer offer) {
+	public boolean declinedOffer(int salenumber, int offerId) {
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
+		Offer offer = db.find(Offer.class, offerId);
 		if(s != null && offer != null && !s.isSold()) {
 			db.getTransaction().begin();
 			Offer offerToRemove = null;

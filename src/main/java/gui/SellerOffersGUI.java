@@ -75,7 +75,7 @@ public class SellerOffersGUI extends JFrame {
 				Sale sale = (Sale) tableModelOffers.getValueAt(row, 4);
 				Offer offer = (Offer) tableModelOffers.getValueAt(row, 5);
 				BLFacade facade = UserGUI.getBusinessLogic();
-				boolean ok = facade.acceptOffer(offer, sale.getSaleNumber(), username);
+				boolean ok = facade.acceptOffer(offer.getOfferId(), sale.getSaleNumber(), username);
 				if (ok) {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferAccepted"));
 					loadOffers();
@@ -99,7 +99,7 @@ public class SellerOffersGUI extends JFrame {
 				Sale sale = (Sale) tableModelOffers.getValueAt(row, 4);
 				Offer offer = (Offer) tableModelOffers.getValueAt(row, 5);
 				BLFacade facade = UserGUI.getBusinessLogic();
-				boolean ok = facade.declinedOffer(sale.getSaleNumber(), offer);
+				boolean ok = facade.declinedOffer(sale.getSaleNumber(), offer.getOfferId());
 				if (ok) {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.OfferDeclined"));
 					loadOffers();

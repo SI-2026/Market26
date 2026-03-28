@@ -82,9 +82,9 @@ public interface BLFacade  {
 	
 	@WebMethod public boolean addOffer(float offer, int salenumber, String buyername);
 	
-	@WebMethod public boolean acceptOffer(Offer offer, int salenumber, String sellername);
+	@WebMethod public boolean acceptOffer(int offerId, int salenumber, String sellername);
 
-	@WebMethod public boolean declinedOffer(int salenumber, Offer offer);
+	@WebMethod public boolean declinedOffer(int salenumber, int offerId);
 	
 	@WebMethod public boolean makeClaim(String description, String sellername, String claimername);
 
