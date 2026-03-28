@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import businessLogic.BLFacade;
+import domain.Claim;
 import domain.Offer;
 import domain.Sale;
 import domain.User;
@@ -29,20 +30,28 @@ public class SellerOffersGUI extends JFrame {
 	private JFrame thisFrame;
 	private JTable tableOffers = new JTable();
 	private DefaultTableModel tableModelOffers;
+	private JTable tableClaims = new JTable();
+	private DefaultTableModel tableModelClaims;
 	private JLabel jLabelMsg = new JLabel();
 	private JLabel jLabelOffers = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Offers"));
+	private JLabel jLabelClaims = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Claims"));
 
-	private final String[] columnNames = new String[] {
+	private String[] columnNames = new String[] {
 			ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Title"),
 			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Buyer"),
 			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Amount"),
+			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Date") };
+
+	private String[] claimColumnNames = new String[] {
+			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Buyer"),
+			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.ClaimDescription"),
 			ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Date") };
 
 	public SellerOffersGUI(String username) {
 		this.username = username;
 		this.thisFrame = this;
 
-		setSize(new Dimension(760, 460));
+		setSize(new Dimension(760, 640));
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Title"));
 		getContentPane().setLayout(null);
 
@@ -50,7 +59,7 @@ public class SellerOffersGUI extends JFrame {
 		getContentPane().add(jLabelOffers);
 
 		JScrollPane scrollPaneOffers = new JScrollPane();
-		scrollPaneOffers.setBounds(new Rectangle(32, 57, 690, 260));
+		scrollPaneOffers.setBounds(new Rectangle(32, 57, 690, 230));
 		getContentPane().add(scrollPaneOffers);
 
 		tableModelOffers = new DefaultTableModel(null, columnNames);
@@ -62,8 +71,20 @@ public class SellerOffersGUI extends JFrame {
 		tableOffers.getColumnModel().removeColumn(tableOffers.getColumnModel().getColumn(5));
 		tableOffers.getColumnModel().removeColumn(tableOffers.getColumnModel().getColumn(4));
 
+		jLabelClaims.setBounds(32, 308, 420, 16);
+		getContentPane().add(jLabelClaims);
+
+		JScrollPane scrollPaneClaims = new JScrollPane();
+		scrollPaneClaims.setBounds(new Rectangle(32, 335, 690, 180));
+		getContentPane().add(scrollPaneClaims);
+
+		tableModelClaims = new DefaultTableModel(null, claimColumnNames);
+		tableClaims.setModel(tableModelClaims);
+		tableClaims.setEnabled(false);
+		scrollPaneClaims.setViewportView(tableClaims);
+
 		JButton jButtonAccept = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOffer"));
-		jButtonAccept.setBounds(32, 339, 170, 30);
+		jButtonAccept.setBounds(32, 532, 170, 30);
 		jButtonAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = tableOffers.getSelectedRow();
@@ -78,7 +99,7 @@ public class SellerOffersGUI extends JFrame {
 				boolean ok = facade.acceptOffer(offer.getOfferId(), sale.getSaleNumber(), username);
 				if (ok) {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.OfferAccepted"));
-					loadOffers();
+					refresh();
 				} else {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AcceptOfferError"));
 				}
@@ -87,7 +108,7 @@ public class SellerOffersGUI extends JFrame {
 		getContentPane().add(jButtonAccept);
 
 		JButton jButtonDecline = new JButton(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.DeclineOffer"));
-		jButtonDecline.setBounds(214, 339, 170, 30);
+		jButtonDecline.setBounds(214, 532, 170, 30);
 		jButtonDecline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = tableOffers.getSelectedRow();
@@ -102,7 +123,7 @@ public class SellerOffersGUI extends JFrame {
 				boolean ok = facade.declinedOffer(sale.getSaleNumber(), offer.getOfferId());
 				if (ok) {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.OfferDeclined"));
-					loadOffers();
+					refresh();
 				} else {
 					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.DeclineOfferError"));
 				}
@@ -111,7 +132,7 @@ public class SellerOffersGUI extends JFrame {
 		getContentPane().add(jButtonDecline);
 
 		JButton jButtonClose = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
-		jButtonClose.setBounds(396, 339, 130, 30);
+		jButtonClose.setBounds(396, 532, 130, 30);
 		jButtonClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				thisFrame.setVisible(false);
@@ -119,63 +140,50 @@ public class SellerOffersGUI extends JFrame {
 		});
 		getContentPane().add(jButtonClose);
 
-		jLabelMsg.setBounds(32, 384, 620, 20);
+		jLabelMsg.setBounds(32, 572, 680, 20);
 		jLabelMsg.setForeground(Color.RED);
 		getContentPane().add(jLabelMsg);
 
-		loadOffers();
-	}
 
-	private void loadOffers() {
-		tableModelOffers.setDataVector(null, columnNames);
-		tableModelOffers.setColumnCount(6);
+	}
+	public void refresh() {
 		BLFacade facade = UserGUI.getBusinessLogic();
 		User seller = facade.getUser(username);
-		if (seller == null || seller.getSales() == null) {
-			jLabelOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.NoOffers"));
-			removeHiddenColumns();
-			return;
-		}
 
-		int rows = 0;
+        		int kont = 0;
 		for (Sale sale : seller.getSales()) {
-			if (sale == null || sale.isSold()) {
+			if (sale.isSold()) {
 				continue;
 			}
 			List<Offer> offers = sale.getOfferList();
-			if (offers == null || offers.isEmpty()) {
+			if (offers.isEmpty()) {
 				continue;
 			}
 			for (Offer offer : offers) {
-				if (offer == null) {
-					continue;
-				}
 				Vector<Object> row = new Vector<Object>();
 				row.add(sale.getTitle());
 				row.add(offer.getBuyer() != null ? offer.getBuyer().getUsername() : "-");
 				row.add(offer.getOffer());
-				Date offerDate = offer.getOfferDate();
-				row.add(offerDate != null ? new SimpleDateFormat("dd-MM-yyyy").format(offerDate) : "-");
+				row.add(offer.getOfferDate());
 				row.add(sale);
 				row.add(offer);
 				tableModelOffers.addRow(row);
-				rows++;
+				kont++;
 			}
 		}
 
-		if (rows == 0) {
-			jLabelOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.NoOffers"));
+        if(seller.getClaims().isEmpty()) {
+			jLabelClaims.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.NoClaims"));
 		} else {
-			jLabelOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.Offers"));
-		}
-
-		removeHiddenColumns();
-	}
-
-	private void removeHiddenColumns() {
-		if (tableOffers.getColumnCount() == 6) {
-			tableOffers.getColumnModel().removeColumn(tableOffers.getColumnModel().getColumn(5));
-			tableOffers.getColumnModel().removeColumn(tableOffers.getColumnModel().getColumn(4));
-		}
+            kont = 0;
+		    for (Claim claim : seller.getClaims()) {
+                Vector<Object> row = new Vector<Object>();
+                row.add(claim.getBuyer());
+                row.add(claim.getDescription());
+                row.add(claim.getDate());
+                tableModelClaims.addRow(row);
+                kont++;
+		    }
+        }
 	}
 }

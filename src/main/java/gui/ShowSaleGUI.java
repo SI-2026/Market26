@@ -203,6 +203,36 @@ public class ShowSaleGUI extends JFrame {
 		
 		getContentPane().add(jButtonFavorites);
 
+		JButton jButtonClaim = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.MakeClaim"));
+		jButtonClaim.setBounds(16, 231, 130, 30);
+		jButtonClaim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String description = JOptionPane.showInputDialog(
+						ShowSaleGUI.this,
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ClaimPrompt"),
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.MakeClaim"),
+						JOptionPane.PLAIN_MESSAGE);
+				if (description == null ||description.isEmpty()) {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidClaim"));
+					return;
+				}
+
+				boolean ok = facade.makeClaim(description, sale.getSeller().getUsername(), username);
+				if (ok) {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ClaimCreated"));
+					jButtonClaim.setEnabled(false);
+				} else {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ClaimError"));
+				}
+			}
+		});
+
+		boolean canClaim = !isGuest && !isSeller && sale.isSold();
+		if (isGuest || isSeller || !sale.isSold()) {
+			jButtonClaim.setEnabled(false);
+		}
+		getContentPane().add(jButtonClaim);
+
 		
 	}	 
 	public BufferedImage rescale(BufferedImage originalImage)
