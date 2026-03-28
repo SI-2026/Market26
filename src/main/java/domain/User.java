@@ -37,6 +37,10 @@ public class User implements Serializable {
 	@XmlID
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Claim> claims = new ArrayList<Claim>();
+	
+	@XmlID
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Movement> movements = new ArrayList<Movement>();
 
 	public User() {
 		super();
@@ -174,6 +178,12 @@ public class User implements Serializable {
 	
 	public List<Claim> getClaims() {
 		return claims;
+	}
+	
+	// int kopurua;
+	public boolean addMovement(String nondik, String nora, int kopurua) {
+		return (movements.contains(new Movement(kopurua, nondik,nora,new Date()))) ? false : movements.add(new Movement(kopurua, nondik,nora,new Date()));
+		
 	}
 	
 	

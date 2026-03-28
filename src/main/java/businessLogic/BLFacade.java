@@ -86,6 +86,8 @@ public interface BLFacade  {
 	@WebMethod public boolean declinedOffer(int salenumber, Offer offer);
 	
 	@WebMethod public boolean makeClaim(String description, String sellername, String claimername);
+	
+	
 
 	
 }

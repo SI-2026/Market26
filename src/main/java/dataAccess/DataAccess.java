@@ -267,6 +267,8 @@ public class DataAccess  {
 	}
 	
 	
+	
+	
 	/**
 	 * This method creates/adds a product to a seller
 	 * 
