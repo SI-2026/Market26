@@ -19,7 +19,7 @@ public class Claim implements Serializable {
 	private Integer claimId;
 
 	@ManyToOne
-	private User buyer;
+	private String buyer;
 	private Date date;
 	private String description;
 	private boolean status;
@@ -28,18 +28,18 @@ public class Claim implements Serializable {
 		super();
 	}
 
-	public Claim(User buyer, Date date, String description, boolean status) {
+	public Claim(String buyer, Date date, String description, boolean status) {
 		this.buyer = buyer;
 		this.date = date;
 		this.description = description;
 		this.status = status;
 	}
 
-	public User getBuyer() {
+	public String getBuyer() {
 		return buyer;
 	}
 
-	public void setBuyer(User buyer) {
+	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
 

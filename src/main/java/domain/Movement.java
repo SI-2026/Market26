@@ -16,7 +16,7 @@ public class Movement {
 	@GeneratedValue
 	int movementId;
 	
-	int kopurua;
+	float kopurua;
 	String nondik; //buyer
 	String nora; //seller
 	Date date;
@@ -26,7 +26,7 @@ public class Movement {
 		super();
 	}
 	
-	public Movement(int kop, String nondik, String nora, Date date) {
+	public Movement(float kop, String nondik, String nora, Date date) {
 		kopurua = kop;
 		this.date = date;
 		this.nondik = nondik;
@@ -41,11 +41,11 @@ public class Movement {
 		this.movementId = movementId;
 	}
 
-	public int getKopurua() {
+	public float getKopurua() {
 		return kopurua;
 	}
 
-	public void setKopurua(int kopurua) {
+	public void setKopurua(float kopurua) {
 		this.kopurua = kopurua;
 	}
 
