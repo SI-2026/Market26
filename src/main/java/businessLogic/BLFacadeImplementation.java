@@ -7,6 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import dataAccess.DataAccess;
+import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
@@ -197,6 +198,14 @@ public class BLFacadeImplementation  implements BLFacade {
 		boolean b = dbManager.makeClaim(description, sellername, claimername);
 		dbManager.close();
 		return b;
+	}
+
+	@Override
+	public List<Movement> getMovements(String username) {
+		dbManager.open();
+		List<Movement> movements = dbManager.getMovements(username);
+		dbManager.close();
+		return movements;
 	}
     
 }

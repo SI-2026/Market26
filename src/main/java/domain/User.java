@@ -185,6 +185,10 @@ public class User implements Serializable {
 	public List<Claim> getClaims() {
 		return claims;
 	}
+
+	public List<Movement> getMovements() {
+		return movements;
+	}
 	
 
 	public boolean addMovement(String nondik, String nora, float kopurua) {

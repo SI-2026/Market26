@@ -124,7 +124,8 @@ public class ProfileGUI extends JFrame {
 		JButton JButtonMovements = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Movements"));
 		JButtonMovements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JFrame movementsGUI = new MovementsGUI(username);
+				movementsGUI.setVisible(true);
 			}
 		});
 		JButtonMovements.setBounds(120, 206, 220, 33);

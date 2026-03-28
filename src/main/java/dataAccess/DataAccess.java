@@ -21,6 +21,7 @@ import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
 import domain.Claim;
+import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
@@ -180,6 +181,7 @@ public class DataAccess  {
 		if(u != null) {
 		    db.getTransaction().begin();
 			u.addMoney(euro);
+			u.addMovement("BANK", username, euro);
 			db.persist(u);
 			db.getTransaction().commit();
 		}
@@ -195,6 +197,9 @@ public class DataAccess  {
 		if(u!=null) {
 			db.getTransaction().begin();
 			b = u.takeOutMoney(euroKop);
+			if (b) {
+				u.addMovement(username, "BANK", euroKop);
+			}
 			db.persist(u);
 			db.getTransaction().commit();
 		}
@@ -275,6 +280,14 @@ public class DataAccess  {
 			db.getTransaction().commit();
 		}
 		return b;
+	}
+
+	public List<Movement> getMovements(String username) {
+		User user = db.find(User.class, username);
+		if (user == null || user.getMovements() == null) {
+			return new ArrayList<Movement>();
+		}
+		return new ArrayList<Movement>(user.getMovements());
 	}
 	
 	
