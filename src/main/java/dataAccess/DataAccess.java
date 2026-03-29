@@ -234,10 +234,6 @@ public class DataAccess  {
 				buyer.addPurchase(s);
 				buyer.addMovement(buyer.getUsername(), sellername, offer.getOffer());
 				s.setSold(true);
-				List<Sale> favoritesList = buyer.getFavorites();
-				if(favoritesList.contains(s)) {
-					favoritesList.remove(s);
-				}
 			}
 			db.persist(buyer);
 			db.persist(seller);
@@ -253,16 +249,7 @@ public class DataAccess  {
 		Offer offer = db.find(Offer.class, offerId);
 		if(s != null && offer != null && !s.isSold()) {
 			db.getTransaction().begin();
-			Offer offerToRemove = null;
-			for (Offer current : s.getOfferList()) {
-				if (current.getOfferId() == offer.getOfferId()) {
-					offerToRemove = current;
-					break;
-				}
-			}
-			if (offerToRemove != null) {
-				b = s.OfferDeclined(offerToRemove);
-			}
+			s.OfferDeclined(offer);
 			db.persist(s);
 			db.getTransaction().commit();
 		}
