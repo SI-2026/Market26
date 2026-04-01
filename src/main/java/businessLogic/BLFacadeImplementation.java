@@ -153,7 +153,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 	
 	@Override
-	public void addMoney(float euro, String username) {
+	public boolean addMoney(float euro, String username) {
 		dbManager.open();
 		dbManager.addMoney(euro, username);
 		dbManager.close();

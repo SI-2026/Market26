@@ -75,7 +75,7 @@ public class ProfileGUI extends JFrame {
 				}
 				BLFacade facade = UserGUI.getBusinessLogic();
 				facade.addMoney(amount, username);
-				refreshBalance();
+				refreshBalance(username);
 				lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddedMoney"));
 				lblInfo.setForeground(new Color(0, 128, 0));
 			}
@@ -93,7 +93,7 @@ public class ProfileGUI extends JFrame {
 				}
 				BLFacade facade = UserGUI.getBusinessLogic();
 				boolean b = facade.takeOutMoney(amount, username);
-				refreshBalance();
+				refreshBalance(username);
 				if (b) {
 					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawOk"));
 					lblInfo.setForeground(new Color(0, 128, 0));
@@ -143,7 +143,7 @@ public class ProfileGUI extends JFrame {
 	
 		
 
-		refreshBalance();
+		refreshBalance(username);
 
 		
 		addWindowListener(new WindowAdapter() {
@@ -171,10 +171,9 @@ public class ProfileGUI extends JFrame {
 		}
 	}
 
-	private void refreshBalance() {
+	private void refreshBalance(String username) {
 		BLFacade facade = UserGUI.getBusinessLogic();
 		User user = facade.getUser(username);
-
 		float balance = 0;
 		if (user != null) {
 			balance = user.getDirua();

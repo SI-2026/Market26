@@ -172,9 +172,9 @@ public class DataAccess  {
 		return b;
 	}
 	
-	public void addMoney(float euro, String username) {
+	public boolean addMoney(float euro, String username) {
 		if (euro <= 0) {
-			return;
+			return false;
 		}
 		User u = db.find(User.class, username);
 		if(u != null) {
@@ -184,6 +184,7 @@ public class DataAccess  {
 			db.persist(u);
 			db.getTransaction().commit();
 		}
+		return true;
 
 	}
 	public boolean takeOutMoney(float euroKop, String username) {
