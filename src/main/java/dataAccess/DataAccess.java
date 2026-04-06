@@ -189,7 +189,7 @@ public class DataAccess  {
 	public boolean takeOutMoney(float euroKop, String username) {
 		boolean b =false;
 		if (euroKop <= 0) {
-			return false;
+			return b;
 		}
 		User u = db.find(User.class, username);
 		if(u!=null) {
