@@ -144,6 +144,8 @@ public class SellerOffersGUI extends JFrame {
 		jLabelMsg.setForeground(Color.RED);
 		getContentPane().add(jLabelMsg);
 
+		refresh();
+
 
 	}
 	public void refresh() {
