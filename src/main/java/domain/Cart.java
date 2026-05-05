@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
 
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,9 +15,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class Cart implements Serializable {
 
     @Id
-    @GeneratedValue
-    private Integer cartId;
-
+    @XmlID
     private String username;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -38,10 +37,6 @@ public class Cart implements Serializable {
         this.username = username;
         this.cartList = (cartList != null) ? new ArrayList<Sale>(cartList) : new ArrayList<Sale>();
         recalculateAmount();
-    }
-
-    public Integer getCartId() {
-        return cartId;
     }
 
     public String getUsername() {
@@ -72,7 +67,7 @@ public class Cart implements Serializable {
         totalAmount = 0;
         return cleared;
     }
-
+    
     public double getAmount() {
         recalculateAmount();
         return totalAmount;

@@ -53,7 +53,7 @@ public class User implements Serializable {
 		this.username = username;
 		this.password = name;
 		this.euro = 0;
-		this.cart = new Cart();
+		this.cart = new Cart(username);
 	}
 
 	public float getDirua() {
@@ -70,6 +70,9 @@ public class User implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+		if (this.cart != null) {
+			this.cart.setUsername(username);
+		}
 	}
 
 	public String getpassword() {
@@ -204,6 +207,11 @@ public class User implements Serializable {
 	public boolean addToCart(Sale sale) {
 		return cart.addToCart(sale);
 	}	
+
+	public Cart getCart() {
+		return cart;
+	}
+
 	
 	
 	

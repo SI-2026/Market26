@@ -30,6 +30,7 @@ public class RegisteredGUI extends JFrame {
 	private JButton jButtonCreateQuery = null;
 	private JButton jButtonQueryQueries = null;
 	private JButton jButtonSellerOffers = null;
+	private JButton jButtonCart = null;
 	private JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
@@ -123,6 +124,17 @@ public class RegisteredGUI extends JFrame {
 		});
 		
 		
+		jButtonCart = new JButton();
+		jButtonCart.setBounds((frameWidth - 240) / 2, 250, 240, 30);
+		jButtonCart.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyCart"));
+		jButtonCart.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
+				JFrame cartGUI = new CartGUI(username);
+				cartGUI.setVisible(true);
+			}
+		});
+
 		//Lengoaiak aukeratzeko combobox-a
 		JComboBox<String> lenguage = new JComboBox<String>(lenguageMod);
 		lenguage.addActionListener(new ActionListener() {
@@ -156,6 +168,7 @@ public class RegisteredGUI extends JFrame {
 		jContentPane.add(jButtonCreateQuery);
 		jContentPane.add(jButtonQueryQueries);
 		jContentPane.add(jButtonSellerOffers);
+		jContentPane.add(jButtonCart);
 		jContentPane.add(lenguage);
 
 		
@@ -173,6 +186,7 @@ public class RegisteredGUI extends JFrame {
 		jButtonCreateQuery.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.CreateSale"));
 		jButtonSellerOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyOffers"));
 		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
+		jButtonCart.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyCart"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") + ": " + username);
 	}
 	

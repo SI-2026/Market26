@@ -45,6 +45,7 @@ public class ShowSaleGUI extends JFrame {
 	private JLabel statusField=new JLabel();
 	private JFrame thisFrame;
 	private final JButton jButtonFavorites = new JButton((String) null);
+	private final JButton jButtonAddToCart = new JButton((String) null);
 	
 	public ShowSaleGUI(Sale sale, String username) { 
 		final boolean isGuest = "Guest".equals(username);
@@ -174,6 +175,24 @@ public class ShowSaleGUI extends JFrame {
 			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.YourOwnSale"));
 		}
 		getContentPane().add(jButtonOffer);
+
+		jButtonAddToCart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean added = facade.addToCart(sale.getSaleNumber(), username);
+				if (added) {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddedToCart"));
+					jButtonAddToCart.setEnabled(false);
+				} else {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddToCartError"));
+				}
+			}
+		});
+		jButtonAddToCart.setBounds(164, 194, 144, 30);
+		jButtonAddToCart.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddToCart"));
+		if (isGuest || sale.isSold() || isSeller) {
+			jButtonAddToCart.setEnabled(false);
+		}
+		getContentPane().add(jButtonAddToCart);
 
 		if (sale.isSold()) {
 			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.Selled"));
