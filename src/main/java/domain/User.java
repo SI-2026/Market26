@@ -42,6 +42,9 @@ public class User implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Movement> movements = new ArrayList<Movement>();
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private Cart cart;
+
 	public User() {
 		super();
 	}
@@ -50,6 +53,7 @@ public class User implements Serializable {
 		this.username = username;
 		this.password = name;
 		this.euro = 0;
+		this.cart = new Cart();
 	}
 
 	public float getDirua() {
@@ -196,7 +200,10 @@ public class User implements Serializable {
 		return (movements.contains(m) ? false : movements.add(m));
 		
 	}
-	
+
+	public boolean addToCart(Sale sale) {
+		return cart.addToCart(sale);
+	}	
 	
 	
 	

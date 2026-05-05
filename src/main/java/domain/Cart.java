@@ -67,30 +67,14 @@ public class Cart implements Serializable {
         return added;
     }
 
-    public boolean removeFromCart(Sale sale) {
-        if (sale == null) {
-            return false;
-        }
-        boolean removed = cartList.remove(sale);
-        if (removed) {
-            totalAmount -= sale.getPrice();
-            if (totalAmount < 0) {
-                totalAmount = 0;
-            }
-        }
-        return removed;
-    }
-
-    public void clearCart() {
-        cartList.clear();
+    public boolean clearCart() {
+        boolean cleared = cartList.clear();
         totalAmount = 0;
-    }
-
-    public void setAmount() {
-        recalculateAmount();
+        return cleared;
     }
 
     public double getAmount() {
+        recalculateAmount();
         return totalAmount;
     }
 
@@ -101,7 +85,7 @@ public class Cart implements Serializable {
                 amount += sale.getPrice();
             }
         }
-        totalAmount = amount;
+        this.totalAmount = amount;
     }
 	
 

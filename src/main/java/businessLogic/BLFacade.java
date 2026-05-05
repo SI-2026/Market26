@@ -90,7 +90,13 @@ public interface BLFacade  {
 
 	@WebMethod public List<Movement> getMovements(String username);
 	
-	
+	@WebMethod public boolean addToCart(int saleNumber, String username);
+
+	@WebMethod public double getCartAmount(String username);
+
+	@WebMethod public boolean clearCart(String username);
+
+	@WebMethod public List<Sale> getCartList(String username);
 
 	
 }

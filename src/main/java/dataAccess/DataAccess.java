@@ -416,9 +416,36 @@ public class DataAccess  {
         g.dispose();
         return resizedImage;
     }
-	
-	
-	
+
+	public boolean addToCart(int saleNumber, String username) {
+		User u = db.find(User.class, username);
+		Sale s = db.find(Sale.class, saleNumber);
+		db.getTransaction().begin();
+		boolean b = u.addToCart(s);
+		db.persist(u);
+		db.getTransaction().commit();
+		return b;
+	}
+
+	public double getCartAmount(String username) {
+		User u = db.find(User.class, username);
+		return u.getCart().getAmount();
+	}
+
+	public boolean clearCart(String username) {
+		User u = db.find(User.class, username);
+		db.getTransaction().begin();
+		boolean b = u.getCart().clearCart();
+		db.persist(u);
+		db.getTransaction().commit();
+		return b;
+	}
+
+	public List<Sale> getCartList(String username) {
+		User u = db.find(User.class, username);
+		return u.getCart().getCartList();
+	}
+
 	public void close(){
 		db.close();
 		System.out.println("DataAcess closed");

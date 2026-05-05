@@ -207,6 +207,37 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return movements;
 	}
+	@Override
+	public boolean addToCart(int saleNumber, String username) {
+		dbManager.open();
+		boolean b = dbManager.addToCart(saleNumber, username);
+		dbManager.close();
+		return b;
+	}
+
+	@Override
+	public double getCartAmount(String username) {
+		dbManager.open();
+		double amount = dbManager.getCartAmount(username);
+		dbManager.close();
+		return amount;
+	}
+
+	@Override
+	public boolean clearCart(String username) {
+		dbManager.open();
+		boolean b = dbManager.clearCart(username);
+		dbManager.close();
+		return b;
+	}
+	@Override
+	public List<Sale> getCartList(String username) {
+		dbManager.open();
+		List<Sale> cartList = dbManager.getCartList(username);
+		dbManager.close();
+		return cartList;
+	}
+
     
 }
 
