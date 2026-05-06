@@ -421,9 +421,12 @@ public class DataAccess  {
 		User u = db.find(User.class, username);
 		Sale s = db.find(Sale.class, saleNumber);
 		db.getTransaction().begin();
-		boolean b = u.addToCart(s);
-		db.persist(u);
-		db.getTransaction().commit();
+		boolean b = false;
+		if (!u.getCart().getCartList().contains(s)){
+			b = u.addToCart(s);
+			db.persist(u);
+			db.getTransaction().commit();
+		}
 		return b;
 	}
 
