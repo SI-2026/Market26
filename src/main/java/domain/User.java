@@ -44,6 +44,10 @@ public class User implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Cart cart;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Demands> eskaerak = new ArrayList<Demands>();
+	
 
 	public User() {
 		super();
@@ -212,8 +216,15 @@ public class User implements Serializable {
 		return cart;
 	}
 
+	public boolean makeEskaera(String username, String prod, String description){
+		return this.eskaerak.add(new Demands(username, description, username));
+
+	}
 	
-	
+	public boolean makeProdOffer(){
+
+		return true;
+	}
 	
 
 }
