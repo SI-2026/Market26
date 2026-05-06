@@ -17,10 +17,12 @@ import javax.swing.table.DefaultTableModel;
 public class QuerySalesGUI extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
+	private String username;
 	private final JLabel jLabelProducts = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("QuerySalesGUI.Products")); 
 
 	private JButton jButtonSearch = new JButton(ResourceBundle.getBundle("Etiquetas").getString("QuerySalesGUI.Search")); 
 	private JButton jButtonClose = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
+	private JButton jButtonCart = new JButton();
 
 	private JScrollPane scrollPanelProducts = new JScrollPane();
 	private JTable tableProducts= new JTable();
@@ -39,11 +41,27 @@ public class QuerySalesGUI extends JFrame {
 	
 
 	public QuerySalesGUI(String username) {
+		this.username = username;
 		tableProducts.setEnabled(false);
 		thisFrame=this;
 		this.getContentPane().setLayout(null);
 		this.setSize(new Dimension(700, 500));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("QuerySalesGUI.FindProducts"));
+
+		jButtonCart.setBounds(560, 11, 110, 25);
+		jButtonCart.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyCart"));
+		jButtonCart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!"Guest".equals(QuerySalesGUI.this.username)) {
+					JFrame cartGUI = new CartGUI(QuerySalesGUI.this.username);
+					cartGUI.setVisible(true);
+				}
+			}
+		});
+		if ("Guest".equals(username)) {
+			jButtonCart.setEnabled(false);
+		}
+		getContentPane().add(jButtonCart);
 		jLabelProducts.setBounds(52, 108, 427, 16);
 		this.getContentPane().add(jLabelProducts);
 

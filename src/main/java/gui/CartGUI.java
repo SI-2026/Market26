@@ -33,7 +33,6 @@ public class CartGUI extends JFrame {
 	private final JScrollPane scrollPaneCart = new JScrollPane();
 	private final JButton jButtonPay = new JButton();
 	private final JButton jButtonClear = new JButton();
-	private final JButton jButtonRefresh = new JButton();
 	private final JButton jButtonClose = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
 
 	private final String[] columnNames = new String[] {
@@ -73,7 +72,6 @@ public class CartGUI extends JFrame {
 		jButtonPay.setBounds(30, 390, 150, 30);
 		jButtonPay.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayCart"));
 		jButtonPay.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				payCart();
 			}
@@ -83,7 +81,6 @@ public class CartGUI extends JFrame {
 		jButtonClear.setBounds(195, 390, 150, 30);
 		jButtonClear.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.ClearCart"));
 		jButtonClear.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				BLFacade facade = UserGUI.getBusinessLogic();
 				if (facade.clearCart(username)) {
@@ -96,19 +93,8 @@ public class CartGUI extends JFrame {
 		});
 		getContentPane().add(jButtonClear);
 
-		jButtonRefresh.setBounds(360, 390, 150, 30);
-		jButtonRefresh.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.Refresh"));
-		jButtonRefresh.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				reloadCart();
-			}
-		});
-		getContentPane().add(jButtonRefresh);
-
 		jButtonClose.setBounds(525, 390, 150, 30);
 		jButtonClose.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}

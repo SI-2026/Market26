@@ -36,7 +36,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
-	private final boolean initialize = false;
+	private final boolean initialize = true;
 
 	private static final String basePath="src/main/resources/images/";
 

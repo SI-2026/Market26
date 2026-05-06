@@ -63,9 +63,9 @@ public class Cart implements Serializable {
     }
 
     public boolean clearCart() {
-        boolean cleared = cartList.clear();
+        cartList.clear();
         totalAmount = 0;
-        return cleared;
+        return true;
     }
     
     public double getAmount() {
