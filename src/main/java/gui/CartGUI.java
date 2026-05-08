@@ -1,11 +1,9 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -38,8 +36,7 @@ public class CartGUI extends JFrame {
 	private final String[] columnNames = new String[] {
 			ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Title"),
 			ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Price"),
-			ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.PublicationDate"),
-			"sale"
+			ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.PublicationDate")
 	};
 
 	public CartGUI(String username) {
@@ -57,16 +54,12 @@ public class CartGUI extends JFrame {
 		tableModelCart = new DefaultTableModel(null, columnNames);
 		tableCart.setModel(tableModelCart);
 		tableCart.setEnabled(false);
-		if (tableCart.getColumnModel().getColumnCount() > 3) {
-			tableCart.getColumnModel().removeColumn(tableCart.getColumnModel().getColumn(3));
-		}
 		scrollPaneCart.setViewportView(tableCart);
 
 		jLabelAmount.setBounds(30, 330, 420, 20);
 		getContentPane().add(jLabelAmount);
 
 		jLabelMsg.setBounds(30, 355, 680, 20);
-		jLabelMsg.setForeground(Color.RED);
 		getContentPane().add(jLabelMsg);
 
 		jButtonPay.setBounds(30, 390, 150, 30);
@@ -107,16 +100,12 @@ public class CartGUI extends JFrame {
 	private void reloadCart() {
 		BLFacade facade = UserGUI.getBusinessLogic();
 		User user = facade.getUser(username);
-		List<Sale> cartList = new ArrayList<Sale>();
+		List<Sale> cartList = null;
 		if (user != null && user.getCart() != null) {
 			cartList = facade.getCartList(username);
 		}
 
-		tableModelCart.setDataVector(null, columnNames);
-		tableModelCart.setColumnCount(4);
-		if (tableCart.getColumnModel().getColumnCount() > 3) {
-			tableCart.getColumnModel().removeColumn(tableCart.getColumnModel().getColumn(3));
-		}
+		tableModelCart.setRowCount(0);
 
 		if (cartList == null || cartList.isEmpty()) {
 			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.EmptyCart"));
@@ -127,7 +116,6 @@ public class CartGUI extends JFrame {
 				row.add(sale.getTitle());
 				row.add(sale.getPrice());
 				row.add(new SimpleDateFormat("dd-MM-yyyy").format(sale.getPublicationDate()));
-				row.add(sale);
 				tableModelCart.addRow(row);
 			}
 		}
@@ -157,9 +145,6 @@ public class CartGUI extends JFrame {
 				jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayError"));
 				return;
 			}
-		}
-
-		for (Sale sale : cartList) {
 			if (!facade.addOffer(sale.getPrice(), sale.getSaleNumber(), username)) {
 				jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayError"));
 				return;
