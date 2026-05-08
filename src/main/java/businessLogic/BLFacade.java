@@ -9,6 +9,7 @@ import domain.User;
 import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
+import domain.Review;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
 import exceptions.SaleAlreadyExistException;
@@ -97,6 +98,12 @@ public interface BLFacade  {
 	@WebMethod public boolean clearCart(String username);
 
 	@WebMethod public List<Sale> getCartList(String username);
+
+	@WebMethod public boolean addReview(int saleNumber, String buyerUsername, int rating, String comment);
+
+	@WebMethod public boolean canReview(int saleNumber, String buyerUsername);
+
+	@WebMethod public List<Review> getReviewsForSale(int saleNumber);
 
 	
 }

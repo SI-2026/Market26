@@ -33,6 +33,8 @@ public class Sale implements Serializable {
 	private User seller;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Offer> offerList;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Review> reviews = new ArrayList<Review>();
 	
 	public Sale(){
 		super();
@@ -227,6 +229,9 @@ public class Sale implements Serializable {
 	public List<Offer> getOfferList(){
 		return offerList;
 	}
+	public List<Review> getReviews() {
+		return reviews;
+	}
 	public boolean isSold() {
 		return this.sold;
 	}
@@ -242,6 +247,32 @@ public class Sale implements Serializable {
 		this.offerList.add(new Offer(buyer, euro, offerDate, sale));
 		return true;
 
+	}
+	
+	public boolean addReview(User buyer, int rating, String comment, Date reviewDate) {
+		if (buyer == null) {
+			return false;
+		}
+		if (rating < 1 || rating > 5) {
+			return false;
+		}
+		if (hasReviewFrom(buyer.getUsername())) {
+			return false;
+		}
+		reviews.add(new Review(buyer, this, rating, comment, reviewDate));
+		return true;
+	}
+	
+	public boolean hasReviewFrom(String username) {
+		if (username == null || reviews == null) {
+			return false;
+		}
+		for (Review review : reviews) {
+			if (review != null && review.getBuyer() != null && username.equals(review.getBuyer().getUsername())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean OfferDeclined(Offer offer) {

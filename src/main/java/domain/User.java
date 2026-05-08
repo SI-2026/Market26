@@ -140,6 +140,26 @@ public class User implements Serializable {
 	public List<Sale> getSales() {
 		return sales;
 	}
+
+	public List<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public boolean hasPurchased(Sale sale) {
+		if (sale == null || purchases == null) {
+			return false;
+		}
+		Integer saleNumber = sale.getSaleNumber();
+		for (Purchase purchase : purchases) {
+			if (purchase != null && purchase.getSale() != null) {
+				Integer purchasedSaleNumber = purchase.getSale().getSaleNumber();
+				if (saleNumber != null && saleNumber.equals(purchasedSaleNumber)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	public List<Sale> getFavorites() {
 		return favorites;

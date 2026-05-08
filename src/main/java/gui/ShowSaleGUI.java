@@ -53,7 +53,7 @@ public class ShowSaleGUI extends JFrame {
 		thisFrame=this; 
 		this.setVisible(true);
 		this.getContentPane().setLayout(null);
-		this.setSize(new Dimension(604, 370));
+		this.setSize(new Dimension(604, 430));
 		//this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("CreateProductGUI.CreateProduct"));
 
 		fieldTitle.setText(sale.getTitle());
@@ -77,7 +77,7 @@ public class ShowSaleGUI extends JFrame {
 				thisFrame.setVisible(false);			}
 		});
 
-		jLabelMsg.setBounds(new Rectangle(16, 306, 320, 20));
+		jLabelMsg.setBounds(new Rectangle(16, 396, 560, 20));
 		jLabelMsg.setForeground(Color.red);
 
 		
@@ -251,6 +251,61 @@ public class ShowSaleGUI extends JFrame {
 			jButtonClaim.setEnabled(false);
 		}
 		getContentPane().add(jButtonClaim);
+
+		JButton jButtonAddReview = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddReview"));
+		jButtonAddReview.setBounds(318, 332, 180, 28);
+		jButtonAddReview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JSpinner ratingSpinner = new JSpinner(new SpinnerNumberModel(5, 1, 5, 1));
+				JTextArea commentArea = new JTextArea(4, 20);
+				commentArea.setLineWrap(true);
+				commentArea.setWrapStyleWord(true);
+				JScrollPane scroll = new JScrollPane(commentArea);
+				Object[] message = new Object[] {
+						ResourceBundle.getBundle("Etiquetas").getString("ReviewsGUI.Rating"),
+						ratingSpinner,
+						ResourceBundle.getBundle("Etiquetas").getString("ReviewsGUI.Comment"),
+						scroll
+				};
+				int option = JOptionPane.showConfirmDialog(
+						ShowSaleGUI.this,
+						message,
+						ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.AddReview"),
+						JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
+				if (option != JOptionPane.OK_OPTION) {
+					return;
+				}
+				String comment = commentArea.getText();
+				if (comment == null || comment.trim().isEmpty()) {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.InvalidReview"));
+					return;
+				}
+				int rating = (Integer) ratingSpinner.getValue();
+				boolean ok = facade.addReview(sale.getSaleNumber(), username, rating, comment.trim());
+				if (ok) {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ReviewAdded"));
+					jButtonAddReview.setEnabled(false);
+				} else {
+					jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ReviewError"));
+				}
+			}
+		});
+		boolean canReview = !isGuest && facade.canReview(sale.getSaleNumber(), username);
+		if (!canReview) {
+			jButtonAddReview.setEnabled(false);
+		}
+		getContentPane().add(jButtonAddReview);
+
+		JButton jButtonReviews = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ShowSaleGUI.ViewReviews"));
+		jButtonReviews.setBounds(318, 364, 180, 28);
+		jButtonReviews.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame reviewsGUI = new ReviewsGUI(sale);
+				reviewsGUI.setVisible(true);
+			}
+		});
+		getContentPane().add(jButtonReviews);
 
 		
 	}	 

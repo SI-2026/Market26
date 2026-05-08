@@ -24,6 +24,7 @@ import domain.Claim;
 import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
+import domain.Review;
 import domain.Sale;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -447,6 +448,53 @@ public class DataAccess  {
 	public List<Sale> getCartList(String username) {
 		User u = db.find(User.class, username);
 		return u.getCart().getCartList();
+	}
+
+	public boolean canReview(int saleNumber, String buyerUsername) {
+		if (buyerUsername == null) {
+			return false;
+		}
+		Sale sale = db.find(Sale.class, saleNumber);
+		User buyer = db.find(User.class, buyerUsername);
+		if (sale == null || buyer == null) {
+			return false;
+		}
+		if (!sale.isSold()) {
+			return false;
+		}
+		if (sale.getSeller() != null && buyerUsername.equals(sale.getSeller().getUsername())) {
+			return false;
+		}
+		if (!buyer.hasPurchased(sale)) {
+			return false;
+		}
+		return !sale.hasReviewFrom(buyerUsername);
+	}
+
+	public boolean addReview(int saleNumber, String buyerUsername, int rating, String comment) {
+		if (!canReview(saleNumber, buyerUsername)) {
+			return false;
+		}
+		Sale sale = db.find(Sale.class, saleNumber);
+		User buyer = db.find(User.class, buyerUsername);
+		if (sale == null || buyer == null) {
+			return false;
+		}
+		db.getTransaction().begin();
+		boolean added = sale.addReview(buyer, rating, comment, new Date());
+		if (added) {
+			db.persist(sale);
+		}
+		db.getTransaction().commit();
+		return added;
+	}
+
+	public List<Review> getReviewsForSale(int saleNumber) {
+		Sale sale = db.find(Sale.class, saleNumber);
+		if (sale == null || sale.getReviews() == null) {
+			return new ArrayList<Review>();
+		}
+		return new ArrayList<Review>(sale.getReviews());
 	}
 
 	public void close(){

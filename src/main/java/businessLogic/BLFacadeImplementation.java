@@ -10,6 +10,7 @@ import dataAccess.DataAccess;
 import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
+import domain.Review;
 import domain.Sale;
 import domain.User;
 import exceptions.FileNotUploadedException;
@@ -236,6 +237,30 @@ public class BLFacadeImplementation  implements BLFacade {
 		List<Sale> cartList = dbManager.getCartList(username);
 		dbManager.close();
 		return cartList;
+	}
+
+	@Override
+	public boolean addReview(int saleNumber, String buyerUsername, int rating, String comment) {
+		dbManager.open();
+		boolean b = dbManager.addReview(saleNumber, buyerUsername, rating, comment);
+		dbManager.close();
+		return b;
+	}
+
+	@Override
+	public boolean canReview(int saleNumber, String buyerUsername) {
+		dbManager.open();
+		boolean b = dbManager.canReview(saleNumber, buyerUsername);
+		dbManager.close();
+		return b;
+	}
+
+	@Override
+	public List<Review> getReviewsForSale(int saleNumber) {
+		dbManager.open();
+		List<Review> reviews = dbManager.getReviewsForSale(saleNumber);
+		dbManager.close();
+		return reviews;
 	}
 
     
