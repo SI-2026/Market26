@@ -12,6 +12,7 @@ import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
 import domain.User;
+import domain.Demand;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
 import exceptions.SaleAlreadyExistException;
@@ -236,6 +237,70 @@ public class BLFacadeImplementation  implements BLFacade {
 		List<Sale> cartList = dbManager.getCartList(username);
 		dbManager.close();
 		return cartList;
+	}
+
+	@Override
+	public Demand createDemand(String username, String prod, String description) {
+		dbManager.open();
+		Demand demand = dbManager.createDemand(username, prod, description);
+		dbManager.close();
+		return demand;
+	}
+
+	@Override
+	public List<Demand> getDemands(String search) {
+		dbManager.open();
+		List<Demand> demands = dbManager.getDemands(search);
+		dbManager.close();
+		return demands;
+	}
+
+	@Override
+	public Demand getDemand(int demandId) {
+		dbManager.open();
+		Demand demand = dbManager.getDemand(demandId);
+		dbManager.close();
+		return demand;
+	}
+
+	@Override
+	public boolean addDemandOffer(int demandId, String sellerUsername, String product, String description, float price) {
+		dbManager.open();
+		boolean ok = dbManager.addDemandOffer(demandId, sellerUsername, product, description, price);
+		dbManager.close();
+		return ok;
+	}
+
+	@Override
+	public boolean acceptDemandOffer(int demandId, int offerId, String ownerUsername) {
+		dbManager.open();
+		boolean ok = dbManager.acceptDemandOffer(demandId, offerId, ownerUsername);
+		dbManager.close();
+		return ok;
+	}
+
+	@Override
+	public boolean declineDemandOffer(int demandId, int offerId, String ownerUsername) {
+		dbManager.open();
+		boolean ok = dbManager.declineDemandOffer(demandId, offerId, ownerUsername);
+		dbManager.close();
+		return ok;
+	}
+
+	@Override
+	public boolean buySubscription(String username) {
+		dbManager.open();
+		boolean ok = dbManager.buySubscription(username);
+		dbManager.close();
+		return ok;
+	}
+
+	@Override
+	public boolean cancelSubscription(String username) {
+		dbManager.open();
+		boolean ok = dbManager.cancelSubscription(username);
+		dbManager.close();
+		return ok;
 	}
 
     

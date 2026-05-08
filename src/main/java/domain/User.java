@@ -6,7 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
@@ -45,8 +51,13 @@ public class User implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Cart cart;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	private List<Demands> eskaerak = new ArrayList<Demands>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Demand> eskaerak = new ArrayList<Demand>();
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private Subscription subscription;
+	private int dailyOfferCount;
+	private Date dailyOfferDate;
 	
 
 	public User() {
@@ -128,6 +139,10 @@ public class User implements Serializable {
 		Purchase purchase = new Purchase(this, sale, new Date());
 		purchases.add(purchase);
 		return purchase;
+	}
+
+	public List<Purchase> getPurchases() {
+		return purchases;
 	}
 
 	public boolean addFavorites(Sale sale) {
@@ -216,9 +231,47 @@ public class User implements Serializable {
 		return cart;
 	}
 
-	public boolean makeEskaera(String username, String prod, String description){
-		return this.eskaerak.add(new Demands(username, description, username));
+	public List<Demand> getDemands() {
+		return eskaerak;
+	}
 
+	public Demand addDemand(String prod, String description) {
+		Demand demand = new Demand(username, prod, description);
+		eskaerak.add(demand);
+		return demand;
+	}
+
+	public boolean makeEskaera(String username, String prod, String description){
+		return this.eskaerak.add(new Demand(username, prod, description));
+
+	}
+
+	public boolean isSubscribed() {
+		return subscription != null && subscription.isActive();
+	}
+
+	public Subscription getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(Subscription subscription) {
+		this.subscription = subscription;
+	}
+
+	public int getDailyOfferCount() {
+		return dailyOfferCount;
+	}
+
+	public void setDailyOfferCount(int dailyOfferCount) {
+		this.dailyOfferCount = dailyOfferCount;
+	}
+
+	public Date getDailyOfferDate() {
+		return dailyOfferDate;
+	}
+
+	public void setDailyOfferDate(Date dailyOfferDate) {
+		this.dailyOfferDate = dailyOfferDate;
 	}
 	
 	public boolean makeProdOffer(){

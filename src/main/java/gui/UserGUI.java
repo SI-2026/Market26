@@ -29,6 +29,7 @@ public class UserGUI extends JFrame {
 	private JButton jButtonLogin = null;
 	private JButton jButtonRegister = null;
 	private JButton jButtonQueryQueries = null;
+	private JButton jButtonQueryDemands = null;
 	protected JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
@@ -50,7 +51,7 @@ public class UserGUI extends JFrame {
 	 */
 	public UserGUI() {
 		super();
-		setBounds(580, 280, 500, 300);
+		setBounds(580, 280, 500, 340);
 		final int frameWidth = 500;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle") +": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 		setAlwaysOnTop(true);
@@ -109,6 +110,17 @@ public class UserGUI extends JFrame {
 				a.setVisible(true);
 			}
 		});
+
+		jButtonQueryDemands = new JButton();
+		jButtonQueryDemands.setBounds((frameWidth - 240) / 2, 170, 240, 64);
+		jButtonQueryDemands.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QueryDemands"));
+		jButtonQueryDemands.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				thisRef.setAlwaysOnTop(false);
+				JFrame a = new QueryDemandsGUI("Guest");
+				a.setVisible(true);
+			}
+		});
 		
 		
 		//Lengoaiak aukeratzeko combobox-a
@@ -129,7 +141,7 @@ public class UserGUI extends JFrame {
 				paintAgain();
 			}
 		});
-		lenguage.setBounds(349, 228, 125, 22);
+		lenguage.setBounds(349, 270, 125, 22);
 		lenguageMod.addElement("Euskara");
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
@@ -141,6 +153,7 @@ public class UserGUI extends JFrame {
 		jContentPane.add(jButtonLogin);
 		jContentPane.add(jButtonRegister);
 		jContentPane.add(jButtonQueryQueries);
+		jContentPane.add(jButtonQueryDemands);
 		jContentPane.add(lenguage);
 
 		
@@ -156,6 +169,7 @@ public class UserGUI extends JFrame {
 	private void paintAgain() {
 		jLabelSelectOption.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOption"));
 		jButtonQueryQueries.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QuerySales"));
+		jButtonQueryDemands.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QueryDemands"));
 		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));

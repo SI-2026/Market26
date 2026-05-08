@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -152,7 +153,10 @@ public class SellerOffersGUI extends JFrame {
 		BLFacade facade = UserGUI.getBusinessLogic();
 		User seller = facade.getUser(username);
 
-        		int kont = 0;
+		tableModelOffers.setRowCount(0);
+		tableModelClaims.setRowCount(0);
+
+		List<Object[]> rows = new ArrayList<Object[]>();
 		for (Sale sale : seller.getSales()) {
 			if (sale.isSold()) {
 				continue;
@@ -162,29 +166,44 @@ public class SellerOffersGUI extends JFrame {
 				continue;
 			}
 			for (Offer offer : offers) {
-				Vector<Object> row = new Vector<Object>();
-				row.add(sale.getTitle());
-				row.add(offer.getBuyer() != null ? offer.getBuyer().getUsername() : "-");
-				row.add(offer.getOffer());
-				row.add(offer.getOfferDate());
-				row.add(sale);
-				row.add(offer);
-				tableModelOffers.addRow(row);
-				kont++;
+				boolean subscribed = offer.getBuyer() != null && offer.getBuyer().isSubscribed();
+				rows.add(new Object[] { sale, offer, Boolean.valueOf(subscribed) });
 			}
+		}
+
+		rows.sort((a, b) -> {
+			Boolean aSub = (Boolean) a[2];
+			Boolean bSub = (Boolean) b[2];
+			return bSub.compareTo(aSub);
+		});
+
+		for (Object[] entry : rows) {
+			Sale sale = (Sale) entry[0];
+			Offer offer = (Offer) entry[1];
+			boolean subscribed = (Boolean) entry[2];
+			Vector<Object> row = new Vector<Object>();
+			row.add(sale.getTitle());
+			String buyerName = offer.getBuyer() != null ? offer.getBuyer().getUsername() : "-";
+			if (subscribed) {
+				buyerName = "+ " + buyerName;
+			}
+			row.add(buyerName);
+			row.add(offer.getOffer());
+			row.add(offer.getOfferDate());
+			row.add(sale);
+			row.add(offer);
+			tableModelOffers.addRow(row);
 		}
 
         if(seller.getClaims().isEmpty()) {
 			jLabelClaims.setText(ResourceBundle.getBundle("Etiquetas").getString("SellerOffersGUI.NoClaims"));
 		} else {
-            kont = 0;
 		    for (Claim claim : seller.getClaims()) {
                 Vector<Object> row = new Vector<Object>();
                 row.add(claim.getBuyer());
                 row.add(claim.getDescription());
                 row.add(claim.getDate());
                 tableModelClaims.addRow(row);
-                kont++;
 		    }
         }
 	}

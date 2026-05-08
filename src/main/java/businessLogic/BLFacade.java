@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import domain.Sale;
+import domain.Demand;
 import domain.User;
 import domain.Movement;
 import domain.Offer;
@@ -97,6 +98,22 @@ public interface BLFacade  {
 	@WebMethod public boolean clearCart(String username);
 
 	@WebMethod public List<Sale> getCartList(String username);
+
+	@WebMethod public Demand createDemand(String username, String prod, String description);
+
+	@WebMethod public List<Demand> getDemands(String search);
+
+	@WebMethod public Demand getDemand(int demandId);
+
+	@WebMethod public boolean addDemandOffer(int demandId, String sellerUsername, String product, String description, float price);
+
+	@WebMethod public boolean acceptDemandOffer(int demandId, int offerId, String ownerUsername);
+
+	@WebMethod public boolean declineDemandOffer(int demandId, int offerId, String ownerUsername);
+
+	@WebMethod public boolean buySubscription(String username);
+
+	@WebMethod public boolean cancelSubscription(String username);
 
 	
 }

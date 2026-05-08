@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
@@ -21,10 +22,13 @@ import configuration.ConfigXML;
 import configuration.UtilDate;
 import domain.User;
 import domain.Claim;
+import domain.Demand;
+import domain.DemandOffer;
 import domain.Movement;
 import domain.Offer;
 import domain.Purchase;
 import domain.Sale;
+import domain.Subscription;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
 import exceptions.SaleAlreadyExistException;
@@ -37,6 +41,15 @@ public class DataAccess  {
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
 	private final boolean initialize = true;
+	private static final float SUBSCRIPTION_PRICE = 200;
+	private static final float PURCHASE_FEE_RATE = (float) 0.10;
+	private static final float CASHBACK_RATE = (float) 0.05;
+	private static final int DAILY_OFFER_LIMIT = 4;
+	private static final int CLAIM_DAYS_FREE = 7;
+	private static final int CLAIM_DAYS_SUBSCRIBED = 30;
+	private static final int SUBSCRIPTION_CANCEL_DAYS = 30;
+	private static final String SYSTEM_FUNDS_ID = "SYSTEM_FUNDS";
+	private static float systemFundsBalance = 0;
 
 	private static final String basePath="src/main/resources/images/";
 
@@ -206,13 +219,27 @@ public class DataAccess  {
 	}
 	
 	public boolean addOffer(float offer, int salenumber, String buyername) {
-		
+		if (offer <= 0) {
+			return false;
+		}
 		boolean b = false;
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
-		if(s != null && buyer != null && !s.isSold() && !buyername.equals(s.getSeller().getUsername()) && buyer.getDirua() >= offer) {
+		if(s != null && buyer != null && !s.isSold() && s.getSeller() != null && !buyername.equals(s.getSeller().getUsername())) {
+			Date now = new Date();
+			if (!canMakeOffer(buyer, now)) {
+				return false;
+			}
+			float total = offer + (offer * PURCHASE_FEE_RATE);
+			if (buyer.getDirua() < total) {
+				return false;
+			}
 		    db.getTransaction().begin();
-			b = s.addOffer(buyer, offer, new Date(), s);
+			b = s.addOffer(buyer, offer, now, s);
+			if (b) {
+				registerOffer(buyer, now);
+			}
+			db.persist(buyer);
 			db.persist(s);
 			db.getTransaction().commit();
 		}
@@ -225,14 +252,32 @@ public class DataAccess  {
 		Sale s = db.find(Sale.class, salenumber);
 		User seller = db.find(User.class, sellername);
 		Offer offer = db.find(Offer.class, offerId);
+		if (offer == null) {
+			return false;
+		}
 		User buyer = db.find(User.class, offer.getBuyer().getUsername());
 		if(seller != null && buyer != null && s != null && !s.isSold()) {
+			float base = offer.getOffer();
+			float fee = base * PURCHASE_FEE_RATE;
+			float total = base + fee;
+			if (buyer.getDirua() < total) {
+				return false;
+			}
 		    db.getTransaction().begin();
-			b = seller.acceptOffer(offer.getOffer(), s, buyer.getUsername(), seller.getUsername());
+			b = seller.acceptOffer(base, s, buyer.getUsername(), seller.getUsername());
 			if (b) {
-				buyer.setDirua(buyer.getDirua() - offer.getOffer());
+				buyer.setDirua(buyer.getDirua() - total);
 				buyer.addPurchase(s);
-				buyer.addMovement(buyer.getUsername(), sellername, offer.getOffer());
+				buyer.addMovement(buyer.getUsername(), sellername, base);
+				buyer.addMovement(buyer.getUsername(), SYSTEM_FUNDS_ID, fee);
+				addSystemFunds(fee);
+				if (buyer.isSubscribed()) {
+					float cashback = base * CASHBACK_RATE;
+					if (removeSystemFunds(cashback)) {
+						buyer.addMoney(cashback);
+						buyer.addMovement(SYSTEM_FUNDS_ID, buyer.getUsername(), cashback);
+					}
+				}
 				s.setSold(true);
 			}
 			db.persist(buyer);
@@ -261,6 +306,10 @@ public class DataAccess  {
 		User seller = db.find(User.class, sellername);
 		User claimer = db.find(User.class, claimername);
 		if(seller != null && claimer != null) {
+			Date now = new Date();
+			if (!canMakeClaim(claimer, seller, now)) {
+				return false;
+			}
 			db.getTransaction().begin();
 			b =  seller.addClaim(claimername, new Date(), description, false);
 			db.persist(seller);
@@ -275,6 +324,187 @@ public class DataAccess  {
 			return new ArrayList<Movement>();
 		}
 		return new ArrayList<Movement>(user.getMovements());
+	}
+
+	public Demand createDemand(String username, String prod, String description) {
+		User user = db.find(User.class, username);
+		if (user == null || prod == null || prod.isEmpty() || description == null || description.isEmpty()) {
+			return null;
+		}
+		db.getTransaction().begin();
+		Demand demand = user.addDemand(prod, description);
+		db.persist(user);
+		db.persist(demand);
+		db.getTransaction().commit();
+		return demand;
+	}
+
+	public List<Demand> getDemands(String search) {
+		String text = (search == null) ? "" : search;
+		TypedQuery<Demand> query = db.createQuery(
+				"SELECT d FROM Demand d WHERE d.active = true AND (d.prod LIKE ?1 OR d.description LIKE ?1)",
+				Demand.class);
+		query.setParameter(1, "%" + text + "%");
+		List<Demand> demands = query.getResultList();
+		return new ArrayList<Demand>(demands);
+	}
+
+	public Demand getDemand(int demandId) {
+		return db.find(Demand.class, demandId);
+	}
+
+	public boolean addDemandOffer(int demandId, String sellerUsername, String product, String description, float price) {
+		if (price <= 0) {
+			return false;
+		}
+		if (product == null || product.isEmpty() || description == null || description.isEmpty()) {
+			return false;
+		}
+		Demand demand = db.find(Demand.class, demandId);
+		User seller = db.find(User.class, sellerUsername);
+		if (demand == null || seller == null || !demand.isActive()) {
+			return false;
+		}
+		if (sellerUsername.equals(demand.getUsername())) {
+			return false;
+		}
+		Date now = new Date();
+		if (!canMakeOffer(seller, now)) {
+			return false;
+		}
+		db.getTransaction().begin();
+		DemandOffer offer = new DemandOffer(seller, product, description, price, now);
+		boolean added = demand.addOffer(offer);
+		if (added) {
+			registerOffer(seller, now);
+			db.persist(offer);
+			db.persist(demand);
+			db.persist(seller);
+		}
+		db.getTransaction().commit();
+		return added;
+	}
+
+	public boolean acceptDemandOffer(int demandId, int offerId, String ownerUsername) {
+		Demand demand = db.find(Demand.class, demandId);
+		if (demand == null || !demand.isActive() || !ownerUsername.equals(demand.getUsername())) {
+			return false;
+		}
+		DemandOffer selected = null;
+		for (DemandOffer offer : demand.getOffers()) {
+			if (offer != null && offerId == offer.getOfferId()) {
+				selected = offer;
+				break;
+			}
+		}
+		if (selected == null) {
+			return false;
+		}
+
+		User buyer = db.find(User.class, ownerUsername);
+		User seller = selected.getSeller();
+		if (buyer == null || seller == null) {
+			return false;
+		}
+		float base = selected.getPrice();
+		float fee = base * PURCHASE_FEE_RATE;
+		float total = base + fee;
+		if (buyer.getDirua() < total) {
+			return false;
+		}
+		db.getTransaction().begin();
+		buyer.setDirua(buyer.getDirua() - total);
+		buyer.addMovement(buyer.getUsername(), seller.getUsername(), base);
+		buyer.addMovement(buyer.getUsername(), SYSTEM_FUNDS_ID, fee);
+		addSystemFunds(fee);
+		seller.addMoney(base);
+		seller.addMovement(buyer.getUsername(), seller.getUsername(), base);
+		if (buyer.isSubscribed()) {
+			float cashback = base * CASHBACK_RATE;
+			if (removeSystemFunds(cashback)) {
+				buyer.addMoney(cashback);
+				buyer.addMovement(SYSTEM_FUNDS_ID, buyer.getUsername(), cashback);
+			}
+		}
+		demand.setActive(false);
+		demand.getOffers().clear();
+		db.persist(buyer);
+		db.persist(seller);
+		db.persist(demand);
+		db.getTransaction().commit();
+		return true;
+	}
+
+	public boolean declineDemandOffer(int demandId, int offerId, String ownerUsername) {
+		Demand demand = db.find(Demand.class, demandId);
+		if (demand == null || !demand.isActive() || !ownerUsername.equals(demand.getUsername())) {
+			return false;
+		}
+		DemandOffer selected = null;
+		for (DemandOffer offer : demand.getOffers()) {
+			if (offer != null && offerId == offer.getOfferId()) {
+				selected = offer;
+				break;
+			}
+		}
+		if (selected == null) {
+			return false;
+		}
+		db.getTransaction().begin();
+		boolean removed = demand.removeOffer(selected);
+		db.persist(demand);
+		db.getTransaction().commit();
+		return removed;
+	}
+
+	public boolean buySubscription(String username) {
+		User user = db.find(User.class, username);
+		if (user == null || user.isSubscribed()) {
+			return false;
+		}
+		if (user.getDirua() < SUBSCRIPTION_PRICE) {
+			return false;
+		}
+		db.getTransaction().begin();
+		Subscription subscription = user.getSubscription();
+		if (subscription == null) {
+			subscription = new Subscription(new Date());
+			user.setSubscription(subscription);
+		} else {
+			subscription.setActive(true);
+			subscription.setStartDate(new Date());
+		}
+		user.setDirua(user.getDirua() - SUBSCRIPTION_PRICE);
+		user.addMovement(user.getUsername(), SYSTEM_FUNDS_ID, SUBSCRIPTION_PRICE);
+		addSystemFunds(SUBSCRIPTION_PRICE);
+		db.persist(subscription);
+		db.persist(user);
+		db.getTransaction().commit();
+		return true;
+	}
+
+	public boolean cancelSubscription(String username) {
+		User user = db.find(User.class, username);
+		Subscription subscription = (user == null) ? null : user.getSubscription();
+		if (user == null || subscription == null || !subscription.isActive() || subscription.getStartDate() == null) {
+			return false;
+		}
+		Date now = new Date();
+		if (!isWithinDays(subscription.getStartDate(), now, SUBSCRIPTION_CANCEL_DAYS)) {
+			return false;
+		}
+		if (!canRemoveSystemFunds(SUBSCRIPTION_PRICE)) {
+			return false;
+		}
+		db.getTransaction().begin();
+		subscription.setActive(false);
+		user.addMoney(SUBSCRIPTION_PRICE);
+		user.addMovement(SYSTEM_FUNDS_ID, user.getUsername(), SUBSCRIPTION_PRICE);
+		removeSystemFunds(SUBSCRIPTION_PRICE);
+		db.persist(subscription);
+		db.persist(user);
+		db.getTransaction().commit();
+		return true;
 	}
 	
 	
@@ -447,6 +677,79 @@ public class DataAccess  {
 	public List<Sale> getCartList(String username) {
 		User u = db.find(User.class, username);
 		return u.getCart().getCartList();
+	}
+
+	private void addSystemFunds(float amount) {
+		systemFundsBalance += amount;
+	}
+
+	private boolean canRemoveSystemFunds(float amount) {
+		return amount <= systemFundsBalance;
+	}
+
+	private boolean removeSystemFunds(float amount) {
+		if (amount > systemFundsBalance) {
+			return false;
+		}
+		systemFundsBalance -= amount;
+		return true;
+	}
+
+	private boolean canMakeOffer(User user, Date now) {
+		if (user.isSubscribed()) {
+			return true;
+		}
+		Date today = UtilDate.trim(now);
+		Date last = user.getDailyOfferDate();
+		if (last == null) {
+			return true;
+		}
+		Date lastDay = UtilDate.trim(last);
+		if (!today.equals(lastDay)) {
+			return true;
+		}
+		return user.getDailyOfferCount() < DAILY_OFFER_LIMIT;
+	}
+
+	private void registerOffer(User user, Date now) {
+		Date today = UtilDate.trim(now);
+		Date last = user.getDailyOfferDate();
+		if (last == null || !today.equals(UtilDate.trim(last))) {
+			user.setDailyOfferDate(today);
+			user.setDailyOfferCount(1);
+		} else {
+			user.setDailyOfferCount(user.getDailyOfferCount() + 1);
+		}
+	}
+
+	private boolean canMakeClaim(User claimer, User seller, Date now) {
+		if (claimer.getPurchases() == null || claimer.getPurchases().isEmpty()) {
+			return false;
+		}
+		int daysLimit = claimer.isSubscribed() ? CLAIM_DAYS_SUBSCRIBED : CLAIM_DAYS_FREE;
+		long limitMs = TimeUnit.DAYS.toMillis(daysLimit);
+		for (Purchase purchase : claimer.getPurchases()) {
+			if (purchase == null || purchase.getSale() == null || purchase.getSale().getSeller() == null) {
+				continue;
+			}
+			if (!seller.getUsername().equals(purchase.getSale().getSeller().getUsername())) {
+				continue;
+			}
+			Date purchaseDate = purchase.getPurchaseDate();
+			if (purchaseDate == null) {
+				continue;
+			}
+			long diff = now.getTime() - purchaseDate.getTime();
+			if (diff >= 0 && diff <= limitMs) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isWithinDays(Date start, Date now, int days) {
+		long diff = now.getTime() - start.getTime();
+		return diff >= 0 && diff <= TimeUnit.DAYS.toMillis(days);
 	}
 
 	public void close(){

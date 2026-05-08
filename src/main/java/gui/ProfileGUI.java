@@ -24,17 +24,20 @@ public class ProfileGUI extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblUsername;
 	private JLabel lblBalance;
+	private JLabel lblSubscription;
 	private JLabel lblInfo;
 	private JTextField txtAmount;
 	private JButton jButtonAddMoney;
 	private JButton jButtonWithdrawMoney;
+	private JButton jButtonSubscribe;
+	private JButton jButtonCancel;
 	private JButton jButtonLogOut;
 	private final String username;
 
 	public ProfileGUI(JFrame registeredRef, String username) {
 		this.username = username;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(920, 300, 460, 340);
+		setBounds(920, 300, 460, 400);
 		final int frameWidth = 460;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.MainTitle") + ": " + username);
 		setAlwaysOnTop(true);
@@ -59,12 +62,17 @@ public class ProfileGUI extends JFrame {
 		lblBalance.setBounds(72, 43, 320, 20);
 		lblBalance.setFont(new Font("Tahoma", Font.BOLD, 14));
 
+		lblSubscription = new JLabel();
+		lblSubscription.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSubscription.setBounds(72, 66, 320, 20);
+		lblSubscription.setFont(new Font("Tahoma", Font.PLAIN, 12));
+
 		txtAmount = new JTextField();
-		txtAmount.setBounds(120, 81, 220, 28);
+		txtAmount.setBounds(120, 94, 220, 28);
 		txtAmount.setColumns(10);
 
 		jButtonAddMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddMoney"));
-		jButtonAddMoney.setBounds(120, 120, 220, 32);
+		jButtonAddMoney.setBounds(120, 133, 220, 32);
 		jButtonAddMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -82,7 +90,7 @@ public class ProfileGUI extends JFrame {
 		});
 
 		jButtonWithdrawMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawMoney"));
-		jButtonWithdrawMoney.setBounds(120, 163, 220, 32);
+		jButtonWithdrawMoney.setBounds(120, 176, 220, 32);
 		jButtonWithdrawMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -106,11 +114,11 @@ public class ProfileGUI extends JFrame {
 
 		lblInfo = new JLabel("");
 		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfo.setBounds(50, 238, 360, 20);
+		lblInfo.setBounds(50, 322, 360, 20);
 		
 		
 		jButtonLogOut = new JButton();
-		jButtonLogOut.setBounds((frameWidth - 170) / 2, 265, 170, 32);
+		jButtonLogOut.setBounds((frameWidth - 170) / 2, 347, 170, 32);
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.LogOut"));
 		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -128,18 +136,55 @@ public class ProfileGUI extends JFrame {
 				movementsGUI.setVisible(true);
 			}
 		});
-		JButtonMovements.setBounds(120, 206, 220, 33);
+		JButtonMovements.setBounds(120, 219, 220, 33);
+
+		jButtonSubscribe = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Subscribe"));
+		jButtonSubscribe.setBounds(120, 252, 220, 28);
+		jButtonSubscribe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BLFacade facade = UserGUI.getBusinessLogic();
+				boolean ok = facade.buySubscription(username);
+				refreshBalance();
+				if (ok) {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionBought"));
+					lblInfo.setForeground(new Color(0, 128, 0));
+				} else {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionError"));
+					lblInfo.setForeground(Color.RED);
+				}
+			}
+		});
+
+		jButtonCancel = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.CancelSubscription"));
+		jButtonCancel.setBounds(120, 287, 220, 28);
+		jButtonCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BLFacade facade = UserGUI.getBusinessLogic();
+				boolean ok = facade.cancelSubscription(username);
+				refreshBalance();
+				if (ok) {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionCanceled"));
+					lblInfo.setForeground(new Color(0, 128, 0));
+				} else {
+					lblInfo.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionError"));
+					lblInfo.setForeground(Color.RED);
+				}
+			}
+		});
 		
 		
 		//Panelera gehitzeko aginduak
 		contentPane.add(lblUsername);
 		contentPane.add(lblBalance);
+		contentPane.add(lblSubscription);
 		contentPane.add(txtAmount);
 		contentPane.add(jButtonAddMoney);
 		contentPane.add(jButtonWithdrawMoney);
 		contentPane.add(lblInfo);
 		contentPane.add(jButtonLogOut);
 		contentPane.add(JButtonMovements);
+		contentPane.add(jButtonSubscribe);
+		contentPane.add(jButtonCancel);
 	
 		
 
@@ -182,5 +227,14 @@ public class ProfileGUI extends JFrame {
 
 		String balanceLabel = ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Balance");
 		lblBalance.setText(balanceLabel + ": " + balance + " EUR");
+		if (user != null && user.isSubscribed()) {
+			lblSubscription.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionActive"));
+			jButtonSubscribe.setEnabled(false);
+			jButtonCancel.setEnabled(true);
+		} else {
+			lblSubscription.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.SubscriptionInactive"));
+			jButtonSubscribe.setEnabled(user != null);
+			jButtonCancel.setEnabled(false);
+		}
 	}
 }

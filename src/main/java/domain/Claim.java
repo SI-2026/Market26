@@ -18,7 +18,6 @@ public class Claim implements Serializable {
 	@GeneratedValue
 	private Integer claimId;
 
-	@ManyToOne
 	private String buyer;
 	private Date date;
 	private String description;
