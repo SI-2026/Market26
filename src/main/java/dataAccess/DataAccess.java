@@ -40,7 +40,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
-	private final boolean initialize = true;
+	private final boolean initialize = false;
 	private static final float SUBSCRIPTION_PRICE = 200;
 	private static final float PURCHASE_FEE_RATE = (float) 0.10;
 	private static final float CASHBACK_RATE = (float) 0.05;

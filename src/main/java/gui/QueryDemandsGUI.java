@@ -45,7 +45,7 @@ public class QueryDemandsGUI extends JFrame {
 	public QueryDemandsGUI(String username) {
 		this.username = username;
 		thisFrame = this;
-		tableDemands.setEnabled(false);
+		tableDemands.setEnabled(true);
 		getContentPane().setLayout(null);
 		setSize(new Dimension(760, 520));
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("QueryDemandsGUI.Title"));
@@ -77,7 +77,12 @@ public class QueryDemandsGUI extends JFrame {
 
 		scrollPanelDemands.setBounds(new Rectangle(52, 137, 650, 230));
 		scrollPanelDemands.setViewportView(tableDemands);
-		tableModelDemands = new DefaultTableModel(null, columnNamesDemands);
+		tableModelDemands = new DefaultTableModel(null, columnNamesDemands) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		tableDemands.setModel(tableModelDemands);
 		tableModelDemands.setDataVector(null, columnNamesDemands);
 		tableModelDemands.setColumnCount(5);
@@ -104,7 +109,8 @@ public class QueryDemandsGUI extends JFrame {
 					JTable table = (JTable) mouseEvent.getSource();
 					int row = table.rowAtPoint(mouseEvent.getPoint());
 					Demand demand = (Demand) tableModelDemands.getValueAt(row, 4);
-					new ShowDemandGUI(demand, username);
+					JFrame offerDemand = new OfferDemandGUI(demand, username);
+					offerDemand.setVisible(true);
 				}
 			}
 		});

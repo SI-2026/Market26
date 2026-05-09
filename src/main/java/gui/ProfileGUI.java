@@ -33,6 +33,7 @@ public class ProfileGUI extends JFrame {
 	private JButton jButtonCancel;
 	private JButton jButtonLogOut;
 	private final String username;
+	private JButton jButtonMyDemands;
 
 	public ProfileGUI(JFrame registeredRef, String username) {
 		this.username = username;
@@ -43,10 +44,20 @@ public class ProfileGUI extends JFrame {
 		setAlwaysOnTop(true);
 		
 		
-		//Panel hasieraketa
-		contentPane = new JPanel();
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		   //Panel hasieraketa
+		   contentPane = new JPanel();
+		   setContentPane(contentPane);
+		   contentPane.setLayout(null);
+
+		   // Botón para ver demandas propias
+		   jButtonMyDemands = new JButton("Nire Eskaerak");
+		   jButtonMyDemands.setBounds(120, 320, 220, 28);
+		   jButtonMyDemands.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
+				   JFrame nireEskaerakGUI = new NireEskaerakGUI(username);
+				   nireEskaerakGUI.setVisible(true);
+			   }
+		   });
 		
 		
 		//Username title
@@ -185,6 +196,7 @@ public class ProfileGUI extends JFrame {
 		contentPane.add(JButtonMovements);
 		contentPane.add(jButtonSubscribe);
 		contentPane.add(jButtonCancel);
+		contentPane.add(jButtonMyDemands);
 	
 		
 
