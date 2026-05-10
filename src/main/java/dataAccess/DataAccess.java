@@ -40,7 +40,7 @@ public class DataAccess  {
 	private  EntityManager  db;
 	private  EntityManagerFactory emf;
     private static final int baseSize = 160;
-	private final boolean initialize = false;
+	private final boolean initialize = true;
 	private static final float SUBSCRIPTION_PRICE = 200;
 	private static final float PURCHASE_FEE_RATE = (float) 0.10;
 	private static final float CASHBACK_RATE = (float) 0.05;
@@ -703,12 +703,12 @@ public class DataAccess  {
 		if (user.isSubscribed()) {
 			return true;
 		}
-		Date today = UtilDate.trim(now);
+		Date today = now;
 		Date last = user.getDailyOfferDate();
 		if (last == null) {
 			return true;
 		}
-		Date lastDay = UtilDate.trim(last);
+		Date lastDay = last;
 		if (!today.equals(lastDay)) {
 			return true;
 		}
