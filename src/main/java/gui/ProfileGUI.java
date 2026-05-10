@@ -38,7 +38,7 @@ public class ProfileGUI extends JFrame {
 	public ProfileGUI(JFrame registeredRef, String username) {
 		this.username = username;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(920, 300, 460, 400);
+		setBounds(920, 300, 460, 460);
 		final int frameWidth = 460;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.MainTitle") + ": " + username);
 		setAlwaysOnTop(true);
@@ -50,8 +50,8 @@ public class ProfileGUI extends JFrame {
 		   contentPane.setLayout(null);
 
 		   // Botón para ver demandas propias
-		   jButtonMyDemands = new JButton("Nire Eskaerak");
-		   jButtonMyDemands.setBounds(120, 320, 220, 28);
+		jButtonMyDemands = new JButton("Nire Eskaerak");
+		jButtonMyDemands.setBounds(120, 360, 220, 28);
 		   jButtonMyDemands.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent e) {
 				   JFrame nireEskaerakGUI = new NireEskaerakGUI(username);
@@ -83,7 +83,7 @@ public class ProfileGUI extends JFrame {
 		txtAmount.setColumns(10);
 
 		jButtonAddMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.AddMoney"));
-		jButtonAddMoney.setBounds(120, 133, 220, 32);
+		jButtonAddMoney.setBounds(120, 135, 220, 32);
 		jButtonAddMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -101,7 +101,7 @@ public class ProfileGUI extends JFrame {
 		});
 
 		jButtonWithdrawMoney = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.WithdrawMoney"));
-		jButtonWithdrawMoney.setBounds(120, 176, 220, 32);
+		jButtonWithdrawMoney.setBounds(120, 180, 220, 32);
 		jButtonWithdrawMoney.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				Float amount = parseAmount();
@@ -125,11 +125,11 @@ public class ProfileGUI extends JFrame {
 
 		lblInfo = new JLabel("");
 		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfo.setBounds(50, 322, 360, 20);
+		lblInfo.setBounds(50, 392, 360, 20);
 		
 		
 		jButtonLogOut = new JButton();
-		jButtonLogOut.setBounds((frameWidth - 170) / 2, 347, 170, 32);
+		jButtonLogOut.setBounds((frameWidth - 170) / 2, 420, 170, 32);
 		jButtonLogOut.setText(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.LogOut"));
 		jButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -147,10 +147,10 @@ public class ProfileGUI extends JFrame {
 				movementsGUI.setVisible(true);
 			}
 		});
-		JButtonMovements.setBounds(120, 219, 220, 33);
+		JButtonMovements.setBounds(120, 225, 220, 33);
 
 		jButtonSubscribe = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.Subscribe"));
-		jButtonSubscribe.setBounds(120, 252, 220, 28);
+		jButtonSubscribe.setBounds(120, 270, 220, 28);
 		jButtonSubscribe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				BLFacade facade = UserGUI.getBusinessLogic();
@@ -167,7 +167,7 @@ public class ProfileGUI extends JFrame {
 		});
 
 		jButtonCancel = new JButton(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.CancelSubscription"));
-		jButtonCancel.setBounds(120, 287, 220, 28);
+		jButtonCancel.setBounds(120, 315, 220, 28);
 		jButtonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				BLFacade facade = UserGUI.getBusinessLogic();

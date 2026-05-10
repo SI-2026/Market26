@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,10 +17,12 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import businessLogic.BLFacade;
 import domain.User;
+import configuration.UtilDate;
 
 public class RegisteredGUI extends JFrame {
 	
@@ -31,6 +35,7 @@ public class RegisteredGUI extends JFrame {
 	private JButton jButtonQueryQueries = null;
 	private JButton jButtonQueryDemands = null;
 	private JButton jButtonSellerOffers = null;
+	private JButton jButtonAdvanceDay = null;
 	private JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
@@ -133,6 +138,18 @@ public class RegisteredGUI extends JFrame {
 				sellerOffersGUI.setVisible(true);
 			}
 		});
+
+		jButtonAdvanceDay = new JButton();
+		jButtonAdvanceDay.setBounds((frameWidth - 200) / 2, 320, 200, 24);
+		jButtonAdvanceDay.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDay"));
+		jButtonAdvanceDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date newDate = UtilDate.advanceDemoDay();
+				String msg = ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDayMsg");
+				String formatted = new SimpleDateFormat("dd-MM-yyyy").format(newDate);
+				JOptionPane.showMessageDialog(thisRef, msg + " " + formatted);
+			}
+		});
 		
 		
 		//Lengoaiak aukeratzeko combobox-a
@@ -169,6 +186,7 @@ public class RegisteredGUI extends JFrame {
 		jContentPane.add(jButtonQueryQueries);
 		jContentPane.add(jButtonQueryDemands);
 		jContentPane.add(jButtonSellerOffers);
+		jContentPane.add(jButtonAdvanceDay);
 		jContentPane.add(lenguage);
 
 		
@@ -187,6 +205,7 @@ public class RegisteredGUI extends JFrame {
 		jButtonQueryDemands.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.QueryDemands"));
 		jButtonSellerOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MyOffers"));
 		jButtonProfile.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.Profile"));
+		jButtonAdvanceDay.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDay"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("RegisteredGUI.MainTitle") + ": " + username);
 	}
 	

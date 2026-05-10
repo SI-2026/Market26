@@ -306,12 +306,12 @@ public class DataAccess  {
 		User seller = db.find(User.class, sellername);
 		User claimer = db.find(User.class, claimername);
 		if(seller != null && claimer != null) {
-			Date now = new Date();
+			Date now = UtilDate.getDemoDate();
 			if (!canMakeClaim(claimer, seller, now)) {
 				return false;
 			}
 			db.getTransaction().begin();
-			b =  seller.addClaim(claimername, new Date(), description, false);
+			b =  seller.addClaim(claimername, now, description, false);
 			db.persist(seller);
 			db.getTransaction().commit();
 		}
@@ -428,6 +428,9 @@ public class DataAccess  {
 		}
 		demand.setActive(false);
 		demand.getOffers().clear();
+		if (buyer.getDemands() != null) {
+			buyer.getDemands().remove(demand);
+		}
 		db.persist(buyer);
 		db.persist(seller);
 		db.persist(demand);
@@ -723,25 +726,48 @@ public class DataAccess  {
 	}
 
 	private boolean canMakeClaim(User claimer, User seller, Date now) {
-		if (claimer.getPurchases() == null || claimer.getPurchases().isEmpty()) {
-			return false;
+		if (now == null) {
+			now = UtilDate.getDemoDate();
 		}
 		int daysLimit = claimer.isSubscribed() ? CLAIM_DAYS_SUBSCRIBED : CLAIM_DAYS_FREE;
 		long limitMs = TimeUnit.DAYS.toMillis(daysLimit);
-		for (Purchase purchase : claimer.getPurchases()) {
-			if (purchase == null || purchase.getSale() == null || purchase.getSale().getSeller() == null) {
-				continue;
+		if (claimer.getPurchases() != null) {
+			for (Purchase purchase : claimer.getPurchases()) {
+				if (purchase == null || purchase.getSale() == null || purchase.getSale().getSeller() == null) {
+					continue;
+				}
+				if (!seller.getUsername().equals(purchase.getSale().getSeller().getUsername())) {
+					continue;
+				}
+				Date purchaseDate = purchase.getPurchaseDate();
+				if (purchaseDate == null) {
+					continue;
+				}
+				long diff = now.getTime() - purchaseDate.getTime();
+				if (diff >= 0 && diff <= limitMs) {
+					return true;
+				}
 			}
-			if (!seller.getUsername().equals(purchase.getSale().getSeller().getUsername())) {
-				continue;
-			}
-			Date purchaseDate = purchase.getPurchaseDate();
-			if (purchaseDate == null) {
-				continue;
-			}
-			long diff = now.getTime() - purchaseDate.getTime();
-			if (diff >= 0 && diff <= limitMs) {
-				return true;
+		}
+		if (claimer.getMovements() != null) {
+			for (Movement movement : claimer.getMovements()) {
+				if (movement == null) {
+					continue;
+				}
+				if (!claimer.getUsername().equals(movement.getNondik())) {
+					continue;
+				}
+				if (!seller.getUsername().equals(movement.getNora())) {
+					continue;
+				}
+				Date movementDate = movement.getDate();
+				if (movementDate == null) {
+					continue;
+				}
+				long diff = now.getTime() - movementDate.getTime();
+				if (diff >= 0 && diff <= limitMs) {
+					return true;
+				}
 			}
 		}
 		return false;

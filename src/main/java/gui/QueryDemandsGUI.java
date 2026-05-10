@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -109,6 +110,11 @@ public class QueryDemandsGUI extends JFrame {
 					JTable table = (JTable) mouseEvent.getSource();
 					int row = table.rowAtPoint(mouseEvent.getPoint());
 					Demand demand = (Demand) tableModelDemands.getValueAt(row, 4);
+					if (demand != null && username != null && username.equals(demand.getUsername())) {
+						String msg = ResourceBundle.getBundle("Etiquetas").getString("QueryDemandsGUI.OwnDemandOffer");
+						JOptionPane.showMessageDialog(QueryDemandsGUI.this, msg);
+						return;
+					}
 					JFrame offerDemand = new OfferDemandGUI(demand, username);
 					offerDemand.setVisible(true);
 				}

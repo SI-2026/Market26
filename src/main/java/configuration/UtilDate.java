@@ -6,6 +6,24 @@ import java.util.TimeZone;
 
 public class UtilDate {
 
+	private static Date demoDate;
+
+	public static Date getDemoDate() {
+		if (demoDate == null) {
+			demoDate = trim(new Date());
+		}
+		return demoDate;
+	}
+
+	public static Date advanceDemoDay() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("CET"));
+		calendar.setTime(getDemoDate());
+		calendar.add(Calendar.DAY_OF_MONTH, 1);
+		demoDate = calendar.getTime();
+		return demoDate;
+	}
+
 	
 	public static Date trim(Date date) {
 

@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 
+import configuration.UtilDate;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class User implements Serializable {
@@ -218,7 +220,7 @@ public class User implements Serializable {
 	
 
 	public boolean addMovement(String nondik, String nora, float kopurua) {
-		Movement m = new Movement(kopurua, nondik,nora,new Date());
+		Movement m = new Movement(kopurua, nondik, nora, UtilDate.getDemoDate());
 		return (movements.contains(m) ? false : movements.add(m));
 		
 	}

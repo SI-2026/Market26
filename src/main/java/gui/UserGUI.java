@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -16,9 +18,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import businessLogic.BLFacade;
+import configuration.UtilDate;
 
 
 public class UserGUI extends JFrame {
@@ -30,6 +34,7 @@ public class UserGUI extends JFrame {
 	private JButton jButtonRegister = null;
 	private JButton jButtonQueryQueries = null;
 	private JButton jButtonQueryDemands = null;
+	private JButton jButtonAdvanceDay = null;
 	protected JLabel jLabelSelectOption;
 	private DefaultComboBoxModel<String> lenguageMod = new DefaultComboBoxModel<String>();
 	private JFrame thisRef = this;
@@ -121,6 +126,18 @@ public class UserGUI extends JFrame {
 				a.setVisible(true);
 			}
 		});
+
+		jButtonAdvanceDay = new JButton();
+		jButtonAdvanceDay.setBounds(30, 248, 200, 30);
+		jButtonAdvanceDay.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDay"));
+		jButtonAdvanceDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date newDate = UtilDate.advanceDemoDay();
+				String msg = ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDayMsg");
+				String formatted = new SimpleDateFormat("dd-MM-yyyy").format(newDate);
+				JOptionPane.showMessageDialog(thisRef, msg + " " + formatted);
+			}
+		});
 		
 		
 		//Lengoaiak aukeratzeko combobox-a
@@ -141,7 +158,7 @@ public class UserGUI extends JFrame {
 				paintAgain();
 			}
 		});
-		lenguage.setBounds(349, 270, 125, 22);
+		lenguage.setBounds(349, 286, 125, 22);
 		lenguageMod.addElement("Euskara");
 		lenguageMod.addElement("English");
 		lenguageMod.addElement("Español");
@@ -154,6 +171,7 @@ public class UserGUI extends JFrame {
 		jContentPane.add(jButtonRegister);
 		jContentPane.add(jButtonQueryQueries);
 		jContentPane.add(jButtonQueryDemands);
+		jContentPane.add(jButtonAdvanceDay);
 		jContentPane.add(lenguage);
 
 		
@@ -172,6 +190,7 @@ public class UserGUI extends JFrame {
 		jButtonQueryDemands.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.QueryDemands"));
 		jButtonLogin.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Login"));
 		jButtonRegister.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Register"));
+		jButtonAdvanceDay.setText(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.AdvanceDay"));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainGUI.MainTitle")+ ": " + ResourceBundle.getBundle("Etiquetas").getString("MainGUI.Guest"));
 	}
 } // @jve:decl-index=0:visual-constraint="0,0"
