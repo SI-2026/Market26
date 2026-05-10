@@ -100,7 +100,7 @@ public class DataAccess  {
 			User user2=new User("Ane Gaztañaga","222");
 			User user3=new User("jon","111");
 			User villa=new User("villa","111");
-
+			User tomu=new User("tomu","1");
 			
 			//Create products
 			Date today = UtilDate.trim(new Date());
@@ -123,6 +123,7 @@ public class DataAccess  {
 			db.persist(user2);
 			db.persist(user3);
 			db.persist(villa);
+			db.persist(tomu);
 
 	
 			db.getTransaction().commit();
