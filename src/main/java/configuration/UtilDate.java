@@ -19,7 +19,7 @@ public class UtilDate {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeZone(TimeZone.getTimeZone("CET"));
 		calendar.setTime(getDemoDate());
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
+		calendar.add(Calendar.DAY_OF_MONTH, 10);
 		demoDate = calendar.getTime();
 		return demoDate;
 	}
