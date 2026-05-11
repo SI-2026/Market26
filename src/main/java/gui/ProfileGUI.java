@@ -38,7 +38,7 @@ public class ProfileGUI extends JFrame {
 	public ProfileGUI(JFrame registeredRef, String username) {
 		this.username = username;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(1000, 300, 460, 460);
+		setBounds(1000, 300, 460, 490);
 		final int frameWidth = 460;
 		setTitle(ResourceBundle.getBundle("Etiquetas").getString("ProfileGUI.MainTitle") + ": " + username);
 		setAlwaysOnTop(true);
