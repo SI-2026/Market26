@@ -323,7 +323,7 @@ public class DataAccess  {
 
 	public Demand createDemand(String username, String prod, String description) {
 		User user = db.find(User.class, username);
-		if (user == null || prod == null || prod.isEmpty() || description == null || description.isEmpty()) {
+		if (user == null || prod == null || description == null ) {
 			return null;
 		}
 		db.getTransaction().begin();
@@ -349,24 +349,16 @@ public class DataAccess  {
 	}
 
 	public boolean addDemandOffer(int demandId, String sellerUsername, String product, String description, float price) {
-		if (price <= 0) {
-			return false;
-		}
-		if (product == null || product.isEmpty() || description == null || description.isEmpty()) {
+		if (price <= 0 || product == null || description == null) {
 			return false;
 		}
 		Demand demand = db.find(Demand.class, demandId);
 		User seller = db.find(User.class, sellerUsername);
-		if (demand == null || seller == null || !demand.isActive()) {
+		if (demand == null || seller == null || !demand.isActive() || sellerUsername.equals(demand.getUsername())) {
 			return false;
 		}
-		if (sellerUsername.equals(demand.getUsername())) {
-			return false;
-		}
-		Date now = new Date();
-		
 		db.getTransaction().begin();
-		DemandOffer offer = new DemandOffer(seller, product, description, price, now);
+		DemandOffer offer = new DemandOffer(seller, product, description, price, new Date());
 		boolean added = demand.addOffer(offer);
 		if (added) {
 			db.persist(offer);
@@ -454,10 +446,7 @@ public class DataAccess  {
 
 	public boolean buySubscription(String username) {
 		User user = db.find(User.class, username);
-		if (user == null || user.isSubscribed()) {
-			return false;
-		}
-		if (user.getDirua() < SUBSCRIPTION_PRICE) {
+		if (user == null || user.isSubscribed() || user.getDirua() < SUBSCRIPTION_PRICE) {
 			return false;
 		}
 		db.getTransaction().begin();
@@ -491,7 +480,7 @@ public class DataAccess  {
 		db.getTransaction().begin();
 		subscription.setActive(false);
 		user.addMoney(SUBSCRIPTION_PRICE);
-		user.addMovement(SYSTEM_FUNDS_ID, user.getUsername(), SUBSCRIPTION_PRICE);
+		user.addMovement(SYSTEM_FUNDS_ID, username, SUBSCRIPTION_PRICE);
 		removeSystemFunds(SUBSCRIPTION_PRICE);
 		db.persist(subscription);
 		db.persist(user);
