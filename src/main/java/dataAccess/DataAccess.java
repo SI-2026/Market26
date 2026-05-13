@@ -44,10 +44,9 @@ public class DataAccess  {
 	private static final float SUBSCRIPTION_PRICE = 200;
 	private static final float PURCHASE_FEE_RATE = (float) 0.10;
 	private static final float CASHBACK_RATE = (float) 0.05;
-	private static final int DAILY_OFFER_LIMIT = 4;
 	private static final int CLAIM_DAYS_FREE = 7;
 	private static final int CLAIM_DAYS_SUBSCRIBED = 30;
-	private static final int SUBSCRIPTION_CANCEL_DAYS = 30;
+
 	private static final String SYSTEM_FUNDS_ID = "SYSTEM_FUNDS";
 	private static float systemFundsBalance = 0;
 
@@ -228,18 +227,13 @@ public class DataAccess  {
 		User buyer = db.find(User.class, buyername);
 		if(s != null && buyer != null && !s.isSold() && s.getSeller() != null && !buyername.equals(s.getSeller().getUsername())) {
 			Date now = new Date();
-			if (!canMakeOffer(buyer, now)) {
-				return false;
-			}
+			
 			float total = offer + (offer * PURCHASE_FEE_RATE);
 			if (buyer.getDirua() < total) {
 				return false;
 			}
 		    db.getTransaction().begin();
 			b = s.addOffer(buyer, offer, now, s);
-			if (b) {
-				registerOffer(buyer, now);
-			}
 			db.persist(buyer);
 			db.persist(s);
 			db.getTransaction().commit();
@@ -370,14 +364,11 @@ public class DataAccess  {
 			return false;
 		}
 		Date now = new Date();
-		if (!canMakeOffer(seller, now)) {
-			return false;
-		}
+		
 		db.getTransaction().begin();
 		DemandOffer offer = new DemandOffer(seller, product, description, price, now);
 		boolean added = demand.addOffer(offer);
 		if (added) {
-			registerOffer(seller, now);
 			db.persist(offer);
 			db.persist(demand);
 			db.persist(seller);
@@ -493,10 +484,7 @@ public class DataAccess  {
 		if (user == null || subscription == null || !subscription.isActive() || subscription.getStartDate() == null) {
 			return false;
 		}
-		Date now = new Date();
-		if (!isWithinDays(subscription.getStartDate(), now, SUBSCRIPTION_CANCEL_DAYS)) {
-			return false;
-		}
+		
 		if (!canRemoveSystemFunds(SUBSCRIPTION_PRICE)) {
 			return false;
 		}
@@ -699,32 +687,6 @@ public class DataAccess  {
 		return true;
 	}
 
-	private boolean canMakeOffer(User user, Date now) {
-		if (user.isSubscribed()) {
-			return true;
-		}
-		Date today = now;
-		Date last = user.getDailyOfferDate();
-		if (last == null) {
-			return true;
-		}
-		Date lastDay = last;
-		if (!today.equals(lastDay)) {
-			return true;
-		}
-		return user.getDailyOfferCount() < DAILY_OFFER_LIMIT;
-	}
-
-	private void registerOffer(User user, Date now) {
-		Date today = UtilDate.trim(now);
-		Date last = user.getDailyOfferDate();
-		if (last == null || !today.equals(UtilDate.trim(last))) {
-			user.setDailyOfferDate(today);
-			user.setDailyOfferCount(1);
-		} else {
-			user.setDailyOfferCount(user.getDailyOfferCount() + 1);
-		}
-	}
 
 	private boolean canMakeClaim(User claimer, User seller, Date now) {
 		if (now == null) {
@@ -772,11 +734,6 @@ public class DataAccess  {
 			}
 		}
 		return false;
-	}
-
-	private boolean isWithinDays(Date start, Date now, int days) {
-		long diff = now.getTime() - start.getTime();
-		return diff >= 0 && diff <= TimeUnit.DAYS.toMillis(days);
 	}
 
 	public void close(){

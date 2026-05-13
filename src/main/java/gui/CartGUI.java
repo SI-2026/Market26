@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -19,7 +18,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import businessLogic.BLFacade;
-import configuration.UtilDate;
 import domain.Sale;
 import domain.User;
 
@@ -149,14 +147,6 @@ public class CartGUI extends JFrame {
 			jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayError"));
 			return;
 		}
-		if (!user.isSubscribed()) {
-			int remaining = getRemainingOffers(user);
-			if (cartList.size() > remaining) {
-				jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.OfferLimit"));
-				return;
-			}
-		}
-
 		for (Sale sale : cartList) {
 			if (sale == null || sale.isSold() || sale.getSeller() == null || username.equals(sale.getSeller().getUsername())) {
 				jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayError"));
@@ -179,18 +169,5 @@ public class CartGUI extends JFrame {
 		facade.clearCart(username);
 		jLabelMsg.setText(ResourceBundle.getBundle("Etiquetas").getString("CartGUI.PayOk"));
 		reloadCart();
-	}
-
-	private int getRemainingOffers(User user) {
-		if (user == null || user.isSubscribed()) {
-			return Integer.MAX_VALUE;
-		}
-		Date today = UtilDate.trim(new Date());
-		Date last = user.getDailyOfferDate();
-		if (last == null || !today.equals(UtilDate.trim(last))) {
-			return 4;
-		}
-		int remaining = 4 - user.getDailyOfferCount();
-		return Math.max(0, remaining);
 	}
 }

@@ -58,8 +58,6 @@ public class User implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Subscription subscription;
-	private int dailyOfferCount;
-	private Date dailyOfferDate;
 	
 
 	public User() {
@@ -258,22 +256,6 @@ public class User implements Serializable {
 
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
-	}
-
-	public int getDailyOfferCount() {
-		return dailyOfferCount;
-	}
-
-	public void setDailyOfferCount(int dailyOfferCount) {
-		this.dailyOfferCount = dailyOfferCount;
-	}
-
-	public Date getDailyOfferDate() {
-		return dailyOfferDate;
-	}
-
-	public void setDailyOfferDate(Date dailyOfferDate) {
-		this.dailyOfferDate = dailyOfferDate;
 	}
 	
 	public boolean makeProdOffer(){
