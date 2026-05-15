@@ -226,14 +226,12 @@ public class DataAccess  {
 		Sale s = db.find(Sale.class, salenumber);
 		User buyer = db.find(User.class, buyername);
 		if(s != null && buyer != null && !s.isSold() && s.getSeller() != null && !buyername.equals(s.getSeller().getUsername())) {
-			Date now = new Date();
-			
 			float total = offer + (offer * PURCHASE_FEE_RATE);
 			if (buyer.getDirua() < total) {
 				return false;
 			}
 		    db.getTransaction().begin();
-			b = s.addOffer(buyer, offer, now, s);
+			b = s.addOffer(buyer, offer, new Date(), s);
 			db.persist(buyer);
 			db.persist(s);
 			db.getTransaction().commit();
